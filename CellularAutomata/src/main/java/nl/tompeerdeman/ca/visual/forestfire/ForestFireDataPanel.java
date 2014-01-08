@@ -1,3 +1,21 @@
+/**
+ * Copyright 2012 Tom Peerdeman
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ */
+
 package nl.tompeerdeman.ca.visual.forestfire;
 
 import java.awt.GridBagConstraints;
@@ -65,9 +83,9 @@ public class ForestFireDataPanel extends JPanel implements
 		oppReached = new JLabel("Opposite reached: false");
 		
 		String windStr[] =
-			{"Von Neumann", "Moore", "Wind up Neumann",
-				"Wind left Neumann", "Wind right Neumann", "Wind up Moore",
-				"Wind left Moore", "Wind right Moore"};
+		{"Von Neumann", "Moore", "Wind up Neumann",
+			"Wind left Neumann", "Wind right Neumann", "Wind up Moore",
+			"Wind left Moore", "Wind right Moore"};
 		wind = new JComboBox<String>(windStr);
 		wind.addActionListener(new ActionListener() {
 			@Override
