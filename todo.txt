@@ -1,0 +1,41 @@
+Forrest Fire TODO:
+
+- GUI
+ * Extra User input variables
+ * User changeable area
+ * load/save area files
+
+- Neighbourhood code normal
+ * diagonal neumann
+ * extended diagonal neumann
+ * random neighbour
+ * wind direction down moore
+ * wind direction down neumann
+	
+- Neighbourhood code hexagonal
+ * moore
+ * neumann1
+ * extended neumann1
+ * neumann2
+ * extended neumann2
+ * random neighbour
+ * wind direction
+
+- Neighbourhood code Triangle
+ * Moore
+ * Neumann ( overbodig?)
+ * random neighbour
+ * wind direction
+
+ - different terrains
+  * bushes
+  * water
+  * 3D (heights in terrain)
+
+ - Extra Variables to be added
+  * Fire Fighters (treshold when to start firefighting, after x steps of fire or with x fields of fire)
+	* Probability to extinguish fire
+	* Weather and temperature
+	* Random fire
+  * Longer burning trees/bushes and whatever
+  * A probability to cast fire (instead of a 100% chance)
