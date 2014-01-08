@@ -87,5 +87,4 @@ public class TimedSimulator extends Simulator {
 		stop();
 		super.reset();
 	}
-	
 }

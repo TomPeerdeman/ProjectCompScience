@@ -21,11 +21,11 @@ package nl.tompeerdeman.ca.forestfire;
 import java.util.Random;
 
 import nl.tompeerdeman.ca.Grid;
-import nl.tompeerdeman.ca.MainSystem;
+import nl.tompeerdeman.ca.SimulatableSystem;
 import nl.tompeerdeman.ca.SimulateChangeListener;
 import nl.tompeerdeman.ca.Simulator;
 
-public class ForestFire extends MainSystem implements SimulateChangeListener {
+public class ForestFire extends SimulatableSystem implements SimulateChangeListener {
 	private ForestFireData ffdata;
 	
 	public static void main(String[] args) {

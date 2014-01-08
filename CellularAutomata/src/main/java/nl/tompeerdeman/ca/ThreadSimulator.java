@@ -76,5 +76,4 @@ public class ThreadSimulator extends Simulator implements Runnable {
 		stop();
 		super.reset();
 	}
-	
 }

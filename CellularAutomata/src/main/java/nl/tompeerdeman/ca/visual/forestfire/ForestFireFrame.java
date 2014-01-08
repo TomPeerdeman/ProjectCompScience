@@ -54,5 +54,4 @@ public class ForestFireFrame extends CaFrame {
 		
 		setVisible(true);
 	}
-	
 }

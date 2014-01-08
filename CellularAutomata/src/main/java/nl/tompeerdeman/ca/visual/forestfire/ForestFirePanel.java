@@ -48,5 +48,4 @@ public class ForestFirePanel extends CaPanel {
 		
 		g.fillRect(x * dx + offsx, y * dy, dx, dy);
 	}
-	
 }

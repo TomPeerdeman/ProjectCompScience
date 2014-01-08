@@ -28,7 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import nl.tompeerdeman.ca.DataSet;
-import nl.tompeerdeman.ca.MainSystem;
+import nl.tompeerdeman.ca.SimulatableSystem;
 import nl.tompeerdeman.ca.Simulator;
 import nl.tompeerdeman.ca.TimedSimulator;
 
@@ -48,7 +48,7 @@ public class SimulateControlPanel {
 	private JButton step;
 	private JButton pause;
 	
-	public SimulateControlPanel(MainSystem sys, JPanel panel,
+	public SimulateControlPanel(SimulatableSystem sys, JPanel panel,
 			SimulateController contr, int ox, int oy) {
 		controller = contr;
 		offsx = ox;

@@ -18,7 +18,7 @@
 
 package nl.tompeerdeman.ca;
 
-public abstract class MainSystem {
+public abstract class SimulatableSystem {
 	protected Grid grid;
 	protected DataSet data;
 	protected Simulator sim;
