@@ -153,6 +153,7 @@ public class ForestFireDataPanel extends JPanel implements
 		veg.setText("Vegetation: " + data.vegetation);
 		barren.setText("Barren: " + data.barren);
 		
+		@SuppressWarnings("resource")
 		Formatter format = new Formatter();
 		format =
 			format.format(Locale.US, "%.2f", (double) data.burnt
@@ -161,6 +162,8 @@ public class ForestFireDataPanel extends JPanel implements
 		fracBurned.setText("Fraction burned: " + format.toString());
 		oppReached.setText("Opposite reached: "
 				+ ((data.reachedOpposite) ? "true" : "false"));
+		
+		format.close();
 		
 		if(data.burning == 0) {
 			control.stop();
