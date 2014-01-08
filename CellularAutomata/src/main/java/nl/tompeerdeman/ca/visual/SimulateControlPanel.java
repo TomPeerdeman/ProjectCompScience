@@ -14,7 +14,7 @@ import nl.tompeerdeman.ca.MainSystem;
 import nl.tompeerdeman.ca.Simulator;
 import nl.tompeerdeman.ca.TimedSimulator;
 
-public class SimulateControlPanel{
+public class SimulateControlPanel {
 	private int offsx;
 	private int offsy;
 	
@@ -30,7 +30,8 @@ public class SimulateControlPanel{
 	private JButton step;
 	private JButton pause;
 	
-	public SimulateControlPanel(MainSystem sys, JPanel panel, SimulateController contr, int ox, int oy){
+	public SimulateControlPanel(MainSystem sys, JPanel panel,
+			SimulateController contr, int ox, int oy) {
 		controller = contr;
 		offsx = ox;
 		offsy = oy;
@@ -41,38 +42,38 @@ public class SimulateControlPanel{
 		delay = new JTextField("10");
 		
 		start = new JButton("Start");
-		start.addActionListener(new ActionListener(){
+		start.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent event){
+			public void actionPerformed(ActionEvent event) {
 				start();
 			}
 		});
 		randomize = new JButton("Randomize");
-		randomize.addActionListener(new ActionListener(){
+		randomize.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent event){
+			public void actionPerformed(ActionEvent event) {
 				randomize();
 			}
 		});
 		reset = new JButton("Reset grid");
-		reset.addActionListener(new ActionListener(){
+		reset.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent event){
+			public void actionPerformed(ActionEvent event) {
 				reset();
 			}
 		});
 		step = new JButton("Step");
-		step.addActionListener(new ActionListener(){
+		step.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent event){
+			public void actionPerformed(ActionEvent event) {
 				sim.simulateTick();
 			}
 		});
 		pause = new JButton("Pause");
 		pause.setEnabled(false);
-		pause.addActionListener(new ActionListener(){
+		pause.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent event){
+			public void actionPerformed(ActionEvent event) {
 				pause();
 			}
 		});
@@ -105,14 +106,14 @@ public class SimulateControlPanel{
 		panel.add(delay, c);
 	}
 	
-	public void start(){
-		if(start.getText().equals("Start")){
+	public void start() {
+		if(start.getText().equals("Start")) {
 			start.setText("Stop");
-			if(controller.onStart()){
-				try{
+			if(controller.onStart()) {
+				try {
 					long ldelay = Long.parseLong(delay.getText());
 					
-					if(ldelay < 0){
+					if(ldelay < 0) {
 						throw new NumberFormatException();
 					}
 					
@@ -125,29 +126,29 @@ public class SimulateControlPanel{
 					((TimedSimulator) sim).setDelay(ldelay);
 					
 					sim.start();
-				}catch(NumberFormatException e){
+				} catch(NumberFormatException e) {
 					delay.setText("10");
 				}
 			}
-		}else{
+		} else {
 			start.setText("Start");
 			stop();
 		}
 	}
 	
-	public void pause(){
-		if(controller.onPause()){
-			if(pause.getText().equals("Pause")){
+	public void pause() {
+		if(controller.onPause()) {
+			if(pause.getText().equals("Pause")) {
 				pause.setText("Unpause");
-			}else{
+			} else {
 				pause.setText("Pause");
 			}
 			sim.pause();
 		}
 	}
 	
-	public void stop(){
-		if(controller.onStop()){
+	public void stop() {
+		if(controller.onStop()) {
 			sim.stop();
 			randomize.setEnabled(true);
 			reset.setEnabled(true);
@@ -159,8 +160,8 @@ public class SimulateControlPanel{
 		}
 	}
 	
-	public void randomize(){
-		if(controller.onRandomize()){
+	public void randomize() {
+		if(controller.onRandomize()) {
 			start.setEnabled(true);
 			sim.reset();
 			data.reset();
@@ -168,8 +169,8 @@ public class SimulateControlPanel{
 		}
 	}
 	
-	public void reset(){
-		if(controller.onReset()){
+	public void reset() {
+		if(controller.onReset()) {
 			start.setEnabled(true);
 			sim.reset();
 			data.reset();

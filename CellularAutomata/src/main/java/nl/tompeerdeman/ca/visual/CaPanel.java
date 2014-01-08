@@ -10,8 +10,7 @@ import nl.tompeerdeman.ca.Grid;
 import nl.tompeerdeman.ca.SimulateChangeListener;
 import nl.tompeerdeman.ca.Simulator;
 
-
-public abstract class CaPanel extends JPanel implements SimulateChangeListener{
+public abstract class CaPanel extends JPanel implements SimulateChangeListener {
 	private static final long serialVersionUID = -2417388660117157544L;
 	
 	protected Grid grid;
@@ -21,7 +20,7 @@ public abstract class CaPanel extends JPanel implements SimulateChangeListener{
 	protected int ny;
 	protected int offsx;
 	
-	public CaPanel(Grid g, int w, int h){
+	public CaPanel(Grid g, int w, int h) {
 		super();
 		
 		grid = g;
@@ -35,12 +34,12 @@ public abstract class CaPanel extends JPanel implements SimulateChangeListener{
 		
 		setSize(nx * dx, ny * dy);
 		setPreferredSize(new Dimension(nx * dx, ny * dy));
-
+		
 		offsx = (getWidth() - nx * dx) / 2;
 	}
 	
 	@Override
-	public void paintComponent(Graphics g){
+	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
 		Graphics2D g2d = (Graphics2D) g;
@@ -53,17 +52,18 @@ public abstract class CaPanel extends JPanel implements SimulateChangeListener{
 		offsx = (getWidth() - nx * dx) / 2;
 		
 		// Draw all tiles
-		for(int y = 0; y < ny; y++){
-			for(int x = 0; x < nx; x++){
+		for(int y = 0; y < ny; y++) {
+			for(int x = 0; x < nx; x++) {
 				paintTile(g2d, x, y);
 			}
 		}
 		
 	}
 	
-	public abstract void paintTile(Graphics2D g, int x, int y);	
+	public abstract void paintTile(Graphics2D g, int x, int y);
 	
-	public void simulationUpdated(Simulator sim){
+	@Override
+	public void simulationUpdated(Simulator sim) {
 		repaint();
 	}
 }

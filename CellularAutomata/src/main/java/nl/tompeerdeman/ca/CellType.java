@@ -1,4 +1,4 @@
 package nl.tompeerdeman.ca;
 
-public interface CellType{
+public interface CellType {
 }

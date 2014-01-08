@@ -1,13 +1,13 @@
 package nl.tompeerdeman.ca;
 
-public class ThreadSimulator extends Simulator implements Runnable{
+public class ThreadSimulator extends Simulator implements Runnable {
 	
-	public ThreadSimulator(Grid g, DataSet d){
+	public ThreadSimulator(Grid g, DataSet d) {
 		super(g, d);
 	}
-
+	
 	@Override
-	public void start(){
+	public void start() {
 		running = true;
 		paused = false;
 		
@@ -15,26 +15,27 @@ public class ThreadSimulator extends Simulator implements Runnable{
 	}
 	
 	@Override
-	public void stop(){
+	public void stop() {
 		running = false;
-		if(paused){
+		if(paused) {
 			pause();
 		}
 	}
 	
-	public void run(){
-		if(cellAddList.size() == 0){
+	@Override
+	public void run() {
+		if(cellAddList.size() == 0) {
 			stop();
 			return;
 		}
 		
-		while(running){
-			while(paused){
-				try{
-					synchronized(this){
+		while(running) {
+			while(paused) {
+				try {
+					synchronized(this) {
 						wait();
 					}
-				}catch(InterruptedException e){
+				} catch(InterruptedException e) {
 				}
 			}
 			
@@ -43,17 +44,17 @@ public class ThreadSimulator extends Simulator implements Runnable{
 	}
 	
 	@Override
-	public void pause(){
+	public void pause() {
 		paused = !paused;
-		if(!paused){
-			synchronized(this){
+		if(!paused) {
+			synchronized(this) {
 				notify();
 			}
 		}
 	}
 	
 	@Override
-	public void reset(){
+	public void reset() {
 		stop();
 		super.reset();
 	}

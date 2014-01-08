@@ -19,9 +19,10 @@ import nl.tompeerdeman.ca.forestfire.ForestFireData;
 import nl.tompeerdeman.ca.visual.SimulateControlPanel;
 import nl.tompeerdeman.ca.visual.SimulateController;
 
-public class ForestFireDataPanel extends JPanel implements SimulateChangeListener, SimulateController{
+public class ForestFireDataPanel extends JPanel implements
+		SimulateChangeListener, SimulateController {
 	private static final long serialVersionUID = -7218172283495918517L;
-
+	
 	private Simulator sim;
 	private ForestFireData data;
 	private ForestFire fire;
@@ -40,7 +41,7 @@ public class ForestFireDataPanel extends JPanel implements SimulateChangeListene
 	private JLabel fracBurned;
 	private JLabel oppReached;
 	
-	public ForestFireDataPanel(ForestFire fire){
+	public ForestFireDataPanel(ForestFire fire) {
 		this.fire = fire;
 		sim = fire.getSimulator();
 		data = (ForestFireData) sim.getData();
@@ -63,13 +64,14 @@ public class ForestFireDataPanel extends JPanel implements SimulateChangeListene
 		fracBurned = new JLabel("Fraction burned: 0.0");
 		oppReached = new JLabel("Opposite reached: false");
 		
-		String windStr[] = {"Von Neumann", "Moore", "Wind up Neumann",
+		String windStr[] =
+			{"Von Neumann", "Moore", "Wind up Neumann",
 				"Wind left Neumann", "Wind right Neumann", "Wind up Moore",
-				"Wind left Moore",	"Wind right Moore"};
-		wind = new JComboBox<String> (windStr);
-		wind.addActionListener(new ActionListener(){
+				"Wind left Moore", "Wind right Moore"};
+		wind = new JComboBox<String>(windStr);
+		wind.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent event){
+			public void actionPerformed(ActionEvent event) {
 				updateNb();
 			}
 		});
@@ -126,7 +128,7 @@ public class ForestFireDataPanel extends JPanel implements SimulateChangeListene
 	}
 	
 	@Override
-	public void simulationUpdated(Simulator sim){
+	public void simulationUpdated(Simulator sim) {
 		tick.setText("Tick: " + sim.getTick());
 		burnt.setText("Burnt: " + data.burnt);
 		burning.setText("Burning: " + data.burning);
@@ -134,39 +136,44 @@ public class ForestFireDataPanel extends JPanel implements SimulateChangeListene
 		barren.setText("Barren: " + data.barren);
 		
 		Formatter format = new Formatter();
-		format = format.format(Locale.US, "%.2f", (double) data.burnt / (double) (data.vegetation + data.burnt));
+		format =
+			format.format(Locale.US, "%.2f", (double) data.burnt
+					/ (double) (data.vegetation + data.burnt));
 		
 		fracBurned.setText("Fraction burned: " + format.toString());
-		oppReached.setText("Opposite reached: " + ((data.reachedOpposite) ? "true" : "false"));
+		oppReached.setText("Opposite reached: "
+				+ ((data.reachedOpposite) ? "true" : "false"));
 		
-		if(data.burning == 0){
+		if(data.burning == 0) {
 			control.stop();
 		}
 	}
 	
-	public boolean onRandomize(){
-		try{
-			double ddensity =  Double.parseDouble(density.getText());
-			if(ddensity < 0 || ddensity > 1.0){
+	@Override
+	public boolean onRandomize() {
+		try {
+			double ddensity = Double.parseDouble(density.getText());
+			if(ddensity < 0 || ddensity > 1.0) {
 				throw new NumberFormatException();
 			}
 			fire.randomizeGrid(ddensity, 0);
 			fire.igniteGrid();
-		}catch(NumberFormatException e){
+		} catch(NumberFormatException e) {
 			density.setText("0.5");
 			return false;
 		}
 		return true;
 	}
 	
-	public boolean onReset(){
+	@Override
+	public boolean onReset() {
 		fire.resetGrid();
 		return true;
 	}
 	
-	public void updateNb(){
+	public void updateNb() {
 		int i = wind.getSelectedIndex();
-		switch(i){
+		switch(i) {
 			case 0:
 				data.setNb(ForestFireData.NB_NEUMANN);
 				break;
@@ -192,19 +199,19 @@ public class ForestFireDataPanel extends JPanel implements SimulateChangeListene
 				data.setNb(ForestFireData.NB_WIND_RIGHT_M);
 		}
 	}
-
+	
 	@Override
-	public boolean onStart(){
+	public boolean onStart() {
 		return true;
 	}
-
+	
 	@Override
-	public boolean onPause(){
+	public boolean onPause() {
 		return true;
 	}
-
+	
 	@Override
-	public boolean onStop(){
+	public boolean onStop() {
 		return true;
 	}
 }
