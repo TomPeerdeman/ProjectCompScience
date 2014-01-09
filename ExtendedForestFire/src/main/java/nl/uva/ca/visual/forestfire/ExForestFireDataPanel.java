@@ -2,6 +2,7 @@ package nl.uva.ca.visual.forestfire;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Formatter;
@@ -70,8 +71,7 @@ public class ExForestFireDataPanel extends JPanel implements
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
-		c.ipadx = 10;
-		c.ipady = 0;
+		c.insets = new Insets(0, 5, 0, 5);
 		
 		tick = new JLabel();
 		burnt = new JLabel();

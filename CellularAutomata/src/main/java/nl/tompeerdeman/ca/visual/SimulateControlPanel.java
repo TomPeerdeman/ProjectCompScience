@@ -100,7 +100,7 @@ public class SimulateControlPanel {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.ipadx = 10;
 		c.ipady = 0;
-		c.gridx = 3;
+		c.gridx = offsx;
 		c.gridy = offsy;
 		
 		panel.add(start, c);

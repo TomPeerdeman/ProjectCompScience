@@ -4,7 +4,7 @@ import nl.tompeerdeman.ca.Simulator;
 import nl.tompeerdeman.ca.forestfire.ForestFire;
 import nl.tompeerdeman.ca.forestfire.ForestFireData;
 import nl.tompeerdeman.ca.visual.CaPanel;
-import nl.uva.ca.visual.forestfire.ExForestFireDataPanel;
+import nl.uva.ca.ExForestFire;
 import nl.uva.ca.visual.ExCaFrame;
 
 public class ExForestFireFrame extends ExCaFrame {
@@ -19,7 +19,8 @@ public class ExForestFireFrame extends ExCaFrame {
 		
 		ForestFire fire =
 			new ForestFire(0.6, 100, 100, 0, ForestFireData.NB_MOORE, 0);
-		fire.buildTimed(10);
+			//new ExForestFire(100, 100, 0, ForestFireData.NB_MOORE, true, 0.3, 0.3, 0.3, 0.2, false);
+			fire.buildTimedSimulator(10);
 		
 		Simulator sim = fire.getSimulator();
 		
