@@ -53,6 +53,8 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JComboBox<String> gridtype;
 	private JComboBox<String> wind;
 	private JComboBox<String> nb;
+	private JComboBox<String> waterCheck;
+	private JComboBox<String> ffCheck;
 	
 	private JTextField density;
 	private JTextField density2;
@@ -67,7 +69,7 @@ public class ExForestFireDataPanel extends JPanel implements
 		
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.NONE;
+		c.fill = GridBagConstraints.BOTH;
 		c.ipadx = 10;
 		c.ipady = 0;
 		
@@ -96,7 +98,7 @@ public class ExForestFireDataPanel extends JPanel implements
 		fracBurned = new JLabel("Fraction burned: 0.0");
 		oppReached = new JLabel("Opposite reached: false");
 		
-		//TODO change windStr to windDriectionStr <intentionally left this way to neot murder the program
+		//TODO change windStr to windDirectionStr <intentionally left this way to neot murder the program
 		
 		String windStr[] =
 		{"Von Neumann", "Moore", "Wind up Neumann",
@@ -108,13 +110,18 @@ public class ExForestFireDataPanel extends JPanel implements
 
 		String nbStr[] =
 				{"Neumann", "Moore", "Extended Neumann"};
-		
+
 		String GridStr[] =
 			{"Standard", "Hexagonal", "Triangular"};
+		
+		String YesNoStr[] =
+			{"Yes", "No"};
 
 		gridtype = new JComboBox<String>(GridStr);
 		wind = new JComboBox<String>(windStr);
 		nb = new JComboBox<String>(nbStr);
+		waterCheck = new JComboBox<String>(YesNoStr);
+		ffCheck = new JComboBox<String>(YesNoStr);
 		wind.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -158,48 +165,56 @@ public class ExForestFireDataPanel extends JPanel implements
 		
 		c.gridx = 1;
 		c.gridy = 1;
-		add(density, c);
-		
-		c.gridx = 1;
-		c.gridy = 2;
 		add(density2Text, c);
 		
 		c.gridx = 1;
-		c.gridy = 3;
-		add(density2, c);
-		
-		c.gridx = 1;
-		c.gridy = 4;
+		c.gridy = 2;
 		add(tempText, c);
 		
 		c.gridx = 1;
+		c.gridy = 3;
+		add(randwater, c);
+		
+		c.gridx = 1;
+		c.gridy = 4;
+		add(firefighters, c);
+		
+		c.gridx = 1;
 		c.gridy = 5;
-		add(temp, c);
+		add(ffextText, c);
 		
 		c.gridx = 1;
 		c.gridy = 6;
-		add(randwater, c);
+		add(fftreshText, c);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		
 		c.gridx = 2;
 		c.gridy = 0;
-		add(firefighters);
+		add(density);
 
 		c.gridx = 2;
 		c.gridy = 1;
-		add(ffextText, c);
-		
+		add(density2, c);
+
 		c.gridx = 2;
 		c.gridy = 2;
-		add(ffext, c);
+		add(temp, c);
 		
 		c.gridx = 2;
 		c.gridy = 3;
-		add(fftreshText, c);
+		add(waterCheck, c);
 		
 		c.gridx = 2;
 		c.gridy = 4;
+		add(ffCheck, c);
+		
+		c.gridx = 2;
+		c.gridy = 5;
+		add(ffext, c);
+		
+		c.gridx = 2;
+		c.gridy = 6;
 		add(fftresh, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
