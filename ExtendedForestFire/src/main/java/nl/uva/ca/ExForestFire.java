@@ -22,17 +22,20 @@ public class ExForestFire extends ForestFire {
 	 * @param bushDensity
 	 * @param fireFightTresh
 	 * @param extinguishProb
+	 * @param useTemperature
 	 */
 	public ExForestFire(int nx, int ny, long seed,
 			boolean[][] nb, boolean randWater, double treeDensity,
-			double bushDensity, double fireFightTresh, double extinguishProb) {
+			double bushDensity, double fireFightTresh, double extinguishProb,
+			boolean useTemperature) {
 		super(0, nx, ny, seed, nb, 0);
 		this.randWater = randWater;
 		this.treeDensity = treeDensity;
 		this.bushDensity = bushDensity;
 		
 		data =
-			new ExForestFireData(nb, grid, 0, fireFightTresh, extinguishProb);
+			new ExForestFireData(nb, grid, 0, fireFightTresh, extinguishProb,
+					useTemperature);
 		ffdata = (ExForestFireData) data;
 	}
 	
@@ -40,17 +43,46 @@ public class ExForestFire extends ForestFire {
 	public void randomizeGrid(final double density, final long seed) {
 		// Note: density is not used; treeDensity & bushDensity is used instead
 		// TODO: overwrite
+		
+		// TODO: mega awesome terrain generation here
 	}
 	
 	@Override
 	public void igniteGrid() {
-		// TODO: overwrite
+		// Fill the bottom line of the grid with burning vegetation
+		for(int x = 0; x < grid.grid.length; x++) {
+			ExForestFireCell cell = (ExForestFireCell) grid.getCell(x, 0);
+			if(cell.getType() == ExForestFireCellType.BUSH) {
+				cell.setType(ExForestFireCellType.BURNING_BUSH);
+			} else if(cell.getType() == ExForestFireCellType.TREE) {
+				cell.setType(ExForestFireCellType.BURNING_TREE);
+			}
+		}
 	}
 	
 	@Override
 	public void resetGrid() {
-		// TODO: overwrite
-		super.resetGrid();
+		for(int y = 0; y < grid.grid[0].length; y++) {
+			for(int x = 0; x < grid.grid.length; x++) {
+				ExForestFireCell cell = (ExForestFireCell) grid.getCell(x, y);
+				
+				if(cell != null) {
+					switch((ExForestFireCellType) cell.getType()) {
+						case BURNING_BUSH:
+						case BURNT_BUSH:
+						case EXTINGUISHED_BUSH:
+							cell.setType(ExForestFireCellType.BUSH);
+						case BURNING_TREE:
+						case BURNT_TREE:
+						case EXTINGUISHED_TREE:
+							cell.setType(ExForestFireCellType.TREE);
+						default:
+							break;
+					
+					}
+				}
+			}
+		}
+		igniteGrid();
 	}
-	
 }

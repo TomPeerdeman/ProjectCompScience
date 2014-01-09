@@ -13,6 +13,7 @@ public class ExForestFireData extends ForestFireData {
 	
 	public double fireFightTresh;
 	public double extinguishProb;
+	public boolean useTemperature;
 	
 	/**
 	 * @param nb
@@ -20,12 +21,14 @@ public class ExForestFireData extends ForestFireData {
 	 * @param densityIdx
 	 * @param fireFightTresh
 	 * @param extinguishProb
+	 * @param useTemperature
 	 */
 	public ExForestFireData(boolean[][] nb, Grid grid, int densityIdx,
-			double fireFightTresh, double extinguishProb) {
+			double fireFightTresh, double extinguishProb, boolean useTemperature) {
 		super(nb, grid, densityIdx);
 		this.fireFightTresh = fireFightTresh;
 		this.extinguishProb = extinguishProb;
+		this.useTemperature = useTemperature;
 	}
 	
 	@Override
