@@ -23,13 +23,12 @@ public class ExForestFireCell extends Cell {
 	
 	@Override
 	public boolean shouldSimulate() {
-		// TODO: overwite
 		return type == ExForestFireCellType.BURNING_BUSH
 				|| type == ExForestFireCellType.BURNING_TREE;
 	}
 	
 	/**
-	 * @return the temperature
+	 * @return the temperature of this cell
 	 */
 	public double getTemperature() {
 		return temperature;
@@ -43,6 +42,10 @@ public class ExForestFireCell extends Cell {
 		this.temperature = temperature;
 	}
 	
+	/**
+	 * @param temperature
+	 *            the temperature to add
+	 */
 	public void addTemperature(double temperature) {
 		this.temperature += temperature;
 	}
@@ -55,6 +58,8 @@ public class ExForestFireCell extends Cell {
 	 */
 	@Override
 	public boolean simulate(Grid grid, DataSet data, Simulator sim) {
+		ExForestFireData ffdata = (ExForestFireData) data;
+		
 		// TODO: Implement
 		return false;
 	}
