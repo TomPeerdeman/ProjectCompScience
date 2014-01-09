@@ -16,10 +16,10 @@ import javax.swing.SwingConstants;
 
 import nl.tompeerdeman.ca.SimulateChangeListener;
 import nl.tompeerdeman.ca.Simulator;
-import nl.tompeerdeman.ca.forestfire.ForestFire;
-import nl.tompeerdeman.ca.forestfire.ForestFireData;
 import nl.tompeerdeman.ca.visual.SimulateController;
 
+import nl.uva.ca.ExForestFire;
+import nl.uva.ca.ExForestFireData;
 import nl.uva.ca.visual.ExSimulateControlPanel;
 
 public class ExForestFireDataPanel extends JPanel implements
@@ -27,8 +27,8 @@ public class ExForestFireDataPanel extends JPanel implements
 	private static final long serialVersionUID = 9104081158410085080L;
 	
 	private Simulator sim;
-	private ForestFireData data;
-	private ForestFire fire;
+	private ExForestFireData data;
+	private ExForestFire fire;
 	
 	private ExSimulateControlPanel control;
 	
@@ -64,10 +64,10 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JTextField fftresh;
 	private JTextField ffext;
 	
-	public ExForestFireDataPanel(ForestFire fire) {
+	public ExForestFireDataPanel(ExForestFire fire) {
 		this.fire = fire;
 		sim = fire.getSimulator();
-		data = (ForestFireData) sim.getData();
+		data = (ExForestFireData) sim.getData();
 		
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -279,14 +279,14 @@ public class ExForestFireDataPanel extends JPanel implements
 		tick.setText("Tick: " + sim.getTick());
 		burnt.setText("Burnt: " + data.burnt);
 		burning.setText("Burning: " + data.burning);
-		veg.setText("Vegetation: " + data.vegetation);
+		veg.setText("Vegetation: " + data.vegetation + data.trees);
 		barren.setText("Barren: " + data.barren);
 		
 		@SuppressWarnings("resource")
 		Formatter format = new Formatter();
 		format =
 			format.format(Locale.US, "%.2f", (double) data.burnt
-					/ (double) (data.vegetation + data.burnt));
+					/ (double) (data.vegetation + data.burnt + data.trees));
 		
 		fracBurned.setText("Fraction burned: " + format.toString());
 		oppReached.setText("Opposite reached: "
@@ -306,7 +306,7 @@ public class ExForestFireDataPanel extends JPanel implements
 			if(ddensity < 0 || ddensity > 1.0) {
 				throw new NumberFormatException();
 			}
-			fire.randomizeGrid(ddensity, 0);
+			fire.randomizeGrid(0);
 			fire.igniteGrid();
 		} catch(NumberFormatException e) {
 			density.setText("0.5");

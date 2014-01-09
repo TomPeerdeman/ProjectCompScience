@@ -1,7 +1,6 @@
 package nl.uva.ca.visual.forestfire;
 
 import nl.tompeerdeman.ca.Simulator;
-import nl.tompeerdeman.ca.forestfire.ForestFire;
 import nl.tompeerdeman.ca.forestfire.ForestFireData;
 import nl.tompeerdeman.ca.visual.CaPanel;
 
@@ -18,7 +17,7 @@ public class ExForestFireFrame extends ExCaFrame {
 	public ExForestFireFrame() {
 		super("Forest fire simulation 2.0");
 		
-		ForestFire fire =
+		ExForestFire fire =
 			// new ForestFire(0.6, 100, 100, 0, ForestFireData.NB_MOORE, 0);
 			new ExForestFire(100, 100, 0, ForestFireData.NB_MOORE, true, false,
 					0.3, 0.3, 0.3, 0.2, false);

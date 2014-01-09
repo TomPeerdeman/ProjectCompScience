@@ -4,9 +4,10 @@
  */
 package nl.uva.ca;
 
-import nl.tompeerdeman.ca.forestfire.ForestFire;
+import nl.tompeerdeman.ca.Grid;
+import nl.tompeerdeman.ca.SimulatableSystem;
 
-public class ExForestFire extends ForestFire {
+public class ExForestFire extends SimulatableSystem {
 	private ExForestFireData ffdata;
 	private boolean randWater;
 	private double treeDensity;
@@ -25,13 +26,19 @@ public class ExForestFire extends ForestFire {
 	 * @param useTemperature
 	 */
 	public ExForestFire(int nx, int ny, long seed,
-			boolean[][] nb, boolean randWater, boolean firefighters, double treeDensity,
+			boolean[][] nb, boolean randWater, boolean firefighters,
+			double treeDensity,
 			double bushDensity, double fireFightTresh, double extinguishProb,
 			boolean useTemperature) {
-		super(0, nx, ny, seed, nb, 0);
 		this.randWater = randWater;
 		this.treeDensity = treeDensity;
 		this.bushDensity = bushDensity;
+		
+		// Create an empty grid
+		grid = new Grid(nx, ny);
+		
+		randomizeGrid(seed);
+		igniteGrid();
 		
 		data =
 			new ExForestFireData(nb, grid, 0, fireFightTresh, extinguishProb,
@@ -39,15 +46,16 @@ public class ExForestFire extends ForestFire {
 		ffdata = (ExForestFireData) data;
 	}
 	
-	@Override
-	public void randomizeGrid(final double density, final long seed) {
-		// Note: density is not used; treeDensity & bushDensity is used instead.
-		// TODO: overwrite
-		
+	public void randomizeGrid(final long seed) {
 		// TODO: mega awesome terrain generation here
+		for(int y = 0; y < grid.grid[0].length; y++) {
+			grid.setCell(new ExForestFireCell(49, y, ExForestFireCellType.BUSH));
+			grid.setCell(new ExForestFireCell(50, y,
+					ExForestFireCellType.WATER));
+			grid.setCell(new ExForestFireCell(51, y, ExForestFireCellType.TREE));
+		}
 	}
 	
-	@Override
 	public void igniteGrid() {
 		// Fill the bottom line of the grid with burning vegetation.
 		for(int x = 0; x < grid.grid.length; x++) {
@@ -64,7 +72,6 @@ public class ExForestFire extends ForestFire {
 		}
 	}
 	
-	@Override
 	public void resetGrid() {
 		for(int y = 0; y < grid.grid[0].length; y++) {
 			for(int x = 0; x < grid.grid.length; x++) {
