@@ -1,6 +1,7 @@
 package nl.uva.ca.visual;
 
 import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -34,10 +35,8 @@ public class ExSimulateControlPanel {
 	public ExSimulateControlPanel(SimulatableSystem sys, JPanel panel,
 			SimulateController contr, int ox, int oy) {
 		controller = contr;
-		offsx = 4;
+		offsx = ox;
 		offsy = oy;
-		System.out.println(offsx);
-		System.out.println(offsy);
 		sim = sys.getSimulator();
 		data = sim.getData();
 		
@@ -83,7 +82,8 @@ public class ExSimulateControlPanel {
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
-
+		c.insets = new Insets(0, 5, 0, 5);
+		
 		c.gridx = offsx;
 		c.gridy = offsy;
 		
