@@ -269,7 +269,7 @@ public class ExForestFireDataPanel extends JPanel implements
 		c.gridy = 5;
 		add(nb, c);
 		
-		control = new ExSimulateControlPanel(fire, this, this, 2, 0);
+		control = new ExSimulateControlPanel(fire, this, this, 4, 0);
 		
 		simulationUpdated(sim);
 	}
