@@ -19,7 +19,6 @@ import nl.tompeerdeman.ca.Simulator;
 import nl.tompeerdeman.ca.forestfire.ForestFire;
 import nl.tompeerdeman.ca.forestfire.ForestFireData;
 import nl.tompeerdeman.ca.visual.SimulateController;
-
 import nl.uva.ca.visual.ExSimulateControlPanel;
 
 public class ExForestFireDataPanel extends JPanel implements
@@ -99,8 +98,7 @@ public class ExForestFireDataPanel extends JPanel implements
 		fracBurned = new JLabel("Fraction burned: 0.0");
 		oppReached = new JLabel("Opposite reached: false");
 		
-		// TODO change windStr to windDirectionStr <intentionally left this way
-		// to neot murder the program
+		//TODO change windStr to windDirectionStr <intentionally left this way to neot murder the program
 		
 		String windStr[] =
 		{"Von Neumann", "Moore", "Wind up Neumann",
@@ -108,17 +106,17 @@ public class ExForestFireDataPanel extends JPanel implements
 			"Wind left Moore", "Wind right Moore"};
 		
 		String windDirectionsStr[] =
-		{"Up", "Right", "Down", "Left"};
-		
+		{"Up", "Right","Down","Left"};
+
 		String nbStr[] =
-		{"Neumann", "Moore", "Extended Neumann"};
-		
+				{"Neumann", "Moore", "Extended Neumann"};
+
 		String GridStr[] =
-		{"Standard", "Hexagonal", "Triangular"};
+			{"Standard", "Hexagonal", "Triangular"};
 		
 		String YesNoStr[] =
-		{"Yes", "No"};
-		
+			{"Yes", "No"};
+
 		gridtype = new JComboBox<String>(GridStr);
 		wind = new JComboBox<String>(windStr);
 		nb = new JComboBox<String>(nbStr);
@@ -189,14 +187,16 @@ public class ExForestFireDataPanel extends JPanel implements
 		c.gridy = 6;
 		add(fftreshText, c);
 		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		
 		c.gridx = 2;
 		c.gridy = 0;
 		add(density, c);
-		
+
 		c.gridx = 2;
 		c.gridy = 1;
 		add(density2, c);
-		
+
 		c.gridx = 2;
 		c.gridy = 2;
 		add(temp, c);
@@ -216,11 +216,13 @@ public class ExForestFireDataPanel extends JPanel implements
 		c.gridx = 2;
 		c.gridy = 6;
 		add(fftresh, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
 		
 		c.gridx = 3;
 		c.gridy = 0;
 		add(typeText, c);
-		
+
 		c.gridx = 3;
 		c.gridy = 1;
 		add(gridtype, c);
@@ -240,8 +242,8 @@ public class ExForestFireDataPanel extends JPanel implements
 		c.gridx = 3;
 		c.gridy = 5;
 		add(nb, c);
-		
-		control = new ExSimulateControlPanel(fire, this, this, 4, 0);
+				
+		control = new ExSimulateControlPanel(fire, this, this, 2, 0);
 		
 		simulationUpdated(sim);
 	}
