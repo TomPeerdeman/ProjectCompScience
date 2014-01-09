@@ -11,6 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import nl.tompeerdeman.ca.SimulateChangeListener;
 import nl.tompeerdeman.ca.Simulator;
@@ -41,8 +42,8 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JLabel nbText;
 	private JLabel windText;
 	private JLabel firefighters;
-	private JLabel firefightertresh;
-	private JLabel probextinguish;
+	private JLabel fftreshText;
+	private JLabel ffextText;
 	private JLabel randwater;
 	private JLabel height;
 	private JLabel fracBurned;
@@ -75,28 +76,45 @@ public class ExForestFireDataPanel extends JPanel implements
 		burning = new JLabel();
 		veg = new JLabel();
 		barren = new JLabel();
-		densityText = new JLabel("Tree Density: ");
+		densityText = new JLabel("Tree Density: ", SwingConstants.LEFT);
 		density2Text = new JLabel("Bush Density: ");
 		tempText = new JLabel("Temperature: ");
 		density = new JTextField("0.3");
 		density2 = new JTextField("0.3");
+		fftresh = new JTextField("0.3");
+		ffext = new JTextField("0.3");
+		temp = new JTextField("18");
 		typeText = new JLabel("Grid Type: ");
 		nbText = new JLabel("Neigbourhood: ");
 		windText = new JLabel("Wind Direction: ");
 		firefighters = new JLabel("Firefighters:");
-		firefightertresh = new JLabel("Firefighter treshold:");
-		probextinguish = new JLabel("Extinguish Probability:");
-		randwater = new JLabel("Generate random water");
+		fftreshText = new JLabel("Firefighter treshold:");
+		ffextText = new JLabel("Extinguish Probability:");
+		randwater = new JLabel("Generate random water:");
 		height = new JLabel("height");
 		
 		fracBurned = new JLabel("Fraction burned: 0.0");
 		oppReached = new JLabel("Opposite reached: false");
 		
+		//TODO change windStr to windDriectionStr <intentionally left this way to neot murder the program
+		
 		String windStr[] =
 		{"Von Neumann", "Moore", "Wind up Neumann",
 			"Wind left Neumann", "Wind right Neumann", "Wind up Moore",
 			"Wind left Moore", "Wind right Moore"};
+		
+		String windDirectionsStr[] =
+		{"Up", "Right","Down","Left"};
+
+		String nbStr[] =
+				{"Neumann", "Moore", "Extended Neumann"};
+		
+		String GridStr[] =
+			{"Standard", "Hexagonal", "Triangular"};
+
+		gridtype = new JComboBox<String>(GridStr);
 		wind = new JComboBox<String>(windStr);
+		nb = new JComboBox<String>(nbStr);
 		wind.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -136,20 +154,80 @@ public class ExForestFireDataPanel extends JPanel implements
 		
 		c.gridx = 1;
 		c.gridy = 0;
-		add(windText);
+		add(densityText);
 		
 		c.gridx = 1;
 		c.gridy = 1;
-		add(wind, c);
+		add(density, c);
 		
 		c.gridx = 1;
 		c.gridy = 2;
-		add(densityText, c);
+		add(density2Text, c);
 		
 		c.gridx = 1;
 		c.gridy = 3;
-		add(density, c);
+		add(density2, c);
 		
+		c.gridx = 1;
+		c.gridy = 4;
+		add(tempText, c);
+		
+		c.gridx = 1;
+		c.gridy = 5;
+		add(temp, c);
+		
+		c.gridx = 1;
+		c.gridy = 6;
+		add(randwater, c);
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		
+		c.gridx = 2;
+		c.gridy = 0;
+		add(firefighters);
+
+		c.gridx = 2;
+		c.gridy = 1;
+		add(ffextText, c);
+		
+		c.gridx = 2;
+		c.gridy = 2;
+		add(ffext, c);
+		
+		c.gridx = 2;
+		c.gridy = 3;
+		add(fftreshText, c);
+		
+		c.gridx = 2;
+		c.gridy = 4;
+		add(fftresh, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		
+		c.gridx = 3;
+		c.gridy = 0;
+		add(typeText);
+
+		c.gridx = 3;
+		c.gridy = 1;
+		add(gridtype, c);
+		
+		c.gridx = 3;
+		c.gridy = 2;
+		add(windText, c);
+		
+		c.gridx = 3;
+		c.gridy = 3;
+		add(wind, c);
+		
+		c.gridx = 3;
+		c.gridy = 4;
+		add(nbText, c);
+		
+		c.gridx = 3;
+		c.gridy = 5;
+		add(nb, c);
+				
 		control = new ExSimulateControlPanel(fire, this, this, 2, 0);
 		
 		simulationUpdated(sim);
