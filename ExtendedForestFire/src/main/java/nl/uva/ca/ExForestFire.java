@@ -52,11 +52,14 @@ public class ExForestFire extends ForestFire {
 		// Fill the bottom line of the grid with burning vegetation.
 		for(int x = 0; x < grid.grid.length; x++) {
 			ExForestFireCell cell = (ExForestFireCell) grid.getCell(x, 0);
-			// Set cell's of type BUSH to BURNING_BUSH and TREE to BURNING_TREE.
-			if(cell.getType() == ExForestFireCellType.BUSH) {
-				cell.setType(ExForestFireCellType.BURNING_BUSH);
-			} else if(cell.getType() == ExForestFireCellType.TREE) {
-				cell.setType(ExForestFireCellType.BURNING_TREE);
+			if(cell != null) {
+				// Set cell's of type BUSH to BURNING_BUSH and TREE to
+				// BURNING_TREE.
+				if(cell.getType() == ExForestFireCellType.BUSH) {
+					cell.setType(ExForestFireCellType.BURNING_BUSH);
+				} else if(cell.getType() == ExForestFireCellType.TREE) {
+					cell.setType(ExForestFireCellType.BURNING_TREE);
+				}
 			}
 		}
 	}
