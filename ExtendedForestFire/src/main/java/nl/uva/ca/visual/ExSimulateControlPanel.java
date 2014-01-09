@@ -34,7 +34,7 @@ public class ExSimulateControlPanel {
 	public ExSimulateControlPanel(SimulatableSystem sys, JPanel panel,
 			SimulateController contr, int ox, int oy) {
 		controller = contr;
-		offsx = 3;
+		offsx = 4;
 		offsy = oy;
 		System.out.println(offsx);
 		System.out.println(offsy);
