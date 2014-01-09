@@ -98,8 +98,7 @@ public class ExForestFireDataPanel extends JPanel implements
 		fracBurned = new JLabel("Fraction burned: 0.0");
 		oppReached = new JLabel("Opposite reached: false");
 		
-		//TODO change windStr to windDirectionStr <intentionally left this way to neot murder the program
-		
+		// old string[]
 		String windStr[] =
 		{"Von Neumann", "Moore", "Wind up Neumann",
 			"Wind left Neumann", "Wind right Neumann", "Wind up Moore",
@@ -118,14 +117,44 @@ public class ExForestFireDataPanel extends JPanel implements
 			{"Yes", "No"};
 
 		gridtype = new JComboBox<String>(GridStr);
-		wind = new JComboBox<String>(windStr);
+		wind = new JComboBox<String>(windDirectionsStr);
 		nb = new JComboBox<String>(nbStr);
 		waterCheck = new JComboBox<String>(YesNoStr);
 		ffCheck = new JComboBox<String>(YesNoStr);
+		
+		// Standard no firefighters, set to false
+		ffCheck.setSelectedIndex(1);
+		fftresh.setEnabled(false);
+		ffext.setEnabled(false);
+		
 		wind.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
+				updateWind();
+			}
+		});
+		nb.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
 				updateNb();
+			}
+		});
+		gridtype.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				updateType();
+			}
+		});
+		waterCheck.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				updateWater();
+			}
+		});
+		ffCheck.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				updateFirefighter();
 			}
 		});
 		
@@ -295,32 +324,69 @@ public class ExForestFireDataPanel extends JPanel implements
 		return true;
 	}
 	
+	public void updateWater() {
+		int i = waterCheck.getSelectedIndex();
+		switch(i) {
+			case 0:
+				break;
+			case 1:
+				System.out.println("We don't need no water");
+				break;
+			
+		}
+	}
+	
+	public void updateFirefighter() {
+		int i = ffCheck.getSelectedIndex();
+		switch(i) {
+			case 0:
+				fftresh.setEnabled(true);
+				ffext.setEnabled(true);
+				break;
+			case 1:
+				fftresh.setEnabled(false);
+				ffext.setEnabled(false);				
+				break;
+			
+		}
+	}
+	
 	public void updateNb() {
+		int i = nb.getSelectedIndex();
+		switch(i) {
+			case 0:
+				break;
+			case 1:
+				break;
+			case 2:
+				break;
+			
+		}
+	}
+	
+	public void updateWind() {
 		int i = wind.getSelectedIndex();
 		switch(i) {
 			case 0:
-				data.setNb(ForestFireData.NB_NEUMANN);
 				break;
 			case 1:
-				data.setNb(ForestFireData.NB_MOORE);
 				break;
 			case 2:
-				data.setNb(ForestFireData.NB_WIND_UP_N);
 				break;
 			case 3:
-				data.setNb(ForestFireData.NB_WIND_LEFT_N);
 				break;
-			case 4:
-				data.setNb(ForestFireData.NB_WIND_RIGHT_N);
+		}
+	}
+	
+	public void updateType() {
+		int i = gridtype.getSelectedIndex();
+		switch(i) {
+			case 0:
 				break;
-			case 5:
-				data.setNb(ForestFireData.NB_WIND_UP_M);
+			case 1:
 				break;
-			case 6:
-				data.setNb(ForestFireData.NB_WIND_LEFT_M);
+			case 2:
 				break;
-			case 7:
-				data.setNb(ForestFireData.NB_WIND_RIGHT_M);
 		}
 	}
 	

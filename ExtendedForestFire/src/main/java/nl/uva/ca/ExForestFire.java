@@ -25,7 +25,7 @@ public class ExForestFire extends ForestFire {
 	 * @param useTemperature
 	 */
 	public ExForestFire(int nx, int ny, long seed,
-			boolean[][] nb, boolean randWater, double treeDensity,
+			boolean[][] nb, boolean randWater, boolean firefighters, double treeDensity,
 			double bushDensity, double fireFightTresh, double extinguishProb,
 			boolean useTemperature) {
 		super(0, nx, ny, seed, nb, 0);

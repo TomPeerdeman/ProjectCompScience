@@ -18,8 +18,8 @@ public class ExForestFireFrame extends ExCaFrame {
 		super("Forest fire simulation 2.0");
 		
 		ForestFire fire =
-			new ForestFire(0.6, 100, 100, 0, ForestFireData.NB_MOORE, 0);
-			//new ExForestFire(100, 100, 0, ForestFireData.NB_MOORE, true, false, 0.3, 0.3, 0.3, 0.2, false);
+			//new ForestFire(0.6, 100, 100, 0, ForestFireData.NB_MOORE, 0);
+			new ExForestFire(100, 100, 0, ForestFireData.NB_MOORE, true, false, 0.3, 0.3, 0.3, 0.2, false);
 			fire.buildTimedSimulator(10);
 		
 		Simulator sim = fire.getSimulator();
