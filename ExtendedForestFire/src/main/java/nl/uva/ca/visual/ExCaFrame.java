@@ -4,12 +4,18 @@
  */
 package nl.uva.ca.visual;
 
-public class ExCaFrame extends CaFrame{
+import nl.tompeerdeman.ca.visual.CaFrame;
+
+public class ExCaFrame extends CaFrame {
 	public static void main(String[] args) {
-		  new ExCaFrame("title");
+		new ExCaFrame("title");
 	}
+	
+	public ExCaFrame(String title) {
+		super(title);
 		
-	public ExCaFrame(String title) extends CaFrame{
 		setSize(850, 650);
+		
+		setVisible(true);
 	}
 }
