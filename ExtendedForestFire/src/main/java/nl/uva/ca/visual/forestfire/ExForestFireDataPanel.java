@@ -16,8 +16,8 @@ import nl.tompeerdeman.ca.SimulateChangeListener;
 import nl.tompeerdeman.ca.Simulator;
 import nl.tompeerdeman.ca.forestfire.ForestFire;
 import nl.tompeerdeman.ca.forestfire.ForestFireData;
-import nl.tompeerdeman.ca.visual.SimulateControlPanel;
 import nl.tompeerdeman.ca.visual.SimulateController;
+import nl.uva.ca.visual.ExSimulateControlPanel;
 
 public class ExForestFireDataPanel extends JPanel implements
 		SimulateChangeListener, SimulateController {
@@ -27,7 +27,7 @@ public class ExForestFireDataPanel extends JPanel implements
 	private ForestFireData data;
 	private ForestFire fire;
 	
-	private SimulateControlPanel control;
+	private ExSimulateControlPanel control;
 	
 	private JLabel tick;
 	private JLabel burnt;
@@ -35,11 +35,29 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JLabel veg;
 	private JLabel barren;
 	private JLabel densityText;
-	private JTextField density;
+	private JLabel density2Text;
+	private JLabel tempText;
+	private JLabel typeText;
+	private JLabel nbText;
 	private JLabel windText;
-	private JComboBox<String> wind;
+	private JLabel firefighters;
+	private JLabel firefightertresh;
+	private JLabel probextinguish;
+	private JLabel randwater;
+	private JLabel height;
 	private JLabel fracBurned;
+	// oppReached to be removed later
 	private JLabel oppReached;
+	
+	private JComboBox<String> gridtype;
+	private JComboBox<String> wind;
+	private JComboBox<String> nb;
+	
+	private JTextField density;
+	private JTextField density2;
+	private JTextField temp;
+	private JTextField fftresh;
+	private JTextField ffext;
 	
 	public ExForestFireDataPanel(ForestFire fire) {
 		this.fire = fire;
@@ -57,9 +75,19 @@ public class ExForestFireDataPanel extends JPanel implements
 		burning = new JLabel();
 		veg = new JLabel();
 		barren = new JLabel();
-		densityText = new JLabel("Density: ");
-		density = new JTextField("0.5");
-		windText = new JLabel("Neigbourhood: ");
+		densityText = new JLabel("Tree Density: ");
+		density2Text = new JLabel("Bush Density: ");
+		tempText = new JLabel("Temperature: ");
+		density = new JTextField("0.3");
+		density2 = new JTextField("0.3");
+		typeText = new JLabel("Grid Type: ");
+		nbText = new JLabel("Neigbourhood: ");
+		windText = new JLabel("Wind Direction: ");
+		firefighters = new JLabel("Firefighters:");
+		firefightertresh = new JLabel("Firefighter treshold:");
+		probextinguish = new JLabel("Extinguish Probability:");
+		randwater = new JLabel("Generate random water");
+		height = new JLabel("height");
 		
 		fracBurned = new JLabel("Fraction burned: 0.0");
 		oppReached = new JLabel("Opposite reached: false");
@@ -122,7 +150,7 @@ public class ExForestFireDataPanel extends JPanel implements
 		c.gridy = 3;
 		add(density, c);
 		
-		control = new SimulateControlPanel(fire, this, this, 2, 0);
+		control = new ExSimulateControlPanel(fire, this, this, 2, 0);
 		
 		simulationUpdated(sim);
 	}
