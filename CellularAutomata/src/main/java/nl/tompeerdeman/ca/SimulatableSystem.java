@@ -27,11 +27,11 @@ public abstract class SimulatableSystem {
 		return sim;
 	}
 	
-	public void buildThread() {
+	public void buildThreadedSimulator() {
 		sim = new ThreadSimulator(grid, data);
 	}
 	
-	public void buildTimed(long delay) {
+	public void buildTimedSimulator(long delay) {
 		sim = new TimedSimulator(grid, data, delay);
 	}
 	

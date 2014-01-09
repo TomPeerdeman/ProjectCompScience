@@ -62,7 +62,7 @@ public class ForestFire extends SimulatableSystem implements SimulateChangeListe
 		
 		ForestFire fire =
 			new ForestFire(density, x, y, seed, ForestFireData.NB_NEUMANN, 0);
-		fire.buildThread();
+		fire.buildThreadedSimulator();
 		fire.getSimulator().addChangeListener(fire);
 		fire.start();
 	}

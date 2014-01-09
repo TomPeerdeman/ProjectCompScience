@@ -36,7 +36,7 @@ public class ForestFireFrame extends CaFrame {
 		
 		ForestFire fire =
 			new ForestFire(0.6, 100, 100, 0, ForestFireData.NB_MOORE, 0);
-		fire.buildTimed(10);
+		fire.buildTimedSimulator(10);
 		
 		Simulator sim = fire.getSimulator();
 		

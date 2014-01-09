@@ -41,7 +41,7 @@ public class ExForestFire extends ForestFire {
 	
 	@Override
 	public void randomizeGrid(final double density, final long seed) {
-		// Note: density is not used; treeDensity & bushDensity is used instead
+		// Note: density is not used; treeDensity & bushDensity is used instead.
 		// TODO: overwrite
 		
 		// TODO: mega awesome terrain generation here
@@ -49,9 +49,10 @@ public class ExForestFire extends ForestFire {
 	
 	@Override
 	public void igniteGrid() {
-		// Fill the bottom line of the grid with burning vegetation
+		// Fill the bottom line of the grid with burning vegetation.
 		for(int x = 0; x < grid.grid.length; x++) {
 			ExForestFireCell cell = (ExForestFireCell) grid.getCell(x, 0);
+			// Set cell's of type BUSH to BURNING_BUSH and TREE to BURNING_TREE.
 			if(cell.getType() == ExForestFireCellType.BUSH) {
 				cell.setType(ExForestFireCellType.BURNING_BUSH);
 			} else if(cell.getType() == ExForestFireCellType.TREE) {
@@ -68,14 +69,17 @@ public class ExForestFire extends ForestFire {
 				
 				if(cell != null) {
 					switch((ExForestFireCellType) cell.getType()) {
+					// Reset all variants of BUSH back to a BUSH type.
 						case BURNING_BUSH:
 						case BURNT_BUSH:
 						case EXTINGUISHED_BUSH:
 							cell.setType(ExForestFireCellType.BUSH);
+							// Reset all variants of TREE back to a TREE type.
 						case BURNING_TREE:
 						case BURNT_TREE:
 						case EXTINGUISHED_TREE:
 							cell.setType(ExForestFireCellType.TREE);
+							// Ignore water and existing BUSH & TREE cell's.
 						default:
 							break;
 					
@@ -83,6 +87,7 @@ public class ExForestFire extends ForestFire {
 				}
 			}
 		}
+		// Re ignite the fresh grid.
 		igniteGrid();
 	}
 }

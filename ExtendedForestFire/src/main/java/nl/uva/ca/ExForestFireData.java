@@ -55,7 +55,8 @@ public class ExForestFireData extends ForestFireData {
 					case BURNING_TREE:
 						burning++;
 						break;
-					case BURNT:
+					case BURNT_TREE:
+					case BURNT_BUSH:
 						burnt++;
 						break;
 					case TREE:
