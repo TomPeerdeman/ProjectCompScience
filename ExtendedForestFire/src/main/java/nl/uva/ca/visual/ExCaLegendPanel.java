@@ -8,8 +8,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import nl.tompeerdeman.ca.Grid;
@@ -26,16 +26,13 @@ public abstract class ExCaLegendPanel extends JPanel {
 	 * 
 	 */
 	public ExCaLegendPanel(Grid g) {
-		// Create black border
-		setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		
 		nx = g.grid.length;
 		
 		// dx = px horizontal per cell
 		dx = (int) Math.floor(400.0 / nx);
 		
-		setSize(nx * dx, 100);
-		setPreferredSize(new Dimension(nx * dx, 100));
+		setSize(nx * dx, 60);
+		setPreferredSize(new Dimension(nx * dx, 60));
 		
 		offsx = (getWidth() - nx * dx) / 2;
 	}
@@ -48,15 +45,21 @@ public abstract class ExCaLegendPanel extends JPanel {
 		// getWidth could be changed by layout manager
 		offsx = (getWidth() - nx * dx) / 2;
 		
+		// Make text rendering less crappy
+		g2d.setRenderingHint(
+				RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+		
 		onPaint(g2d);
 	}
 	
 	public abstract void onPaint(Graphics2D g2d);
 	
 	public void drawAt(Graphics2D g2d, int x, int y, Color color, String desc) {
+		
 		g2d.setColor(color);
-		g2d.fillRect(x, y, x + dx, y + dx);
+		g2d.fillRect(x, y, 10, 10);
 		g2d.setColor(Color.BLACK);
-		g2d.drawString(desc, x + dx + 3, y);
+		g2d.drawString(desc, x + 10 + 3, y + 10);
 	}
 }

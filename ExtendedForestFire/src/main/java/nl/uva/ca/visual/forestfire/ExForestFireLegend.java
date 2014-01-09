@@ -4,6 +4,7 @@
  */
 package nl.uva.ca.visual.forestfire;
 
+import java.awt.Font;
 import java.awt.Graphics2D;
 
 import nl.tompeerdeman.ca.Grid;
@@ -19,6 +20,10 @@ public class ExForestFireLegend extends ExCaLegendPanel {
 	 */
 	public ExForestFireLegend(Grid g) {
 		super(g);
+		// Default JPanel font is plain, JLabel is bold. We want JLabel style.
+		Font f = getFont();
+		f = new Font(f.getName(), Font.BOLD, f.getSize());
+		setFont(f);
 	}
 	
 	/*
@@ -30,9 +35,9 @@ public class ExForestFireLegend extends ExCaLegendPanel {
 	public void onPaint(Graphics2D g2d) {
 		int i = 0;
 		for(ExForestFireCellType type : ExForestFireCellType.values()) {
-			// 2 per column 25px long 15 px high
-			int x = (i / 2) * 25 + offsx;
-			int y = (i % 2) * 15;
+			// 3 per column 130px long 15 px high
+			int x = (i / 3) * 130 + offsx;
+			int y = (i % 3) * 15 + 10;
 			drawAt(g2d, x, y, type.getColor(), type.getDesc());
 			i++;
 		}

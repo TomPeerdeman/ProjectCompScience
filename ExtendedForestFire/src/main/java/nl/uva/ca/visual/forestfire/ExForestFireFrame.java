@@ -36,6 +36,11 @@ public class ExForestFireFrame extends ExCaFrame {
 		ExForestFireDataPanel dataPanel = new ExForestFireDataPanel(fire);
 		sim.addChangeListener(dataPanel);
 		
+		ExForestFireLegend legend =
+			new ExForestFireLegend(sim.getGrid());
+		
+		main.add(legend);
+		
 		main.add(dataPanel);
 		
 		setVisible(true);
