@@ -17,7 +17,6 @@ import javax.swing.SwingConstants;
 import nl.tompeerdeman.ca.SimulateChangeListener;
 import nl.tompeerdeman.ca.Simulator;
 import nl.tompeerdeman.ca.visual.SimulateController;
-
 import nl.uva.ca.ExForestFire;
 import nl.uva.ca.ExForestFireData;
 import nl.uva.ca.visual.ExSimulateControlPanel;
@@ -414,14 +413,37 @@ public class ExForestFireDataPanel extends JPanel implements
 	}
 	
 	public void updateType() {
+		//String[] probabilities = {gridProb1.getText(), gridProb2.getText(),gridProb3.getText(),gridProb4.getText(),gridProb5.getText(),gridProb6.getText(),gridProb7.getText(),gridProb8.getText()};
 		int i = gridtype.getSelectedIndex();
+		remove(gridProb1);
+		remove(gridProb2);
+		remove(gridProb3);
+		remove(gridProb4);
+		remove(gridProb5);
+		remove(gridProb6);
+		remove(gridProb7);
+		remove(gridProb8);
+		System.out.println(i);
 		switch(i) {
 			case 0:
-				System.out.println(gridProb1.getText());
+				repaint();
 				break;
 			case 1:
+				repaint();
 				break;
 			case 2:
+				/*
+				// probabilities start
+			    c.gridwidth = 1;
+			    
+				// column 1
+			    c.weightx=0.1;
+				
+				c.gridx = 3;
+				c.gridy = 4;
+				add(gridProb1, c);
+				*/
+				repaint();
 				break;
 		}
 	}
