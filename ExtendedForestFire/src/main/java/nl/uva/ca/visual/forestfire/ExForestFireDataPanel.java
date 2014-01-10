@@ -509,17 +509,25 @@ public class ExForestFireDataPanel extends JPanel implements
 				repaint();
 				break;
 			case 1:				// probabilities start
-				c.gridwidth = 2;
+				c.gridwidth = 1;
 				
 				// row 1
-				
+
 				c.gridx = 3;
+				c.gridy = 4;
+				add(empty, c);
+				
+				c.gridx = 4;
 				c.gridy = 4;
 				add(gridProb1, c);
 				
 				c.gridx = 5;
 				c.gridy = 4;
 				add(gridProb2, c);
+				
+				c.gridx = 6;
+				c.gridy = 4;
+				add(empty, c);
 				
 				// row 2
 				c.gridwidth = 1;
@@ -544,16 +552,23 @@ public class ExForestFireDataPanel extends JPanel implements
 				c.gridy = 5;
 				add(gridProb4, c);
 				
-				// column 3
-				c.gridwidth = 2;	
-				
+				// row 3
+
 				c.gridx = 3;
+				c.gridy = 6;
+				add(empty, c);
+				
+				c.gridx = 4;
 				c.gridy = 6;
 				add(gridProb5, c);
 				
 				c.gridx = 5;
 				c.gridy = 6;
 				add(gridProb6, c);
+				
+				c.gridx = 6;
+				c.gridy = 6;
+				add(empty, c);
 				
 				// probabilities end
 				
