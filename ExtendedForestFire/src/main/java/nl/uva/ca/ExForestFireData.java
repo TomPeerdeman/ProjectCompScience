@@ -5,37 +5,46 @@
 package nl.uva.ca;
 
 import nl.tompeerdeman.ca.Cell;
+import nl.tompeerdeman.ca.DataSet;
 import nl.tompeerdeman.ca.Grid;
-import nl.tompeerdeman.ca.forestfire.ForestFireData;
 
-public class ExForestFireData extends ForestFireData {
-	public int trees;
+public class ExForestFireData implements DataSet {
+	protected Grid grid;
+	public double[][] neighborhood;
+	
+	public long bushes;
+	public long trees;
+	public long barren;
+	public long burning;
+	public long burnt;
 	
 	public double fireFightTresh;
 	public double extinguishProb;
 	public boolean useTemperature;
 	
 	/**
-	 * @param nb
 	 * @param grid
-	 * @param densityIdx
+	 * @param neighborhood
 	 * @param fireFightTresh
 	 * @param extinguishProb
 	 * @param useTemperature
 	 */
-	public ExForestFireData(boolean[][] nb, Grid grid, int densityIdx,
+	public ExForestFireData(Grid grid, double[][] neighborhood,
 			double fireFightTresh, double extinguishProb, boolean useTemperature) {
-		super(nb, grid, densityIdx);
+		this.grid = grid;
+		this.neighborhood = neighborhood;
 		this.fireFightTresh = fireFightTresh;
 		this.extinguishProb = extinguishProb;
 		this.useTemperature = useTemperature;
+		
+		reset();
 	}
 	
 	@Override
 	public void reset() {
 		burning = 0;
 		burnt = 0;
-		vegetation = 0;
+		bushes = 0;
 		barren = 0;
 		trees = 0;
 		
@@ -63,7 +72,7 @@ public class ExForestFireData extends ForestFireData {
 						trees++;
 						break;
 					case BUSH:
-						vegetation++;
+						bushes++;
 						break;
 					default:
 						barren++;
@@ -71,7 +80,5 @@ public class ExForestFireData extends ForestFireData {
 				}
 			}
 		}
-		
-		reachedOpposite = false;
 	}
 }

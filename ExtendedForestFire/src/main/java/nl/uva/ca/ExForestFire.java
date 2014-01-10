@@ -8,10 +8,14 @@ import nl.tompeerdeman.ca.Grid;
 import nl.tompeerdeman.ca.SimulatableSystem;
 
 public class ExForestFire extends SimulatableSystem {
-	private ExForestFireData ffdata;
-	private boolean randWater;
-	private double treeDensity;
-	private double bushDensity;
+	public static final double[][] NB_NEUMANN = {
+													{0, 1, 0},
+													{1, 0, 1},
+													{0, 1, 0}};
+	
+	public boolean randWater;
+	public double treeDensity;
+	public double bushDensity;
 	
 	/**
 	 * @param nx
@@ -19,6 +23,7 @@ public class ExForestFire extends SimulatableSystem {
 	 * @param seed
 	 * @param nb
 	 * @param randWater
+	 * @param firefighters
 	 * @param treeDensity
 	 * @param bushDensity
 	 * @param fireFightTresh
@@ -41,9 +46,9 @@ public class ExForestFire extends SimulatableSystem {
 		igniteGrid();
 		
 		data =
-			new ExForestFireData(nb, grid, 0, fireFightTresh, extinguishProb,
-					useTemperature);
-		ffdata = (ExForestFireData) data;
+			new ExForestFireData(grid, NB_NEUMANN,
+					((firefighters) ? fireFightTresh : -1.0),
+					extinguishProb, useTemperature);
 	}
 	
 	public void randomizeGrid(final long seed) {

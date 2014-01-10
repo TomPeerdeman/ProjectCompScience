@@ -58,6 +58,7 @@ public class ExForestFireCell extends Cell {
 	 */
 	@Override
 	public boolean simulate(Grid grid, DataSet data, Simulator sim) {
+		@SuppressWarnings("unused")
 		ExForestFireData ffdata = (ExForestFireData) data;
 		
 		// TODO: Implement

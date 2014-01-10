@@ -47,7 +47,6 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JLabel fftreshText;
 	private JLabel ffextText;
 	private JLabel randwater;
-	private JLabel height;
 	private JLabel fracBurned;
 	private JLabel treeBurningText;
 	private JLabel bushBurningText;
@@ -100,18 +99,12 @@ public class ExForestFireDataPanel extends JPanel implements
 		fftreshText = new JLabel("Firefighter treshold:");
 		ffextText = new JLabel("Extinguish Probability:");
 		randwater = new JLabel("Generate random water:");
-		height = new JLabel("Height");
+		new JLabel("Height");
 		treeBurningText = new JLabel("Tree Burning x steps:");
 		bushBurningText = new JLabel("Bush Burning x steps:");
 		
 		fracBurned = new JLabel("Fraction burned: 0.0");
 		oppReached = new JLabel("Opposite reached: false");
-		
-		// old string[]
-		String windStr[] =
-		{"Von Neumann", "Moore", "Wind up Neumann",
-			"Wind left Neumann", "Wind right Neumann", "Wind up Moore",
-			"Wind left Moore", "Wind right Moore"};
 		
 		String windDirectionsStr[] =
 		{"Up", "Right", "Down", "Left"};
@@ -303,18 +296,17 @@ public class ExForestFireDataPanel extends JPanel implements
 		tick.setText("Tick: " + sim.getTick());
 		burnt.setText("Burnt: " + data.burnt);
 		burning.setText("Burning: " + data.burning);
-		veg.setText("Vegetation: " + (data.vegetation + data.trees));
+		veg.setText("Vegetation: " + (data.bushes + data.trees));
 		barren.setText("Barren: " + data.barren);
 		
 		@SuppressWarnings("resource")
 		Formatter format = new Formatter();
 		format =
 			format.format(Locale.US, "%.2f", (double) data.burnt
-					/ (double) (data.vegetation + data.burnt + data.trees));
+					/ (double) (data.bushes + data.burnt + data.trees));
 		
 		fracBurned.setText("Fraction burned: " + format.toString());
-		oppReached.setText("Opposite reached: "
-				+ ((data.reachedOpposite) ? "true" : "false"));
+		oppReached.setText("Opposite reached: maybe");
 		
 		format.close();
 		
@@ -326,10 +318,18 @@ public class ExForestFireDataPanel extends JPanel implements
 	@Override
 	public boolean onRandomize() {
 		try {
-			double ddensity = Double.parseDouble(density.getText());
-			if(ddensity < 0 || ddensity > 1.0) {
+			double d = Double.parseDouble(density.getText());
+			if(d < 0 || d > 1.0) {
 				throw new NumberFormatException();
 			}
+			fire.treeDensity = d;
+			
+			d = Double.parseDouble(density2.getText());
+			if(d < 0 || d > 1.0) {
+				throw new NumberFormatException();
+			}
+			fire.bushDensity = d;
+			
 			fire.randomizeGrid(0);
 			fire.igniteGrid();
 		} catch(NumberFormatException e) {
@@ -349,11 +349,11 @@ public class ExForestFireDataPanel extends JPanel implements
 		int i = waterCheck.getSelectedIndex();
 		switch(i) {
 			case 0:
+				fire.randWater = true;
 				break;
 			case 1:
-				System.out.println("We don't need no water");
+				fire.randWater = false;
 				break;
-		
 		}
 	}
 	
