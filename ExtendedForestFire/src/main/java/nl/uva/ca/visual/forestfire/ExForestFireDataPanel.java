@@ -52,6 +52,7 @@ public class ExForestFireDataPanel extends JPanel implements
 	// oppReached to be removed later
 	private JLabel oppReached;
 	private JLabel height;
+	private JLabel empty;
 	
 	private JComboBox<String> gridtype;
 	private JComboBox<String> waterCheck;
@@ -92,6 +93,7 @@ public class ExForestFireDataPanel extends JPanel implements
 		densityText = new JLabel("Tree Density: ", SwingConstants.LEFT);
 		density2Text = new JLabel("Bush Density: ");
 		tempText = new JLabel("Temperature: ");
+		empty = new JLabel(" ");
 		density = new JTextField("0.3");
 		density2 = new JTextField("0.3");
 		fftresh = new JTextField("0.3");
@@ -153,6 +155,7 @@ public class ExForestFireDataPanel extends JPanel implements
 				updateFirefighter();
 			}
 		});
+	    c.weightx = 1;
 		
 		c.gridx = 0;
 		c.gridy = 0;
@@ -263,7 +266,6 @@ public class ExForestFireDataPanel extends JPanel implements
 		c.gridwidth = 1;
 		
 		// column 1
-		c.weightx = 0.1;
 		
 		c.gridx = 3;
 		c.gridy = 4;
@@ -308,6 +310,18 @@ public class ExForestFireDataPanel extends JPanel implements
 		c.gridx = 5;
 		c.gridy = 6;
 		add(gridProb8, c);
+		
+		c.gridx = 6;
+		c.gridy = 4;
+		add(empty, c);
+		
+		c.gridx = 6;
+		c.gridy = 5;
+		add(empty, c);
+		
+		c.gridx = 6;
+		c.gridy = 6;
+		add(empty, c);
 		
 		// probabilities end
 		
@@ -431,7 +445,6 @@ public class ExForestFireDataPanel extends JPanel implements
 				c.gridwidth = 1;
 				
 				// column 1
-				c.weightx = 0.1;
 				
 				c.gridx = 3;
 				c.gridy = 4;
@@ -477,43 +490,142 @@ public class ExForestFireDataPanel extends JPanel implements
 				c.gridy = 6;
 				add(gridProb8, c);
 				
+				c.gridx = 6;
+				c.gridy = 4;
+				add(empty, c);
+				
+				c.gridx = 6;
+				c.gridy = 5;
+				add(empty, c);
+				
+				c.gridx = 6;
+				c.gridy = 6;
+				add(empty, c);
+				
 				// probabilities end
 				
 				c.gridwidth = 2;
 				revalidate();
 				repaint();
 				break;
-			case 1:
-				revalidate();
-				repaint();
-				break;
-			case 2:
-				// probabilities start
-			    c.gridwidth = 4;
-			    
-			    c.weightx = 1;
-				// column 1
+			case 1:				// probabilities start
+				c.gridwidth = 2;
+				
+				// row 1
+				
 				c.gridx = 3;
 				c.gridy = 4;
 				add(gridProb1, c);
-								
+				
+				c.gridx = 5;
+				c.gridy = 4;
+				add(gridProb2, c);
+				
+				// row 2
+				c.gridwidth = 1;
+
+				c.gridx = 3;
+				c.gridy = 5;
+				add(gridProb3, c);
+
+				c.gridwidth = 2;
+				
 				c.fill = GridBagConstraints.VERTICAL;
 				
-				c.gridx = 3;
+				c.gridx = 4;
 				c.gridy = 5;
 				add(filler, c);
 				
 				c.fill = GridBagConstraints.HORIZONTAL;
 				
-			    c.gridwidth = 2;
-
+				c.gridwidth = 1;
+				
+				c.gridx = 6;
+				c.gridy = 5;
+				add(gridProb4, c);
+				
+				// column 3
+				c.gridwidth = 2;	
+				
+				c.gridx = 3;
+				c.gridy = 6;
+				add(gridProb5, c);
+				
+				c.gridx = 5;
+				c.gridy = 6;
+				add(gridProb6, c);
+				
+				// probabilities end
+				
+				c.gridwidth = 2;
+				revalidate();
+				repaint();
+				break;
+			case 2:
+				// probabilities start
+				c.gridwidth = 1;
+				
+				// column 1
+				
+				c.gridx = 3;
+				c.gridy = 4;
+				add(empty, c);
+				
+				c.gridx = 3;
+				c.gridy = 5;
+				add(empty, c);
+				
 				c.gridx = 3;
 				c.gridy = 6;
 				add(gridProb2, c);
-
+				
+				// column 2
+				
+				c.gridx = 4;
+				c.gridy = 4;
+				add(gridProb1, c);
+				
+				c.fill = GridBagConstraints.VERTICAL;
+				
+				c.gridx = 4;
+				c.gridy = 5;
+				add(filler, c);
+				
+				c.fill = GridBagConstraints.HORIZONTAL;
+				
+				c.gridx = 4;
+				c.gridy = 6;
+				add(empty, c);
+				
+				// column 3
+				
+				c.gridx = 5;
+				c.gridy = 4;
+				add(empty, c);
+				
+				c.gridx = 5;
+				c.gridy = 5;
+				add(empty, c);
+				
 				c.gridx = 5;
 				c.gridy = 6;
 				add(gridProb3, c);
+				
+				c.gridx = 6;
+				c.gridy = 4;
+				add(empty, c);
+				
+				c.gridx = 6;
+				c.gridy = 5;
+				add(empty, c);
+				
+				c.gridx = 6;
+				c.gridy = 6;
+				add(empty, c);
+				
+				// probabilities end
+				
+				c.gridwidth = 2;
 				
 				revalidate();
 				repaint();
