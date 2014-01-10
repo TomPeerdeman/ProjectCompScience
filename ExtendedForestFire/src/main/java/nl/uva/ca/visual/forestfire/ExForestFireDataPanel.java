@@ -252,7 +252,7 @@ public class ExForestFireDataPanel extends JPanel implements
 		c.gridx = 2;
 		c.gridy = 6;
 		add(fftresh, c);
-
+		
 		c.gridx = 3;
 		c.gridy = 0;
 		add(treeBurningText, c);
@@ -272,7 +272,6 @@ public class ExForestFireDataPanel extends JPanel implements
 		c.gridx = 3;
 		c.gridy = 4;
 		add(nbText, c);
-
 		
 		c.gridx = 4;
 		c.gridy = 0;
@@ -304,7 +303,7 @@ public class ExForestFireDataPanel extends JPanel implements
 		tick.setText("Tick: " + sim.getTick());
 		burnt.setText("Burnt: " + data.burnt);
 		burning.setText("Burning: " + data.burning);
-		veg.setText("Vegetation: " + data.vegetation + data.trees);
+		veg.setText("Vegetation: " + (data.vegetation + data.trees));
 		barren.setText("Barren: " + data.barren);
 		
 		@SuppressWarnings("resource")
