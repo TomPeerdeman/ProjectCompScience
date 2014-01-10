@@ -8,5 +8,6 @@ public class ExCaFrame extends CaFrame {
 	public ExCaFrame(String title) {
 		super(title);
 		setSize(950, 720);
+		setResizable(false);
 	}
 }

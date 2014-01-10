@@ -53,10 +53,15 @@ public class ExForestFire extends SimulatableSystem {
 	
 	public void randomizeGrid(final long seed) {
 		// TODO: mega awesome terrain generation here
+		
+		grid.clear();
+		
 		for(int y = 0; y < grid.grid[0].length; y++) {
 			grid.setCell(new ExForestFireCell(49, y, ExForestFireCellType.BUSH));
-			grid.setCell(new ExForestFireCell(50, y,
-					ExForestFireCellType.WATER));
+			if(randWater) {
+				grid.setCell(new ExForestFireCell(50, y,
+						ExForestFireCellType.WATER));
+			}
 			grid.setCell(new ExForestFireCell(51, y, ExForestFireCellType.TREE));
 		}
 	}

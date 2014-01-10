@@ -374,7 +374,6 @@ public class ExForestFireDataPanel extends JPanel implements
 			fire.randomizeGrid(0);
 			fire.igniteGrid();
 		} catch(NumberFormatException e) {
-			density.setText("0.5");
 			return false;
 		}
 		return true;
