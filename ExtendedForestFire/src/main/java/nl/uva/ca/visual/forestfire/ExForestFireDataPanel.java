@@ -17,7 +17,6 @@ import javax.swing.SwingConstants;
 import nl.tompeerdeman.ca.SimulateChangeListener;
 import nl.tompeerdeman.ca.Simulator;
 import nl.tompeerdeman.ca.visual.SimulateController;
-
 import nl.uva.ca.ExForestFire;
 import nl.uva.ca.ExForestFireData;
 import nl.uva.ca.visual.ExSimulateControlPanel;
@@ -31,6 +30,7 @@ public class ExForestFireDataPanel extends JPanel implements
 	private ExForestFire fire;
 	
 	private ExSimulateControlPanel control;
+	private GridBagConstraints c;
 	
 	private JLabel tick;
 	private JLabel burnt;
@@ -80,7 +80,7 @@ public class ExForestFireDataPanel extends JPanel implements
 		data = (ExForestFireData) sim.getData();
 		
 		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(0, 5, 0, 5);
 		
@@ -413,14 +413,110 @@ public class ExForestFireDataPanel extends JPanel implements
 	}
 	
 	public void updateType() {
+		//String[] probabilities = {gridProb1.getText(), gridProb2.getText(),gridProb3.getText(),gridProb4.getText(),gridProb5.getText(),gridProb6.getText(),gridProb7.getText(),gridProb8.getText()};
 		int i = gridtype.getSelectedIndex();
+		remove(gridProb1);
+		remove(gridProb2);
+		remove(gridProb3);
+		remove(gridProb4);
+		remove(gridProb5);
+		remove(gridProb6);
+		remove(gridProb7);
+		remove(gridProb8);
+		remove(filler);
+		System.out.println(i);
 		switch(i) {
 			case 0:
-				System.out.println(gridProb1.getText());
+				// probabilities start
+				c.gridwidth = 1;
+				
+				// column 1
+				c.weightx = 0.1;
+				
+				c.gridx = 3;
+				c.gridy = 4;
+				add(gridProb1, c);
+				
+				c.gridx = 3;
+				c.gridy = 5;
+				add(gridProb4, c);
+				
+				c.gridx = 3;
+				c.gridy = 6;
+				add(gridProb6, c);
+				
+				// column 2
+				
+				c.gridx = 4;
+				c.gridy = 4;
+				add(gridProb2, c);
+				
+				c.fill = GridBagConstraints.VERTICAL;
+				
+				c.gridx = 4;
+				c.gridy = 5;
+				add(filler, c);
+				
+				c.fill = GridBagConstraints.HORIZONTAL;
+				
+				c.gridx = 4;
+				c.gridy = 6;
+				add(gridProb7, c);
+				
+				// column 3
+				
+				c.gridx = 5;
+				c.gridy = 4;
+				add(gridProb3, c);
+				
+				c.gridx = 5;
+				c.gridy = 5;
+				add(gridProb5, c);
+				
+				c.gridx = 5;
+				c.gridy = 6;
+				add(gridProb8, c);
+				
+				// probabilities end
+				
+				c.gridwidth = 2;
+				revalidate();
+				repaint();
 				break;
 			case 1:
+				revalidate();
+				repaint();
 				break;
 			case 2:
+				// probabilities start
+			    c.gridwidth = 4;
+			    
+			    c.weightx = 1;
+				// column 1
+				c.gridx = 3;
+				c.gridy = 4;
+				add(gridProb1, c);
+								
+				c.fill = GridBagConstraints.VERTICAL;
+				
+				c.gridx = 3;
+				c.gridy = 5;
+				add(filler, c);
+				
+				c.fill = GridBagConstraints.HORIZONTAL;
+				
+			    c.gridwidth = 2;
+
+				c.gridx = 3;
+				c.gridy = 6;
+				add(gridProb2, c);
+
+				c.gridx = 5;
+				c.gridy = 6;
+				add(gridProb3, c);
+				
+				revalidate();
+				repaint();
 				break;
 		}
 	}
