@@ -49,6 +49,8 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JLabel randwater;
 	private JLabel height;
 	private JLabel fracBurned;
+	private JLabel treeBurningText;
+	private JLabel bushBurningText;
 	// oppReached to be removed later
 	private JLabel oppReached;
 	
@@ -63,6 +65,8 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JTextField temp;
 	private JTextField fftresh;
 	private JTextField ffext;
+	private JTextField bushBurning;
+	private JTextField treeBurning;
 	
 	public ExForestFireDataPanel(ExForestFire fire) {
 		this.fire = fire;
@@ -86,6 +90,8 @@ public class ExForestFireDataPanel extends JPanel implements
 		density2 = new JTextField("0.3");
 		fftresh = new JTextField("0.3");
 		ffext = new JTextField("0.3");
+		treeBurning = new JTextField("1");
+		bushBurning = new JTextField("1");
 		temp = new JTextField("18");
 		typeText = new JLabel("Grid Type: ");
 		nbText = new JLabel("Neigbourhood: ");
@@ -94,7 +100,9 @@ public class ExForestFireDataPanel extends JPanel implements
 		fftreshText = new JLabel("Firefighter treshold:");
 		ffextText = new JLabel("Extinguish Probability:");
 		randwater = new JLabel("Generate random water:");
-		height = new JLabel("height");
+		height = new JLabel("Height");
+		treeBurningText = new JLabel("Tree Burning x steps:");
+		bushBurningText = new JLabel("Bush Burning x steps:");
 		
 		fracBurned = new JLabel("Fraction burned: 0.0");
 		oppReached = new JLabel("Opposite reached: false");
@@ -244,32 +252,49 @@ public class ExForestFireDataPanel extends JPanel implements
 		c.gridx = 2;
 		c.gridy = 6;
 		add(fftresh, c);
-		
+
 		c.gridx = 3;
 		c.gridy = 0;
-		add(typeText, c);
+		add(treeBurningText, c);
 		
 		c.gridx = 3;
 		c.gridy = 1;
-		add(gridtype, c);
+		add(bushBurningText, c);
 		
 		c.gridx = 3;
 		c.gridy = 2;
-		add(windText, c);
+		add(typeText, c);
 		
 		c.gridx = 3;
 		c.gridy = 3;
-		add(wind, c);
+		add(windText, c);
 		
 		c.gridx = 3;
 		c.gridy = 4;
 		add(nbText, c);
+
 		
-		c.gridx = 3;
-		c.gridy = 5;
+		c.gridx = 4;
+		c.gridy = 0;
+		add(treeBurning, c);
+		
+		c.gridx = 4;
+		c.gridy = 1;
+		add(bushBurning, c);
+		
+		c.gridx = 4;
+		c.gridy = 2;
+		add(gridtype, c);
+		
+		c.gridx = 4;
+		c.gridy = 3;
+		add(wind, c);
+		
+		c.gridx = 4;
+		c.gridy = 4;
 		add(nb, c);
 		
-		control = new ExSimulateControlPanel(fire, this, this, 4, 0);
+		control = new ExSimulateControlPanel(fire, this, this, 5, 0);
 		
 		simulationUpdated(sim);
 	}
