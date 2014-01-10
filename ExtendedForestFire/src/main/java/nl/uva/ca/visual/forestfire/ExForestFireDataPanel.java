@@ -41,22 +41,19 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JLabel density2Text;
 	private JLabel tempText;
 	private JLabel typeText;
-	private JLabel nbText;
-	private JLabel windText;
 	private JLabel firefighters;
 	private JLabel fftreshText;
 	private JLabel ffextText;
 	private JLabel randwater;
 	private JLabel height;
 	private JLabel fracBurned;
+	private JLabel gridProbText;
 	private JLabel treeBurningText;
 	private JLabel bushBurningText;
 	// oppReached to be removed later
 	private JLabel oppReached;
 	
 	private JComboBox<String> gridtype;
-	private JComboBox<String> wind;
-	private JComboBox<String> nb;
 	private JComboBox<String> waterCheck;
 	private JComboBox<String> ffCheck;
 	
@@ -94,30 +91,19 @@ public class ExForestFireDataPanel extends JPanel implements
 		bushBurning = new JTextField("1");
 		temp = new JTextField("18");
 		typeText = new JLabel("Grid Type: ");
-		nbText = new JLabel("Neigbourhood: ");
-		windText = new JLabel("Wind Direction: ");
 		firefighters = new JLabel("Firefighters:");
 		fftreshText = new JLabel("Firefighter treshold:");
 		ffextText = new JLabel("Extinguish Probability:");
 		randwater = new JLabel("Generate random water:");
+		gridProbText = new JLabel("Grid Fire transfer Probabilities:");
 		height = new JLabel("Height");
-		treeBurningText = new JLabel("Tree Burning x steps:");
-		bushBurningText = new JLabel("Bush Burning x steps:");
+		treeBurningText = new JLabel("Tree Burning steps:");
+		bushBurningText = new JLabel("Bush Burning steps:");
 		
 		fracBurned = new JLabel("Fraction burned: 0.0");
 		oppReached = new JLabel("Opposite reached: false");
 		
 		// old string[]
-		String windStr[] =
-		{"Von Neumann", "Moore", "Wind up Neumann",
-			"Wind left Neumann", "Wind right Neumann", "Wind up Moore",
-			"Wind left Moore", "Wind right Moore"};
-		
-		String windDirectionsStr[] =
-		{"Up", "Right", "Down", "Left"};
-		
-		String nbStr[] =
-		{"Neumann", "Moore", "Extended Neumann"};
 		
 		String GridStr[] =
 		{"Standard", "Hexagonal", "Triangular"};
@@ -126,8 +112,6 @@ public class ExForestFireDataPanel extends JPanel implements
 		{"Yes", "No"};
 		
 		gridtype = new JComboBox<String>(GridStr);
-		wind = new JComboBox<String>(windDirectionsStr);
-		nb = new JComboBox<String>(nbStr);
 		waterCheck = new JComboBox<String>(YesNoStr);
 		ffCheck = new JComboBox<String>(YesNoStr);
 		
@@ -135,19 +119,6 @@ public class ExForestFireDataPanel extends JPanel implements
 		ffCheck.setSelectedIndex(1);
 		fftresh.setEnabled(false);
 		ffext.setEnabled(false);
-		
-		wind.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				updateWind();
-			}
-		});
-		nb.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				updateNb();
-			}
-		});
 		gridtype.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -264,14 +235,12 @@ public class ExForestFireDataPanel extends JPanel implements
 		c.gridx = 3;
 		c.gridy = 2;
 		add(typeText, c);
-		
+
+	    //c.gridwidth = 2;
 		c.gridx = 3;
 		c.gridy = 3;
-		add(windText, c);
-		
-		c.gridx = 3;
-		c.gridy = 4;
-		add(nbText, c);
+		add(gridProbText, c);
+	    //c.gridwidth = 1;
 		
 		c.gridx = 4;
 		c.gridy = 0;
@@ -284,15 +253,7 @@ public class ExForestFireDataPanel extends JPanel implements
 		c.gridx = 4;
 		c.gridy = 2;
 		add(gridtype, c);
-		
-		c.gridx = 4;
-		c.gridy = 3;
-		add(wind, c);
-		
-		c.gridx = 4;
-		c.gridy = 4;
-		add(nb, c);
-		
+				
 		control = new ExSimulateControlPanel(fire, this, this, 5, 0);
 		
 		simulationUpdated(sim);
@@ -369,33 +330,6 @@ public class ExForestFireDataPanel extends JPanel implements
 				ffext.setEnabled(false);
 				break;
 		
-		}
-	}
-	
-	public void updateNb() {
-		int i = nb.getSelectedIndex();
-		switch(i) {
-			case 0:
-				break;
-			case 1:
-				break;
-			case 2:
-				break;
-		
-		}
-	}
-	
-	public void updateWind() {
-		int i = wind.getSelectedIndex();
-		switch(i) {
-			case 0:
-				break;
-			case 1:
-				break;
-			case 2:
-				break;
-			case 3:
-				break;
 		}
 	}
 	
