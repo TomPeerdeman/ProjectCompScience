@@ -15,39 +15,37 @@ public class ExForestFire extends SimulatableSystem {
 													{1, 0, 1},
 													{0, 1, 0}};
 	/*
-	 *  Hexagon neighbours
-	 *         (Xn, Yn+1)  (Xn+1, Yn+1)
-	 *   (Xn-1, Yn)    (Xn, Yn)    (Xn+1, Yn)  
-	 *         (Xn, Yn-1)  (Xn+1, Yn-1)
+	 * Hexagon neighbours
+	 * (Xn, Yn+1) (Xn+1, Yn+1)
+	 * (Xn-1, Yn) (Xn, Yn) (Xn+1, Yn)
+	 * (Xn, Yn-1) (Xn+1, Yn-1)
 	 */
-
+	
 	public static final double[][] NB_MOORE_HEX = {
 													{0, 1, 1},
 													{1, 0, 1},
 													{0, 1, 1}};
-
+	
 	/*
-	 *  Triangle1 neighbours
-	 *   (Xn-1, Yn)    (Xn, Yn)    (Xn+1, Yn)  /\
-	 *                (Xn, Yn-1)              /__\
+	 * Triangle1 neighbours
+	 * (Xn-1, Yn) (Xn, Yn) (Xn+1, Yn) /\
+	 * (Xn, Yn-1) /__\
 	 */
-
+	
 	public static final double[][] NB_MOORE_TRI1 = {
 													{0, 0, 0},
 													{1, 0, 1},
 													{0, 1, 0}};
 	/*
-	 *  Triangle2 neighbours                  ____
-     *                (Xn, Yn+1)              \  /
-	 *   (Xn-1, Yn)    (Xn, Yn)    (Xn+1, Yn)  \/
-
+	 * Triangle2 neighbours ____
+	 * (Xn, Yn+1) \ /
+	 * (Xn-1, Yn) (Xn, Yn) (Xn+1, Yn) \/
 	 */
-
+	
 	public static final double[][] NB_MOORE_TRI2 = {
 													{0, 1, 0},
 													{1, 0, 1},
 													{0, 0, 0}};
-
 	
 	public boolean randWater;
 	public double treeDensity;
@@ -66,6 +64,7 @@ public class ExForestFire extends SimulatableSystem {
 	 * @param fireFightTresh
 	 * @param extinguishProb
 	 * @param useTemperature
+	 * @param type
 	 */
 	public ExForestFire(int nx, int ny, long seed,
 			boolean[][] nb, boolean randWater, boolean firefighters,
@@ -94,69 +93,78 @@ public class ExForestFire extends SimulatableSystem {
 		
 		grid.clear();
 		
-		/*for(int y = 0; y < grid.grid[0].length; y++) {
-			grid.setCell(new ExForestFireCell(49, y, ExForestFireCellType.BUSH));
-			if(randWater) {
-				grid.setCell(new ExForestFireCell(50, y,
-						ExForestFireCellType.WATER));
-			}
-			grid.setCell(new ExForestFireCell(51, y, ExForestFireCellType.TREE));
-		}*/
-		if(randWater){
+		/*
+		 * for(int y = 0; y < grid.grid[0].length; y++) {
+		 * grid.setCell(new ExForestFireCell(49, y, ExForestFireCellType.BUSH));
+		 * if(randWater) {
+		 * grid.setCell(new ExForestFireCell(50, y,
+		 * ExForestFireCellType.WATER));
+		 * }
+		 * grid.setCell(new ExForestFireCell(51, y, ExForestFireCellType.TREE));
+		 * }
+		 */
+		if(randWater) {
 			Random rand = new Random();
 			// generate a number of random water points
-			int points = rand.nextInt(5)+1;
-			int [][] pointcoord = new int[5][3];
-			for(int i = 0; i < points; i++){
+			int points = rand.nextInt(5) + 1;
+			int[][] pointcoord = new int[5][3];
+			for(int i = 0; i < points; i++) {
 				// generate coordinates for each point
 				pointcoord[i][0] = rand.nextInt(100);
 				pointcoord[i][1] = rand.nextInt(100);
-				// if there is more then 1 point, connect it to a random other point
-				if(points > 1){
-					while(true){
+				// if there is more then 1 point, connect it to a random other
+				// point
+				if(points > 1) {
+					while(true) {
 						int temp = rand.nextInt(points);
-						// dont connect to self
-						if(temp != i){
+						// don't connect to self
+						if(temp != i) {
 							pointcoord[i][2] = temp;
 							break;
 						}
 					}
 				}
-				// fill the blank if im the only point
-				else{
+				// fill the blank if i'm the only point
+				else {
 					pointcoord[i][2] = 0;
 				}
 			}
 			// draw all connections
-			if(points > 1){
+			if(points > 1) {
 				// connect random water points
-				for(int i = 0; i < points; i++){
-					randomWater(pointcoord[i][0], pointcoord[i][1], pointcoord[pointcoord[i][2]][0], pointcoord[pointcoord[i][2]][1]);
+				for(int i = 0; i < points; i++) {
+					randomWater(pointcoord[i][0], pointcoord[i][1],
+							pointcoord[pointcoord[i][2]][0],
+							pointcoord[pointcoord[i][2]][1]);
 				}
 			}
-
+			
 			// connect the closest point to an edge -> fancy
 			int edge = rand.nextInt(100);
 			int xory = rand.nextInt(2);
 			
-			// cant be more then 200
+			// can't be more than 200
 			int distance = 200;
 			int newdistance;
 			int index = 0;
-			if(xory == 0){
-				for(int i = 0; i < points; i++){
-					newdistance = Math.abs(pointcoord[i][0] - 0) + Math.abs(pointcoord[i][1] - edge);
-					if(newdistance < distance){
+			if(xory == 0) {
+				for(int i = 0; i < points; i++) {
+					newdistance =
+						Math.abs(pointcoord[i][0] - 0)
+								+ Math.abs(pointcoord[i][1] - edge);
+					if(newdistance < distance) {
 						distance = newdistance;
 						index = i;
 					}
 				}
 				randomWater(pointcoord[index][0], pointcoord[index][1], 0, edge);
 			}
-			else{
-				for(int i = 0; i < points; i++){
-					newdistance = Math.abs(pointcoord[i][0] - edge) + Math.abs(pointcoord[i][1] - 0);
-					if(newdistance < distance){
+			else {
+				for(int i = 0; i < points; i++) {
+					newdistance =
+						Math.abs(pointcoord[i][0] - edge)
+								+ Math.abs(pointcoord[i][1] - 0);
+					if(newdistance < distance) {
 						distance = newdistance;
 						index = i;
 					}
@@ -166,72 +174,87 @@ public class ExForestFire extends SimulatableSystem {
 		}
 	}
 	
-	public void randomWater(int xstart, int ystart, int xend, int yend){
+	public void randomWater(int xstart, int ystart, int xend, int yend) {
 		int xcurr = xstart;
 		int ycurr = ystart;
-		int xory;
+		
 		// calculate distance left
 		int distance = Math.abs(xcurr - xend) + Math.abs(ycurr - yend);
-		Random rand2 = new Random();
+		int distX = Math.abs(xcurr - xend);
+		int distY = Math.abs(ycurr - yend);
+		Random rand = new Random();
+		
 		// find out the correct possible direction and randomly choose one
-		while(distance > 0){
-			if(xend > xcurr && yend > ycurr){
-				xory = rand2.nextInt(2);
-				if(xory == 0){
+		while(distance > 0) {
+			boolean goX = rand.nextInt(distX + distY) < distX;
+			
+			if(xend > xcurr && yend > ycurr) {
+				if(goX) {
 					xcurr++;
 				}
-				else{
+				else {
 					ycurr++;
-				}				
+				}
 			}
-			else if(xend < xcurr && yend < ycurr){
-				xory = rand2.nextInt(2);
-				if(xory == 0){
+			else if(xend < xcurr && yend < ycurr) {
+				if(goX) {
 					xcurr--;
 				}
-				else{
+				else {
 					ycurr--;
-				}				
+				}
 			}
-			else if(xend > xcurr && yend < ycurr){
-				xory = rand2.nextInt(2);
-				if(xory == 0){
+			else if(xend > xcurr && yend < ycurr) {
+				if(goX) {
 					xcurr++;
 				}
-				else{
+				else {
 					ycurr--;
-				}				
+				}
 			}
-			else if(xend < xcurr && yend > ycurr){
-				xory = rand2.nextInt(2);
-				if(xory == 0){
+			else if(xend < xcurr && yend > ycurr) {
+				if(goX) {
 					xcurr--;
 				}
-				else{
+				else {
 					ycurr++;
-				}				
+				}
 			}
-			else if(xend > xcurr){
+			else if(xend > xcurr) {
 				xcurr++;
 			}
-			else if(yend > ycurr){
+			else if(yend > ycurr) {
 				ycurr++;
 			}
-			else if(xend < xcurr){
+			else if(xend < xcurr) {
 				xcurr--;
 			}
-			else if(yend < ycurr){
+			else if(yend < ycurr) {
 				ycurr--;
 			}
 			
 			// if we intersect with an existing river, break
-			ExForestFireCell cell = (ExForestFireCell) grid.getCell(xcurr, ycurr);
+			ExForestFireCell cell =
+				(ExForestFireCell) grid.getCell(xcurr, ycurr);
 			if(cell == null)
-				grid.setCell(new ExForestFireCell(xcurr, ycurr, ExForestFireCellType.WATER));
-
-
+				grid.setCell(new ExForestFireCell(xcurr, ycurr,
+						ExForestFireCellType.WATER));
+			else
+				break;
+			
 			distance = Math.abs(xcurr - xend) + Math.abs(ycurr - yend);
+			distX = Math.abs(xcurr - xend);
+			distY = Math.abs(ycurr - yend);
 		}
+		
+		// Debug, see starting points
+		// if(grid.getCell(xstart, ystart) != null) {
+		// grid.getCell(xstart, ystart).setType(
+		// ExForestFireCellType.BURNING_TREE);
+		// } else {
+		// grid.setCell(new ExForestFireCell(xstart, ystart,
+		// ExForestFireCellType.BURNING_TREE));
+		// }
 	}
 	
 	public void igniteGrid() {
@@ -257,18 +280,19 @@ public class ExForestFire extends SimulatableSystem {
 				
 				if(cell != null) {
 					switch((ExForestFireCellType) cell.getType()) {
-					// Reset all variants of BUSH back to a BUSH type.
+					
 						case BURNING_BUSH:
 						case BURNT_BUSH:
 						case EXTINGUISHED_BUSH:
+							// Reset all variants of BUSH back to a BUSH type.
 							cell.setType(ExForestFireCellType.BUSH);
-							// Reset all variants of TREE back to a TREE type.
 						case BURNING_TREE:
 						case BURNT_TREE:
 						case EXTINGUISHED_TREE:
+							// Reset all variants of TREE back to a TREE type.
 							cell.setType(ExForestFireCellType.TREE);
-							// Ignore water and existing BUSH & TREE cell's.
 						default:
+							// Ignore water and existing BUSH & TREE cell's.
 							break;
 					
 					}
