@@ -547,6 +547,8 @@ public class ExForestFireDataPanel extends JPanel implements
 				repaint();
 				break;
 			case 2:
+				fire.type = 2;
+				fire.getSimulator().afterSimulateTick();
 				// probabilities start
 				c.gridwidth = 1;
 				
