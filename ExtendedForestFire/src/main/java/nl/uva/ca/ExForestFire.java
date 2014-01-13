@@ -103,23 +103,66 @@ public class ExForestFire extends SimulatableSystem {
 			grid.setCell(new ExForestFireCell(51, y, ExForestFireCellType.TREE));
 		}*/
 		if(randWater){
-			Random rand = new Random(12); 
-			int xwater1 = rand.nextInt(100);
-			int ywater1 = rand.nextInt(100);
-			int xwater2 = rand.nextInt(100);
-			int ywater2 = rand.nextInt(100);
+			Random rand = new Random();
+			// generate a number of random water points
+			int points = rand.nextInt(5)+1;
+			int [][] pointcoord = new int[5][3];
+			for(int i = 0; i < points; i++){
+				// generate coordinates for each point
+				pointcoord[i][0] = rand.nextInt(100);
+				pointcoord[i][1] = rand.nextInt(100);
+				// if there is more then 1 point, connect it to a random other point
+				if(points > 1){
+					while(true){
+						int temp = rand.nextInt(points);
+						// dont connect to self
+						if(temp != i){
+							pointcoord[i][2] = temp;
+							break;
+						}
+					}
+				}
+				// fill the blank if im the only point
+				else{
+					pointcoord[i][2] = 0;
+				}
+			}
+			// draw all connections
+			if(points > 1){
+				// connect random water points
+				for(int i = 0; i < points; i++){
+					randomWater(pointcoord[i][0], pointcoord[i][1], pointcoord[pointcoord[i][2]][0], pointcoord[pointcoord[i][2]][1]);
+				}
+			}
+
+			// connect the closest point to an edge -> fancy
 			int edge = rand.nextInt(100);
 			int xory = rand.nextInt(2);
-			grid.setCell(new ExForestFireCell(xwater1, ywater1, ExForestFireCellType.WATER));
-			grid.setCell(new ExForestFireCell(xwater2, ywater2, ExForestFireCellType.WATER));
+			
+			// cant be more then 200
+			int distance = 200;
+			int newdistance;
+			int index = 0;
 			if(xory == 0){
-				grid.setCell(new ExForestFireCell(0, edge, ExForestFireCellType.WATER));
+				for(int i = 0; i < points; i++){
+					newdistance = Math.abs(pointcoord[i][0] - 0) + Math.abs(pointcoord[i][1] - edge);
+					if(newdistance < distance){
+						distance = newdistance;
+						index = i;
+					}
+				}
+				randomWater(pointcoord[index][0], pointcoord[index][1], 0, edge);
 			}
 			else{
-				grid.setCell(new ExForestFireCell(edge, 0, ExForestFireCellType.WATER));
+				for(int i = 0; i < points; i++){
+					newdistance = Math.abs(pointcoord[i][0] - edge) + Math.abs(pointcoord[i][1] - 0);
+					if(newdistance < distance){
+						distance = newdistance;
+						index = i;
+					}
+				}
+				randomWater(pointcoord[index][0], pointcoord[index][1], edge, 0);
 			}
-			randomWater(xwater1, ywater1, xwater2, ywater2);
-
 		}
 	}
 	
@@ -127,8 +170,10 @@ public class ExForestFire extends SimulatableSystem {
 		int xcurr = xstart;
 		int ycurr = ystart;
 		int xory;
+		// calculate distance left
 		int distance = Math.abs(xcurr - xend) + Math.abs(ycurr - yend);
-		Random rand2 = new Random(); 
+		Random rand2 = new Random();
+		// find out the correct possible direction and randomly choose one
 		while(distance > 0){
 			if(xend > xcurr && yend > ycurr){
 				xory = rand2.nextInt(2);
@@ -178,7 +223,12 @@ public class ExForestFire extends SimulatableSystem {
 			else if(yend < ycurr){
 				ycurr--;
 			}
-			grid.setCell(new ExForestFireCell(xcurr, ycurr, ExForestFireCellType.WATER));
+			
+			// if we intersect with an existing river, break
+			ExForestFireCell cell = (ExForestFireCell) grid.getCell(xcurr, ycurr);
+			if(cell == null)
+				grid.setCell(new ExForestFireCell(xcurr, ycurr, ExForestFireCellType.WATER));
+
 
 			distance = Math.abs(xcurr - xend) + Math.abs(ycurr - yend);
 		}
