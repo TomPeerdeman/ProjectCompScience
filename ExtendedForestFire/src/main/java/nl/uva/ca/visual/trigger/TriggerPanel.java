@@ -25,10 +25,17 @@ public class TriggerPanel extends JPanel {
 	}
 	
 	public void add(JPanel p, String name) {
+		System.out.println("Add " + name + "/" + p);
 		layout.addLayoutComponent(p, name);
 	}
 	
 	public void show(String name) {
+		System.out.println("Show " + name);
 		layout.show(this, name);
+	}
+	
+	public void first() {
+		layout.first(this);
+		repaint();
 	}
 }

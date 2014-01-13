@@ -635,6 +635,10 @@ public class ExForestFireDataPanel extends JPanel implements
 			}
 			triggerModel.remove(idx);
 			triggerManager.triggers.remove(idx);
+			if(triggerManager.triggers.size() == 0) {
+				triggerEditButton.setEnabled(false);
+				triggerDelButton.setEnabled(false);
+			}
 		}
 	}
 	
@@ -642,6 +646,9 @@ public class ExForestFireDataPanel extends JPanel implements
 		int idx = triggerModel.size();
 		triggerModel.add(idx, newTrigger);
 		triggerManager.triggers.add(idx, newTrigger);
+		triggerEditButton.setEnabled(true);
+		triggerDelButton.setEnabled(true);
+		triggerList.setSelectedIndex(idx);
 	}
 	
 	public void onEditTrigger(int idx, Trigger newTrigger) {

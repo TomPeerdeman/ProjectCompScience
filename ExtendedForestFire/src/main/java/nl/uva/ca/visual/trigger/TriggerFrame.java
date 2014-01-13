@@ -23,6 +23,8 @@ import javax.swing.JPanel;
 
 import nl.uva.ca.Trigger;
 import nl.uva.ca.TriggerManager;
+import nl.uva.ca.triggers.TestAction;
+import nl.uva.ca.triggers.TickTrigger;
 import nl.uva.ca.visual.forestfire.ExForestFireDataPanel;
 
 /**
@@ -62,7 +64,7 @@ public class TriggerFrame extends JFrame {
 	 * @param panel
 	 * @throws HeadlessException
 	 */
-	public TriggerFrame(String title, ExForestFireDataPanel panel)
+	public TriggerFrame(String title, final ExForestFireDataPanel panel)
 			throws HeadlessException {
 		super(title);
 		main = getContentPane();
@@ -95,6 +97,7 @@ public class TriggerFrame extends JFrame {
 				triggerPanel.show((String) triggers.getSelectedItem());
 			}
 		});
+		triggerPanel.show((String) triggers.getSelectedItem());
 		
 		actionPanel = new TriggerPanel();
 		
@@ -116,8 +119,16 @@ public class TriggerFrame extends JFrame {
 				actionPanel.show((String) actions.getSelectedItem());
 			}
 		});
+		actionPanel.show((String) actions.getSelectedItem());
 		
 		applyButton = new JButton("Create");
+		applyButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				panel.onNewTrigger(new TickTrigger(10, new TestAction()));
+				dispose();
+			}
+		});
 		
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
@@ -130,6 +141,7 @@ public class TriggerFrame extends JFrame {
 		c.gridx = 0;
 		c.gridy = 1;
 		main.add(triggerPanel, c);
+		triggerPanel.first();
 		
 		c.gridx = 1;
 		c.gridy = 0;
@@ -138,6 +150,7 @@ public class TriggerFrame extends JFrame {
 		c.gridx = 1;
 		c.gridy = 1;
 		main.add(actionPanel, c);
+		actionPanel.first();
 		
 		c.gridx = 1;
 		c.gridy = 2;

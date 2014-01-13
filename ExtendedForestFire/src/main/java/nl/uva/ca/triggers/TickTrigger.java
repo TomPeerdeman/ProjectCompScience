@@ -16,10 +16,10 @@ public class TickTrigger extends Trigger {
 	private final int tick;
 	
 	/**
-	 * @param action
 	 * @param tick
+	 * @param action
 	 */
-	public TickTrigger(TriggerAction action, int tick) {
+	public TickTrigger(int tick, TriggerAction action) {
 		super(action);
 		this.tick = tick;
 	}
