@@ -467,16 +467,17 @@ public class ExForestFireDataPanel extends JPanel implements
 		remove(gridProb7);
 		remove(gridProb8);
 		remove(filler);
-		System.out.println(i);
 		switch(i) {
 			case 0:
 				fire.type = 0;
+				fire.getSimulator().afterSimulateTick();
 				drawStandardGrid();
 				revalidate();
 				repaint();
 				break;
 			case 1:
 				fire.type = 1;
+				fire.getSimulator().afterSimulateTick();
 				// probabilities start
 				c.gridwidth = 1;
 				

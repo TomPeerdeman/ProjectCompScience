@@ -34,7 +34,7 @@ public class ExForestFireFrame extends ExCaFrame {
 		Simulator sim = fire.getSimulator();
 		
 		CaPanel capanel =
-			new ExForestFirePanel(sim.getGrid(), getWidth(), getHeight(), fire.type);
+			new ExForestFirePanel(sim.getGrid(), getWidth(), getHeight(), fire);
 		sim.addChangeListener(capanel);
 		sim.afterSimulateTick();
 		
