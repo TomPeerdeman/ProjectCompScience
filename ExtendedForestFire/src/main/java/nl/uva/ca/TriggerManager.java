@@ -4,7 +4,6 @@
  */
 package nl.uva.ca;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,29 +12,27 @@ import java.util.Map;
 import nl.tompeerdeman.ca.SimulateChangeListener;
 import nl.tompeerdeman.ca.Simulator;
 
-import nl.uva.ca.triggers.NBAction;
-import nl.uva.ca.triggers.TestAction;
-import nl.uva.ca.triggers.TickTrigger;
+import nl.uva.ca.visual.trigger.TestActionGenerator;
+import nl.uva.ca.visual.trigger.TriggerActionGeneratorPanel;
+import nl.uva.ca.visual.trigger.TriggerGeneratorPanel;
+import nl.uva.ca.visual.trigger.forestfire.NBActionGenerator;
+import nl.uva.ca.visual.trigger.forestfire.TickGenerator;
 
 /**
  *
  */
 public class TriggerManager implements SimulateChangeListener {
-	public static final Map<String, Constructor<? extends Trigger>> TRIGGERS =
-		new HashMap<String, Constructor<? extends Trigger>>();
-	public static final Map<String, Constructor<? extends TriggerAction>> ACTIONS =
-		new HashMap<String, Constructor<? extends TriggerAction>>();
+	public static final Map<String, Class<? extends TriggerGeneratorPanel<?>>> TRIGGERS =
+		new HashMap<String, Class<? extends TriggerGeneratorPanel<?>>>();
+	public static final Map<String, Class<? extends TriggerActionGeneratorPanel<?>>> ACTIONS =
+		new HashMap<String, Class<? extends TriggerActionGeneratorPanel<?>>>();
 	
 	static {
 		try {
-			TRIGGERS.put("Tick", TickTrigger.class.getConstructor(
-					TriggerAction.class, int.class));
+			TRIGGERS.put("Tick", TickGenerator.class);
 			
-			ACTIONS.put("Neighborhood",
-					NBAction.class.getConstructor(double[][].class));
-			
-			ACTIONS.put("Test",
-					TestAction.class.getConstructor());
+			ACTIONS.put("Neighborhood", NBActionGenerator.class);
+			ACTIONS.put("Test", TestActionGenerator.class);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

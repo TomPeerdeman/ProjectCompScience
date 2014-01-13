@@ -4,6 +4,8 @@
  */
 package nl.uva.ca.visual.trigger;
 
+import javax.swing.JPanel;
+
 import nl.uva.ca.Trigger;
 import nl.uva.ca.TriggerAction;
 
@@ -12,17 +14,21 @@ import nl.uva.ca.TriggerAction;
  * 
  */
 public abstract class TriggerGeneratorPanel<T extends Trigger> extends
-		TriggerPanel {
+		JPanel {
 	private static final long serialVersionUID = -4796731464773731267L;
 	
 	/**
 	 * 
 	 */
 	public TriggerGeneratorPanel() {
+		init();
 	}
 	
-	public TriggerGeneratorPanel(T parent) {
+	public TriggerGeneratorPanel(Trigger parent) {
+		init();
 	}
+	
+	public abstract void init();
 	
 	public abstract T generate(TriggerAction action);
 }

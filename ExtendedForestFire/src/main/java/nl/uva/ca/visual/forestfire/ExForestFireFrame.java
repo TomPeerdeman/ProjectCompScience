@@ -40,7 +40,7 @@ public class ExForestFireFrame extends ExCaFrame {
 		
 		main.add(capanel);
 		
-		ExForestFireDataPanel dataPanel = new ExForestFireDataPanel(fire);
+		ExForestFireDataPanel dataPanel = new ExForestFireDataPanel(fire, null);
 		sim.addChangeListener(dataPanel);
 		
 		ExForestFireLegend legend =

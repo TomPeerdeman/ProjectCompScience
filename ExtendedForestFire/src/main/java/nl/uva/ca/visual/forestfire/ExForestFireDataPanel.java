@@ -27,6 +27,7 @@ import nl.tompeerdeman.ca.visual.SimulateController;
 import nl.uva.ca.ExForestFire;
 import nl.uva.ca.ExForestFireData;
 import nl.uva.ca.Trigger;
+import nl.uva.ca.TriggerManager;
 import nl.uva.ca.visual.ExSimulateControlPanel;
 import nl.uva.ca.visual.trigger.TriggerFrame;
 
@@ -42,6 +43,7 @@ public class ExForestFireDataPanel extends JPanel implements
 	private GridBagConstraints c;
 	
 	private TriggerFrame triggerFrame;
+	private TriggerManager triggerManager;
 	
 	private JLabel tick;
 	private JLabel burnt;
@@ -86,8 +88,10 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JList<Trigger> triggerList;
 	private JScrollPane triggerPane;
 	
-	public ExForestFireDataPanel(ExForestFire fire) {
+	public ExForestFireDataPanel(ExForestFire fire, TriggerManager tManager) {
 		this.fire = fire;
+		this.triggerManager = tManager;
+		
 		sim = fire.getSimulator();
 		data = (ExForestFireData) sim.getData();
 		
@@ -118,18 +122,10 @@ public class ExForestFireDataPanel extends JPanel implements
 		gridProb7 = new JTextField("7");
 		gridProb8 = new JTextField("8");
 		filler = new JLabel("Fire");
-		new JTextField("1");
-		new JTextField("1");
 		temp = new JTextField("18");
 		typeText = new JLabel("Grid Type: ");
 		firefighters = new JLabel("Firefighters:");
-		new JLabel("Firefighter treshold:");
-		new JLabel("Extinguish Probability:");
 		randwater = new JLabel("Generate random water:");
-		new JLabel("Grid Fire transfer Probabilities:");
-		new JLabel("Height");
-		new JLabel("Tree Burning steps:");
-		new JLabel("Bush Burning steps:");
 		
 		triggerModel = new DefaultListModel<Trigger>();
 		triggerList = new JList<Trigger>(triggerModel);
@@ -622,11 +618,34 @@ public class ExForestFireDataPanel extends JPanel implements
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		int idx = triggerList.getSelectedIndex();
 		if(e.getSource() == triggerAddButton) {
 			if(triggerFrame != null) {
 				triggerFrame.dispose();
 			}
-			triggerFrame = new TriggerFrame("Add new trigger");
+			triggerFrame = new TriggerFrame("Add new trigger", this);
+		} else if(e.getSource() == triggerEditButton) {
+			if(triggerFrame != null) {
+				triggerFrame.dispose();
+			}
+			triggerFrame = new TriggerFrame(idx, triggerModel.get(idx), this);
+		} else if(e.getSource() == triggerDelButton) {
+			if(triggerFrame != null) {
+				triggerFrame.dispose();
+			}
+			triggerModel.remove(idx);
+			triggerManager.triggers.remove(idx);
 		}
+	}
+	
+	public void onNewTrigger(Trigger newTrigger) {
+		int idx = triggerModel.size();
+		triggerModel.add(idx, newTrigger);
+		triggerManager.triggers.add(idx, newTrigger);
+	}
+	
+	public void onEditTrigger(int idx, Trigger newTrigger) {
+		triggerModel.set(idx, newTrigger);
+		triggerManager.triggers.set(idx, newTrigger);
 	}
 }
