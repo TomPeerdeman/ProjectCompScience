@@ -4,6 +4,8 @@
  */
 package nl.uva.ca;
 
+import java.util.Random;
+
 import nl.tompeerdeman.ca.Grid;
 import nl.tompeerdeman.ca.SimulatableSystem;
 
@@ -92,13 +94,93 @@ public class ExForestFire extends SimulatableSystem {
 		
 		grid.clear();
 		
-		for(int y = 0; y < grid.grid[0].length; y++) {
+		/*for(int y = 0; y < grid.grid[0].length; y++) {
 			grid.setCell(new ExForestFireCell(49, y, ExForestFireCellType.BUSH));
 			if(randWater) {
 				grid.setCell(new ExForestFireCell(50, y,
 						ExForestFireCellType.WATER));
 			}
 			grid.setCell(new ExForestFireCell(51, y, ExForestFireCellType.TREE));
+		}*/
+		if(randWater){
+			Random rand = new Random(12); 
+			int xwater1 = rand.nextInt(100);
+			int ywater1 = rand.nextInt(100);
+			int xwater2 = rand.nextInt(100);
+			int ywater2 = rand.nextInt(100);
+			int edge = rand.nextInt(100);
+			int xory = rand.nextInt(2);
+			grid.setCell(new ExForestFireCell(xwater1, ywater1, ExForestFireCellType.WATER));
+			grid.setCell(new ExForestFireCell(xwater2, ywater2, ExForestFireCellType.WATER));
+			if(xory == 0){
+				grid.setCell(new ExForestFireCell(0, edge, ExForestFireCellType.WATER));
+			}
+			else{
+				grid.setCell(new ExForestFireCell(edge, 0, ExForestFireCellType.WATER));
+			}
+			randomWater(xwater1, ywater1, xwater2, ywater2);
+
+		}
+	}
+	
+	public void randomWater(int xstart, int ystart, int xend, int yend){
+		int xcurr = xstart;
+		int ycurr = ystart;
+		int xory;
+		int distance = Math.abs(xcurr - xend) + Math.abs(ycurr - yend);
+		Random rand2 = new Random(); 
+		while(distance > 0){
+			if(xend > xcurr && yend > ycurr){
+				xory = rand2.nextInt(2);
+				if(xory == 0){
+					xcurr++;
+				}
+				else{
+					ycurr++;
+				}				
+			}
+			else if(xend < xcurr && yend < ycurr){
+				xory = rand2.nextInt(2);
+				if(xory == 0){
+					xcurr--;
+				}
+				else{
+					ycurr--;
+				}				
+			}
+			else if(xend > xcurr && yend < ycurr){
+				xory = rand2.nextInt(2);
+				if(xory == 0){
+					xcurr++;
+				}
+				else{
+					ycurr--;
+				}				
+			}
+			else if(xend < xcurr && yend > ycurr){
+				xory = rand2.nextInt(2);
+				if(xory == 0){
+					xcurr--;
+				}
+				else{
+					ycurr++;
+				}				
+			}
+			else if(xend > xcurr){
+				xcurr++;
+			}
+			else if(yend > ycurr){
+				ycurr++;
+			}
+			else if(xend < xcurr){
+				xcurr--;
+			}
+			else if(yend < ycurr){
+				ycurr--;
+			}
+			grid.setCell(new ExForestFireCell(xcurr, ycurr, ExForestFireCellType.WATER));
+
+			distance = Math.abs(xcurr - xend) + Math.abs(ycurr - yend);
 		}
 	}
 	
