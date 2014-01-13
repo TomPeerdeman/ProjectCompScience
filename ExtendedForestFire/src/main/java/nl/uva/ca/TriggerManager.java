@@ -14,23 +14,28 @@ import nl.tompeerdeman.ca.SimulateChangeListener;
 import nl.tompeerdeman.ca.Simulator;
 
 import nl.uva.ca.triggers.NBAction;
+import nl.uva.ca.triggers.TestAction;
 import nl.uva.ca.triggers.TickTrigger;
 
 /**
  *
  */
 public class TriggerManager implements SimulateChangeListener {
-	private static final Map<String, Constructor<? extends Trigger>> TRIGGERS =
+	public static final Map<String, Constructor<? extends Trigger>> TRIGGERS =
 		new HashMap<String, Constructor<? extends Trigger>>();
-	private static final Map<String, Constructor<? extends TriggerAction>> ACTIONS =
+	public static final Map<String, Constructor<? extends TriggerAction>> ACTIONS =
 		new HashMap<String, Constructor<? extends TriggerAction>>();
 	
 	static {
 		try {
-			TRIGGERS.put("Tick", TickTrigger.class.getConstructor(int.class));
+			TRIGGERS.put("Tick", TickTrigger.class.getConstructor(
+					TriggerAction.class, int.class));
 			
 			ACTIONS.put("Neighborhood",
 					NBAction.class.getConstructor(double[][].class));
+			
+			ACTIONS.put("Test",
+					TestAction.class.getConstructor());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -9,6 +9,7 @@ import java.util.Formatter;
 import java.util.Locale;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -27,9 +28,10 @@ import nl.uva.ca.ExForestFire;
 import nl.uva.ca.ExForestFireData;
 import nl.uva.ca.Trigger;
 import nl.uva.ca.visual.ExSimulateControlPanel;
+import nl.uva.ca.visual.trigger.TriggerFrame;
 
 public class ExForestFireDataPanel extends JPanel implements
-		SimulateChangeListener, SimulateController {
+		SimulateChangeListener, SimulateController, ActionListener {
 	private static final long serialVersionUID = 9104081158410085080L;
 	
 	private Simulator sim;
@@ -38,6 +40,8 @@ public class ExForestFireDataPanel extends JPanel implements
 	
 	private ExSimulateControlPanel control;
 	private GridBagConstraints c;
+	
+	private TriggerFrame triggerFrame;
 	
 	private JLabel tick;
 	private JLabel burnt;
@@ -73,6 +77,10 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JTextField gridProb7;
 	private JTextField gridProb8;
 	private JLabel filler;
+	
+	private JButton triggerAddButton = new JButton("Add");
+	private JButton triggerEditButton = new JButton("Edit");
+	private JButton triggerDelButton = new JButton("Del");
 	
 	private DefaultListModel<Trigger> triggerModel;
 	private JList<Trigger> triggerList;
@@ -250,12 +258,33 @@ public class ExForestFireDataPanel extends JPanel implements
 		c.gridy = 0;
 		add(new JLabel("Triggers"), c);
 		
+		c.gridx = 4;
+		c.gridy = 0;
+		triggerAddButton.addActionListener(this);
+		add(triggerAddButton, c);
+		
+		c.gridx = 5;
+		c.gridy = 0;
+		
+		triggerEditButton.setEnabled(false);
+		triggerEditButton.addActionListener(this);
+		add(triggerEditButton, c);
+		
+		c.gridx = 6;
+		c.gridy = 0;
+		
+		triggerDelButton.setEnabled(false);
+		triggerDelButton.addActionListener(this);
+		add(triggerDelButton, c);
+		
+		c.gridwidth = 4;
 		c.gridheight = 6;
 		c.gridx = 3;
 		c.gridy = 1;
 		add(triggerPane, c);
 		
 		c.gridheight = 1;
+		c.gridwidth = 1;
 		
 		control = new ExSimulateControlPanel(fire, this, this, 7, 0);
 		
@@ -583,5 +612,21 @@ public class ExForestFireDataPanel extends JPanel implements
 	@Override
 	public boolean onStop() {
 		return true;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == triggerAddButton) {
+			if(triggerFrame != null) {
+				triggerFrame.dispose();
+			}
+			triggerFrame = new TriggerFrame("Add new trigger");
+		}
 	}
 }
