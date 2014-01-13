@@ -8,17 +8,24 @@ import java.awt.event.ActionListener;
 import java.util.Formatter;
 import java.util.Locale;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import nl.tompeerdeman.ca.SimulateChangeListener;
 import nl.tompeerdeman.ca.Simulator;
 import nl.tompeerdeman.ca.visual.SimulateController;
+
 import nl.uva.ca.ExForestFire;
 import nl.uva.ca.ExForestFireData;
+import nl.uva.ca.Trigger;
 import nl.uva.ca.visual.ExSimulateControlPanel;
 
 public class ExForestFireDataPanel extends JPanel implements
@@ -42,16 +49,10 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JLabel tempText;
 	private JLabel typeText;
 	private JLabel firefighters;
-	private JLabel fftreshText;
-	private JLabel ffextText;
 	private JLabel randwater;
 	private JLabel fracBurned;
-	private JLabel gridProbText;
-	private JLabel treeBurningText;
-	private JLabel bushBurningText;
 	// oppReached to be removed later
 	private JLabel oppReached;
-	private JLabel height;
 	private JLabel empty;
 	
 	private JComboBox<String> gridtype;
@@ -63,8 +64,6 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JTextField temp;
 	private JTextField fftresh;
 	private JTextField ffext;
-	private JTextField bushBurning;
-	private JTextField treeBurning;
 	private JTextField gridProb1;
 	private JTextField gridProb2;
 	private JTextField gridProb3;
@@ -74,6 +73,10 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JTextField gridProb7;
 	private JTextField gridProb8;
 	private JLabel filler;
+	
+	private DefaultListModel<Trigger> triggerModel;
+	private JList<Trigger> triggerList;
+	private JScrollPane triggerPane;
 	
 	public ExForestFireDataPanel(ExForestFire fire) {
 		this.fire = fire;
@@ -107,18 +110,25 @@ public class ExForestFireDataPanel extends JPanel implements
 		gridProb7 = new JTextField("7");
 		gridProb8 = new JTextField("8");
 		filler = new JLabel("Fire");
-		treeBurning = new JTextField("1");
-		bushBurning = new JTextField("1");
+		new JTextField("1");
+		new JTextField("1");
 		temp = new JTextField("18");
 		typeText = new JLabel("Grid Type: ");
 		firefighters = new JLabel("Firefighters:");
-		fftreshText = new JLabel("Firefighter treshold:");
-		ffextText = new JLabel("Extinguish Probability:");
+		new JLabel("Firefighter treshold:");
+		new JLabel("Extinguish Probability:");
 		randwater = new JLabel("Generate random water:");
-		gridProbText = new JLabel("Grid Fire transfer Probabilities:");
-		height = new JLabel("Height");
-		treeBurningText = new JLabel("Tree Burning steps:");
-		bushBurningText = new JLabel("Bush Burning steps:");
+		new JLabel("Grid Fire transfer Probabilities:");
+		new JLabel("Height");
+		new JLabel("Tree Burning steps:");
+		new JLabel("Bush Burning steps:");
+		
+		triggerModel = new DefaultListModel<Trigger>();
+		triggerList = new JList<Trigger>(triggerModel);
+		triggerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		triggerPane = new JScrollPane(triggerList);
+		triggerPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		fracBurned = new JLabel("Fraction burned: 0.0");
 		oppReached = new JLabel("Opposite reached: false");
@@ -155,7 +165,7 @@ public class ExForestFireDataPanel extends JPanel implements
 				updateFirefighter();
 			}
 		});
-	    c.weightx = 1;
+		c.weightx = 1;
 		
 		c.gridx = 0;
 		c.gridy = 0;
@@ -209,11 +219,8 @@ public class ExForestFireDataPanel extends JPanel implements
 		
 		c.gridx = 1;
 		c.gridy = 5;
-		add(ffextText, c);
 		
-		c.gridx = 1;
-		c.gridy = 6;
-		add(fftreshText, c);
+		add(typeText, c);
 		
 		c.gridx = 2;
 		c.gridy = 0;
@@ -237,48 +244,18 @@ public class ExForestFireDataPanel extends JPanel implements
 		
 		c.gridx = 2;
 		c.gridy = 5;
-		add(ffext, c);
-		
-		c.gridx = 2;
-		c.gridy = 6;
-		add(fftresh, c);
-		
-		c.gridwidth = 2;
-		
-		c.gridx = 3;
-		c.gridy = 0;
-		add(treeBurningText, c);
-		
-		c.gridx = 3;
-		c.gridy = 1;
-		add(bushBurningText, c);
-		
-		c.gridx = 3;
-		c.gridy = 2;
-		add(typeText, c);
-		
-		c.gridwidth = 6;
-		c.gridx = 3;
-		c.gridy = 3;
-		add(gridProbText, c);
-		
-		drawStandardGrid();
-		
-		c.gridwidth = 2;
-		
-		c.gridx = 5;
-		c.gridy = 0;
-		add(treeBurning, c);
-		
-		c.gridx = 5;
-		c.gridy = 1;
-		add(bushBurning, c);
-		
-		c.gridx = 5;
-		c.gridy = 2;
 		add(gridtype, c);
 		
-		c.gridwidth = 1;
+		c.gridx = 3;
+		c.gridy = 0;
+		add(new JLabel("Triggers"), c);
+		
+		c.gridheight = 6;
+		c.gridx = 3;
+		c.gridy = 1;
+		add(triggerPane, c);
+		
+		c.gridheight = 1;
 		
 		control = new ExSimulateControlPanel(fire, this, this, 7, 0);
 		
@@ -365,7 +342,7 @@ public class ExForestFireDataPanel extends JPanel implements
 		}
 	}
 	
-	public void drawStandardGrid(){
+	public void drawStandardGrid() {
 		// probabilities start
 		c.gridwidth = 1;
 		
@@ -433,7 +410,8 @@ public class ExForestFireDataPanel extends JPanel implements
 	}
 	
 	public void updateType() {
-		//String[] probabilities = {gridProb1.getText(), gridProb2.getText(),gridProb3.getText(),gridProb4.getText(),gridProb5.getText(),gridProb6.getText(),gridProb7.getText(),gridProb8.getText()};
+		// String[] probabilities = {gridProb1.getText(),
+		// gridProb2.getText(),gridProb3.getText(),gridProb4.getText(),gridProb5.getText(),gridProb6.getText(),gridProb7.getText(),gridProb8.getText()};
 		int i = gridtype.getSelectedIndex();
 		remove(gridProb1);
 		remove(gridProb2);
@@ -456,7 +434,7 @@ public class ExForestFireDataPanel extends JPanel implements
 				c.gridwidth = 1;
 				
 				// row 1
-
+				
 				c.gridx = 3;
 				c.gridy = 4;
 				add(empty, c);
@@ -475,11 +453,11 @@ public class ExForestFireDataPanel extends JPanel implements
 				
 				// row 2
 				c.gridwidth = 1;
-
+				
 				c.gridx = 3;
 				c.gridy = 5;
 				add(gridProb3, c);
-
+				
 				c.gridwidth = 2;
 				
 				c.fill = GridBagConstraints.VERTICAL;
@@ -497,7 +475,7 @@ public class ExForestFireDataPanel extends JPanel implements
 				add(gridProb4, c);
 				
 				// row 3
-
+				
 				c.gridx = 3;
 				c.gridy = 6;
 				add(empty, c);
