@@ -16,6 +16,7 @@ public class ExForestFire extends SimulatableSystem {
 	public boolean randWater;
 	public double treeDensity;
 	public double bushDensity;
+	public int type;
 	
 	/**
 	 * @param nx
@@ -34,10 +35,11 @@ public class ExForestFire extends SimulatableSystem {
 			boolean[][] nb, boolean randWater, boolean firefighters,
 			double treeDensity,
 			double bushDensity, double fireFightTresh, double extinguishProb,
-			boolean useTemperature) {
+			boolean useTemperature, int type) {
 		this.randWater = randWater;
 		this.treeDensity = treeDensity;
 		this.bushDensity = bushDensity;
+		this.type = type;
 		
 		// Create an empty grid
 		grid = new Grid(nx, ny);

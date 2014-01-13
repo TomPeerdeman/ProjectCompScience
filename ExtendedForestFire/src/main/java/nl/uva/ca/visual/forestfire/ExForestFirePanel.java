@@ -10,9 +10,11 @@ import nl.uva.ca.ExForestFireCellType;
 
 public class ExForestFirePanel extends CaPanel {
 	private static final long serialVersionUID = 3871766750986566999L;
+	protected int type;
 	
-	public ExForestFirePanel(Grid g, int w, int h) {
+	public ExForestFirePanel(Grid g, int w, int h, int t) {
 		super(g, w, h);
+		type = t;
 	}
 	
 	// TODO other types of grids
@@ -20,7 +22,8 @@ public class ExForestFirePanel extends CaPanel {
 	
 	@Override
 	public void paintTile(Graphics2D g, int x, int y) {
-		/*if( = 0){
+		System.out.println(type);
+		if(type == 0){
 			ExForestFireCell cell = (ExForestFireCell) grid.getCell(x, y);
 
 			// add more colors for different terrains
@@ -31,8 +34,8 @@ public class ExForestFirePanel extends CaPanel {
 			}
 			
 			g.fillRect(x * dx + offsx, y * dy, dx, dy);
-		}*/
-		//else{
+		}
+		if(type == 1){
 			ExForestFireCell cell = (ExForestFireCell) grid.getCell(x, y);
 	
 			// add more colors for different terrains
@@ -67,6 +70,6 @@ public class ExForestFirePanel extends CaPanel {
 					
 				}
 			}
-		//}
+		}
 	}
 }

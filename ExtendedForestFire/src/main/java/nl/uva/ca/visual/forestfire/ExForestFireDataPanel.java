@@ -470,11 +470,13 @@ public class ExForestFireDataPanel extends JPanel implements
 		System.out.println(i);
 		switch(i) {
 			case 0:
+				fire.type = 0;
 				drawStandardGrid();
 				revalidate();
 				repaint();
 				break;
 			case 1:
+				fire.type = 1;
 				// probabilities start
 				c.gridwidth = 1;
 				
