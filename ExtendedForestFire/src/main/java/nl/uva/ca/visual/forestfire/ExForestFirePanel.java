@@ -35,7 +35,23 @@ public class ExForestFirePanel extends CaPanel {
 			
 			g.fillRect(x * dx + offsx, y * dy, dx, dy);
 		}
-		if(fire.type == 1){
+		else if(fire.type == 1){
+			ExForestFireCell cell = (ExForestFireCell) grid.getCell(x, y);
+
+			// add more colors for different terrains
+			if(cell == null) {
+				g.setColor(Color.WHITE);
+			} else {
+				g.setColor(((ExForestFireCellType) cell.getType()).getColor());
+			}
+			
+			if(y % 2 == 0){
+				g.fillRect(x * dx + offsx, y * dy, dx, dy);
+			} else{
+				g.fillRect(x * dx + offsx + dx/2, y * dy, dx, dy);
+			}
+		}
+		else{
 			ExForestFireCell cell = (ExForestFireCell) grid.getCell(x, y);
 	
 			// add more colors for different terrains
@@ -44,26 +60,24 @@ public class ExForestFirePanel extends CaPanel {
 			} else {
 				g.setColor(((ExForestFireCellType) cell.getType()).getColor());
 			}
+			
 			if(y % 2 == 0){
 				if(x % 2 == 0){
 					int xPoly[] = {x * dx + offsx, x * dx + offsx + 2 * dx, x * dx + offsx + dx};
 					int yPoly[] = {y * dy, y * dy, y * dy + dy};
 					g.fillPolygon(xPoly, yPoly, 3);
-				}
-				else{
+				} else{
 					int xPoly[] = {x * dx + offsx, x * dx + offsx + 2 * dx, x * dx + offsx + dx};
 					int yPoly[] = {y * dy + dy, y * dy + dy, y * dy};
 					g.fillPolygon(xPoly, yPoly, 3);
 					
 				}
-			}
-			else{
+			} else{
 				if(x % 2 == 0){
 					int xPoly[] = {x * dx + offsx, x * dx + offsx + 2 * dx, x * dx + offsx + dx};
 					int yPoly[] = {y * dy + dy, y * dy + dy, y * dy};
 					g.fillPolygon(xPoly, yPoly, 3);
-				}
-				else{
+				} else{
 					int xPoly[] = {x * dx + offsx, x * dx + offsx + 2 * dx, x * dx + offsx + dx};
 					int yPoly[] = {y * dy, y * dy, y * dy + dy};
 					g.fillPolygon(xPoly, yPoly, 3);
