@@ -4,6 +4,8 @@
  */
 package nl.uva.ca.visual.trigger;
 
+import java.awt.Dimension;
+
 import javax.swing.JPanel;
 
 import nl.uva.ca.TriggerAction;
@@ -20,10 +22,20 @@ public abstract class TriggerActionGeneratorPanel<T extends TriggerAction>
 	 * 
 	 */
 	public TriggerActionGeneratorPanel() {
+		setSize(150, 100);
+		Dimension d = new Dimension(150, 100);
+		setPreferredSize(d);
+		setMinimumSize(d);
+		
 		init();
 	}
 	
 	public TriggerActionGeneratorPanel(TriggerAction parent) {
+		setSize(150, 100);
+		Dimension d = new Dimension(150, 100);
+		setPreferredSize(d);
+		setMinimumSize(d);
+		
 		init();
 	}
 	

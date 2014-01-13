@@ -4,8 +4,13 @@
  */
 package nl.uva.ca.visual.trigger.forestfire;
 
+import java.awt.Dimension;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import nl.uva.ca.Trigger;
 import nl.uva.ca.TriggerAction;
@@ -51,9 +56,13 @@ public class TickGenerator extends TriggerGeneratorPanel<TickTrigger> {
 	 */
 	@Override
 	public void init() {
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		
 		tickTextField = new JTextField("0");
 		
-		add(new JLabel("After tick"));
+		add(new JLabel("After tick", SwingConstants.RIGHT));
 		add(tickTextField);
+		Dimension d = new Dimension(150, 60);
+		add(new Box.Filler(d, d, d));
 	}
 }
