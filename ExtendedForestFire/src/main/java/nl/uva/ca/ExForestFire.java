@@ -12,6 +12,40 @@ public class ExForestFire extends SimulatableSystem {
 													{0, 1, 0},
 													{1, 0, 1},
 													{0, 1, 0}};
+	/*
+	 *  Hexagon neighbours
+	 *         (Xn, Yn+1)  (Xn+1, Yn+1)
+	 *   (Xn-1, Yn)    (Xn, Yn)    (Xn+1, Yn)  
+	 *         (Xn, Yn-1)  (Xn+1, Yn-1)
+	 */
+
+	public static final double[][] NB_MOORE_HEX = {
+													{0, 1, 1},
+													{1, 0, 1},
+													{0, 1, 1}};
+
+	/*
+	 *  Triangle1 neighbours
+	 *   (Xn-1, Yn)    (Xn, Yn)    (Xn+1, Yn)  /\
+	 *                (Xn, Yn-1)              /__\
+	 */
+
+	public static final double[][] NB_MOORE_TRI1 = {
+													{0, 0, 0},
+													{1, 0, 1},
+													{0, 1, 0}};
+	/*
+	 *  Triangle2 neighbours                  ____
+     *                (Xn, Yn+1)              \  /
+	 *   (Xn-1, Yn)    (Xn, Yn)    (Xn+1, Yn)  \/
+
+	 */
+
+	public static final double[][] NB_MOORE_TRI2 = {
+													{0, 1, 0},
+													{1, 0, 1},
+													{0, 0, 0}};
+
 	
 	public boolean randWater;
 	public double treeDensity;
