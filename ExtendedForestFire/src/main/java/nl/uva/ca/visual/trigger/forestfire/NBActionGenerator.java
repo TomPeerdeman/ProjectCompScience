@@ -41,6 +41,40 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 	 */
 	public NBActionGenerator(TriggerAction parent) {
 		super(parent);
+		
+		NBAction nba = (NBAction) parent;
+		
+		int type = nba.getType();
+		double[][] grid = nba.getNb();
+		if(type == 2) {
+			gridProb[1].setText(String.valueOf(grid[0][1]));
+			gridProb[3].setText(String.valueOf(grid[1][0]));
+			gridProb[4].setText(String.valueOf(grid[1][2]));
+			
+			gridProb[6].setText(String.valueOf(grid[2][0]));
+			gridProb[5].setText(String.valueOf(grid[2][2]));
+			gridProb[2].setText(String.valueOf(grid[3][1]));
+		} else if(type == 1) {
+			gridProb[1].setText(String.valueOf(grid[0][1]));
+			gridProb[2].setText(String.valueOf(grid[0][2]));
+			
+			gridProb[3].setText(String.valueOf(grid[1][0]));
+			gridProb[4].setText(String.valueOf(grid[1][2]));
+			
+			gridProb[6].setText(String.valueOf(grid[2][1]));
+			gridProb[7].setText(String.valueOf(grid[2][2]));
+		} else if(type == 0) {
+			gridProb[0].setText(String.valueOf(grid[0][0]));
+			gridProb[1].setText(String.valueOf(grid[0][1]));
+			gridProb[2].setText(String.valueOf(grid[0][2]));
+			
+			gridProb[3].setText(String.valueOf(grid[1][0]));
+			gridProb[4].setText(String.valueOf(grid[1][2]));
+			
+			gridProb[5].setText(String.valueOf(grid[2][0]));
+			gridProb[6].setText(String.valueOf(grid[2][1]));
+			gridProb[7].setText(String.valueOf(grid[2][2]));
+		}
 	}
 	
 	/*
@@ -50,6 +84,8 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 	 */
 	@Override
 	public void init() {
+		type = -1;
+		
 		setLayout(new GridBagLayout());
 		
 		c = new GridBagConstraints();
@@ -272,6 +308,6 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 			return null;
 		}
 		
-		return new NBAction(grid);
+		return new NBAction(grid, type);
 	}
 }
