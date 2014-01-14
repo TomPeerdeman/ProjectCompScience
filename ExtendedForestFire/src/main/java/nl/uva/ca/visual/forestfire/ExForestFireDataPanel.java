@@ -60,7 +60,6 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JLabel fracBurned;
 	// oppReached to be removed later
 	private JLabel oppReached;
-	private JLabel empty;
 	
 	private JComboBox<String> gridtype;
 	private JComboBox<String> waterCheck;
@@ -71,15 +70,6 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JTextField temp;
 	private JTextField fftresh;
 	private JTextField ffext;
-	private JTextField gridProb1;
-	private JTextField gridProb2;
-	private JTextField gridProb3;
-	private JTextField gridProb4;
-	private JTextField gridProb5;
-	private JTextField gridProb6;
-	private JTextField gridProb7;
-	private JTextField gridProb8;
-	private JLabel filler;
 	
 	private JButton triggerAddButton = new JButton("Add");
 	private JButton triggerEditButton = new JButton("Edit");
@@ -109,20 +99,10 @@ public class ExForestFireDataPanel extends JPanel implements
 		densityText = new JLabel("Tree Density: ", SwingConstants.LEFT);
 		density2Text = new JLabel("Bush Density: ");
 		tempText = new JLabel("Temperature: ");
-		empty = new JLabel(" ");
 		density = new JTextField("0.3");
 		density2 = new JTextField("0.3");
 		fftresh = new JTextField("0.3");
 		ffext = new JTextField("0.3");
-		gridProb1 = new JTextField("1");
-		gridProb2 = new JTextField("2");
-		gridProb3 = new JTextField("3");
-		gridProb4 = new JTextField("4");
-		gridProb5 = new JTextField("5");
-		gridProb6 = new JTextField("6");
-		gridProb7 = new JTextField("7");
-		gridProb8 = new JTextField("8");
-		filler = new JLabel("Fire");
 		temp = new JTextField("18");
 		typeText = new JLabel("Grid Type: ");
 		firefighters = new JLabel("Firefighters:");
@@ -397,91 +377,14 @@ public class ExForestFireDataPanel extends JPanel implements
 		}
 	}
 	
-	public void drawStandardGrid() {
-		// probabilities start
-		c.gridwidth = 1;
-		
-		// column 1
-		
-		c.gridx = 3;
-		c.gridy = 4;
-		add(gridProb1, c);
-		
-		c.gridx = 3;
-		c.gridy = 5;
-		add(gridProb4, c);
-		
-		c.gridx = 3;
-		c.gridy = 6;
-		add(gridProb6, c);
-		
-		// column 2
-		
-		c.gridx = 4;
-		c.gridy = 4;
-		add(gridProb2, c);
-		
-		c.fill = GridBagConstraints.VERTICAL;
-		
-		c.gridx = 4;
-		c.gridy = 5;
-		add(filler, c);
-		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		
-		c.gridx = 4;
-		c.gridy = 6;
-		add(gridProb7, c);
-		
-		// column 3
-		
-		c.gridx = 5;
-		c.gridy = 4;
-		add(gridProb3, c);
-		
-		c.gridx = 5;
-		c.gridy = 5;
-		add(gridProb5, c);
-		
-		c.gridx = 5;
-		c.gridy = 6;
-		add(gridProb8, c);
-		
-		c.gridx = 6;
-		c.gridy = 4;
-		add(empty, c);
-		
-		c.gridx = 6;
-		c.gridy = 5;
-		add(empty, c);
-		
-		c.gridx = 6;
-		c.gridy = 6;
-		add(empty, c);
-		
-		// probabilities end
-		
-		c.gridwidth = 2;
-	}
-	
 	public void updateType() {
 		// String[] probabilities = {gridProb1.getText(),
 		// gridProb2.getText(),gridProb3.getText(),gridProb4.getText(),gridProb5.getText(),gridProb6.getText(),gridProb7.getText(),gridProb8.getText()};
 		int i = gridtype.getSelectedIndex();
-		remove(gridProb1);
-		remove(gridProb2);
-		remove(gridProb3);
-		remove(gridProb4);
-		remove(gridProb5);
-		remove(gridProb6);
-		remove(gridProb7);
-		remove(gridProb8);
-		remove(filler);
 		switch(i) {
 			case 0:
 				fire.type = 0;
 				fire.getSimulator().afterSimulateTick();
-				drawStandardGrid();
 				revalidate();
 				repaint();
 				onRandomize();
@@ -489,71 +392,7 @@ public class ExForestFireDataPanel extends JPanel implements
 			case 1:
 				fire.type = 1;
 				fire.getSimulator().afterSimulateTick();
-				// probabilities start
-				c.gridwidth = 1;
 				
-				// row 1
-				
-				c.gridx = 3;
-				c.gridy = 4;
-				add(empty, c);
-				
-				c.gridx = 4;
-				c.gridy = 4;
-				add(gridProb1, c);
-				
-				c.gridx = 5;
-				c.gridy = 4;
-				add(gridProb2, c);
-				
-				c.gridx = 6;
-				c.gridy = 4;
-				add(empty, c);
-				
-				// row 2
-				c.gridwidth = 1;
-				
-				c.gridx = 3;
-				c.gridy = 5;
-				add(gridProb3, c);
-				
-				c.gridwidth = 2;
-				
-				c.fill = GridBagConstraints.VERTICAL;
-				
-				c.gridx = 4;
-				c.gridy = 5;
-				add(filler, c);
-				
-				c.fill = GridBagConstraints.HORIZONTAL;
-				
-				c.gridwidth = 1;
-				
-				c.gridx = 6;
-				c.gridy = 5;
-				add(gridProb4, c);
-				
-				// row 3
-				
-				c.gridx = 3;
-				c.gridy = 6;
-				add(empty, c);
-				
-				c.gridx = 4;
-				c.gridy = 6;
-				add(gridProb5, c);
-				
-				c.gridx = 5;
-				c.gridy = 6;
-				add(gridProb6, c);
-				
-				c.gridx = 6;
-				c.gridy = 6;
-				add(empty, c);
-				
-				// probabilities end
-				
-				c.gridwidth = 2;
 				revalidate();
 				repaint();
 				onRandomize();
@@ -561,71 +400,7 @@ public class ExForestFireDataPanel extends JPanel implements
 			case 2:
 				fire.type = 2;
 				fire.getSimulator().afterSimulateTick();
-				// probabilities start
-				c.gridwidth = 1;
-				
-				// column 1
-				
-				c.gridx = 3;
-				c.gridy = 4;
-				add(empty, c);
-				
-				c.gridx = 3;
-				c.gridy = 5;
-				add(empty, c);
-				
-				c.gridx = 3;
-				c.gridy = 6;
-				add(gridProb2, c);
-				
-				// column 2
-				
-				c.gridx = 4;
-				c.gridy = 4;
-				add(gridProb1, c);
-				
-				c.fill = GridBagConstraints.VERTICAL;
-				
-				c.gridx = 4;
-				c.gridy = 5;
-				add(filler, c);
-				
-				c.fill = GridBagConstraints.HORIZONTAL;
-				
-				c.gridx = 4;
-				c.gridy = 6;
-				add(empty, c);
-				
-				// column 3
-				
-				c.gridx = 5;
-				c.gridy = 4;
-				add(empty, c);
-				
-				c.gridx = 5;
-				c.gridy = 5;
-				add(empty, c);
-				
-				c.gridx = 5;
-				c.gridy = 6;
-				add(gridProb3, c);
-				
-				c.gridx = 6;
-				c.gridy = 4;
-				add(empty, c);
-				
-				c.gridx = 6;
-				c.gridy = 5;
-				add(empty, c);
-				
-				c.gridx = 6;
-				c.gridy = 6;
-				add(empty, c);
-				
-				// probabilities end
-				
-				c.gridwidth = 2;
-				
+								
 				revalidate();
 				repaint();
 				onRandomize();
