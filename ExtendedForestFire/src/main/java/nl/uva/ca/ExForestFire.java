@@ -225,7 +225,7 @@ public class ExForestFire extends SimulatableSystem {
 		int tries = 0;
 		while(t < total) {
 			rx = rand.nextInt(grid.grid.length);
-			ry = rand.nextInt((grid.grid[0].length - 1));
+			ry = rand.nextInt((grid.grid[0].length));
 			if(grid.getCell(rx, ry) == null) {
 				grid.setCell(new ExForestFireCell(rx, ry, cellType));
 				t++;
