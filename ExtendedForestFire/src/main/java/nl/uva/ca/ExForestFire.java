@@ -506,11 +506,13 @@ public class ExForestFire extends SimulatableSystem {
 						case EXTINGUISHED_BUSH:
 							// Reset all variants of BUSH back to a BUSH type.
 							cell.setType(ExForestFireCellType.BUSH);
+							break;
 						case BURNING_TREE:
 						case BURNT_TREE:
 						case EXTINGUISHED_TREE:
 							// Reset all variants of TREE back to a TREE type.
 							cell.setType(ExForestFireCellType.TREE);
+							break;
 						default:
 							// Ignore water and existing BUSH & TREE cell's.
 							break;
