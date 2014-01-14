@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import nl.tompeerdeman.ca.SimulatableSystem;
 import nl.tompeerdeman.ca.SimulateChangeListener;
 import nl.tompeerdeman.ca.Simulator;
 
@@ -39,29 +40,39 @@ public class TriggerManager implements SimulateChangeListener {
 	}
 	
 	public ArrayList<Trigger> triggers;
+	private SimulatableSystem sys;
 	
 	/**
+	 * @param sys
 	 * 
 	 */
-	public TriggerManager() {
+	public TriggerManager(SimulatableSystem sys) {
 		triggers = new ArrayList<Trigger>();
+		
+		this.sys = sys;
 	}
 	
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * nl.tompeerdeman.ca.SimulateChangeListener#simulationUpdated(nl.
-	 * tompeerdeman
+	 * nl.tompeerdeman.ca.SimulateChangeListener#simulationUpdated(nl.tompeerdeman
 	 * .ca.Simulator)
 	 */
 	@Override
 	public void simulationUpdated(Simulator sim) {
 		Iterator<Trigger> it = triggers.iterator();
 		while(it.hasNext()) {
-			if(it.next().process(sim)) {
-				it.remove();
+			Trigger t = it.next();
+			if(!t.isActivated() && t.process(sys)) {
+				t.setActivated(true);
 			}
+		}
+	}
+	
+	public void reset() {
+		for(Trigger t : triggers) {
+			t.setActivated(false);
 		}
 	}
 }

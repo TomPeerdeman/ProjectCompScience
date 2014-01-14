@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 public class TriggerPanel extends JPanel {
 	private static final long serialVersionUID = -6273342822045865252L;
 	
+	public String active;
+	
 	/**
 	 * 
 	 */
@@ -30,11 +32,7 @@ public class TriggerPanel extends JPanel {
 	}
 	
 	public void show(String name) {
+		active = name;
 		((CardLayout) getLayout()).show(this, name);
-	}
-	
-	public void first() {
-		((CardLayout) getLayout()).first(this);
-		repaint();
 	}
 }

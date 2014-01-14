@@ -28,6 +28,7 @@ import nl.uva.ca.ExForestFire;
 import nl.uva.ca.ExForestFireData;
 import nl.uva.ca.Trigger;
 import nl.uva.ca.TriggerManager;
+import nl.uva.ca.triggers.TriggerListRenderer;
 import nl.uva.ca.visual.ExSimulateControlPanel;
 import nl.uva.ca.visual.trigger.TriggerFrame;
 
@@ -130,6 +131,7 @@ public class ExForestFireDataPanel extends JPanel implements
 		triggerModel = new DefaultListModel<Trigger>();
 		triggerList = new JList<Trigger>(triggerModel);
 		triggerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		triggerList.setCellRenderer(new TriggerListRenderer(triggerManager));
 		
 		triggerPane = new JScrollPane(triggerList);
 		triggerPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -309,11 +311,15 @@ public class ExForestFireDataPanel extends JPanel implements
 		if(data.burning == 0) {
 			control.stop();
 		}
+		
+		triggerList.repaint();
 	}
 	
 	@Override
 	public boolean onRandomize() {
 		try {
+			triggerManager.reset();
+			
 			double d = Double.parseDouble(density.getText());
 			if(d < 0 || d > 1.0) {
 				throw new NumberFormatException();
@@ -336,6 +342,7 @@ public class ExForestFireDataPanel extends JPanel implements
 	
 	@Override
 	public boolean onReset() {
+		triggerManager.reset();
 		fire.resetGrid();
 		return true;
 	}
@@ -619,6 +626,11 @@ public class ExForestFireDataPanel extends JPanel implements
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		int idx = triggerList.getSelectedIndex();
+		if(e.getSource() != triggerAddButton
+				&& (idx < 0 || idx >= triggerManager.triggers.size())) {
+			return;
+		}
+		
 		if(e.getSource() == triggerAddButton) {
 			if(triggerFrame != null) {
 				triggerFrame.dispose();
@@ -638,6 +650,8 @@ public class ExForestFireDataPanel extends JPanel implements
 			if(triggerManager.triggers.size() == 0) {
 				triggerEditButton.setEnabled(false);
 				triggerDelButton.setEnabled(false);
+			} else if(idx == triggerManager.triggers.size()) {
+				triggerList.setSelectedIndex(idx - 1);
 			}
 		}
 	}

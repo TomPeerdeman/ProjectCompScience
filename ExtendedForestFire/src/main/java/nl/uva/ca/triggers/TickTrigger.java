@@ -4,6 +4,7 @@
  */
 package nl.uva.ca.triggers;
 
+import nl.tompeerdeman.ca.SimulatableSystem;
 import nl.tompeerdeman.ca.Simulator;
 
 import nl.uva.ca.Trigger;
@@ -27,15 +28,23 @@ public class TickTrigger extends Trigger {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see nl.uva.ca.Trigger#process(nl.tompeerdeman.ca.Simulator)
+	 * @see nl.uva.ca.Trigger#process(nl.tompeerdeman.ca.SimulatableSystem)
 	 */
 	@Override
-	public boolean process(Simulator sim) {
+	public boolean process(SimulatableSystem sys) {
+		Simulator sim = sys.getSimulator();
 		if(sim.getTick() >= tick) {
 			action.execute(sim.getData());
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * @return the tick
+	 */
+	public int getTick() {
+		return tick;
 	}
 	
 	@Override

@@ -22,9 +22,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import nl.uva.ca.Trigger;
+import nl.uva.ca.TriggerAction;
 import nl.uva.ca.TriggerManager;
-import nl.uva.ca.triggers.TestAction;
-import nl.uva.ca.triggers.TickTrigger;
 import nl.uva.ca.visual.forestfire.ExForestFireDataPanel;
 
 /**
@@ -54,9 +53,11 @@ public class TriggerFrame extends JFrame {
 	 */
 	public TriggerFrame(int idx, Trigger trigger, ExForestFireDataPanel panel)
 			throws HeadlessException {
-		this(trigger.toString(), panel);
+		super(trigger.toString());
 		
-		applyButton.setText("Apply");
+		init(panel, idx, trigger);
+		
+		applyButton.setText("Edit");
 	}
 	
 	/**
@@ -64,9 +65,15 @@ public class TriggerFrame extends JFrame {
 	 * @param panel
 	 * @throws HeadlessException
 	 */
-	public TriggerFrame(String title, final ExForestFireDataPanel panel)
+	public TriggerFrame(String title, ExForestFireDataPanel panel)
 			throws HeadlessException {
 		super(title);
+		
+		init(panel, -1, null);
+	}
+	
+	private void init(final ExForestFireDataPanel panel, final int idx,
+			Trigger superTrigger) {
 		main = getContentPane();
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -81,7 +88,14 @@ public class TriggerFrame extends JFrame {
 		
 		for(Entry<String, Class<? extends TriggerGeneratorPanel<?>>> e : TriggerManager.TRIGGERS.entrySet()) {
 			try {
-				TriggerGeneratorPanel<?> p = e.getValue().newInstance();
+				TriggerGeneratorPanel<?> p;
+				if(superTrigger == null) {
+					p = e.getValue().newInstance();
+				} else {
+					p =
+						e.getValue().getConstructor(Trigger.class)
+							.newInstance(superTrigger);
+				}
 				panels.put(e.getKey(), p);
 				triggerPanel.add(p, e.getKey());
 			} catch(Exception e1) {
@@ -103,7 +117,13 @@ public class TriggerFrame extends JFrame {
 		
 		for(Entry<String, Class<? extends TriggerActionGeneratorPanel<?>>> e : TriggerManager.ACTIONS.entrySet()) {
 			try {
-				TriggerActionGeneratorPanel<?> p = e.getValue().newInstance();
+				TriggerActionGeneratorPanel<?> p;
+				if(superTrigger == null) {
+					p = e.getValue().newInstance();
+				} else {
+					p = e.getValue().getConstructor(TriggerAction.class)
+							.newInstance(superTrigger.getAction());
+				}
 				panels.put(e.getKey(), p);
 				actionPanel.add(p, e.getKey());
 			} catch(Exception e1) {
@@ -125,8 +145,23 @@ public class TriggerFrame extends JFrame {
 		applyButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				panel.onNewTrigger(new TickTrigger(10, new TestAction()));
-				dispose();
+				TriggerGeneratorPanel<? extends Trigger> tP =
+					(TriggerGeneratorPanel<?>) panels.get(triggerPanel.active);
+				TriggerActionGeneratorPanel<? extends TriggerAction> aP =
+					(TriggerActionGeneratorPanel<?>) panels.get(actionPanel.active);
+				
+				TriggerAction ac = aP.generate();
+				if(ac != null) {
+					Trigger tr = tP.generate(ac);
+					if(tr != null) {
+						if(idx < 0) {
+							panel.onNewTrigger(tr);
+						} else {
+							panel.onEditTrigger(idx, tr);
+						}
+						dispose();
+					}
+				}
 			}
 		});
 		
@@ -141,7 +176,6 @@ public class TriggerFrame extends JFrame {
 		c.gridx = 0;
 		c.gridy = 1;
 		main.add(triggerPanel, c);
-		triggerPanel.first();
 		
 		c.gridx = 1;
 		c.gridy = 0;
@@ -150,7 +184,6 @@ public class TriggerFrame extends JFrame {
 		c.gridx = 1;
 		c.gridy = 1;
 		main.add(actionPanel, c);
-		actionPanel.first();
 		
 		c.gridx = 1;
 		c.gridy = 2;

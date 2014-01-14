@@ -41,8 +41,11 @@ public class ExForestFireFrame extends ExCaFrame {
 		
 		main.add(capanel);
 		
+		TriggerManager triggerManager = new TriggerManager(fire);
 		ExForestFireDataPanel dataPanel =
-			new ExForestFireDataPanel(fire, new TriggerManager());
+			new ExForestFireDataPanel(fire, triggerManager);
+		
+		sim.addChangeListener(triggerManager);
 		sim.addChangeListener(dataPanel);
 		
 		ExForestFireLegend legend =

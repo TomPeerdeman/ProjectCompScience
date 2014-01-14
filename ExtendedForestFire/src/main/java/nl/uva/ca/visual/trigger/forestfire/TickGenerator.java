@@ -4,8 +4,10 @@
  */
 package nl.uva.ca.visual.trigger.forestfire;
 
+import java.awt.Color;
 import java.awt.Dimension;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -28,7 +30,6 @@ public class TickGenerator extends TriggerGeneratorPanel<TickTrigger> {
 	 * 
 	 */
 	public TickGenerator() {
-		super();
 	}
 	
 	/**
@@ -36,6 +37,7 @@ public class TickGenerator extends TriggerGeneratorPanel<TickTrigger> {
 	 */
 	public TickGenerator(Trigger parent) {
 		super(parent);
+		tickTextField.setText("" + ((TickTrigger) parent).getTick());
 	}
 	
 	/*
@@ -46,6 +48,13 @@ public class TickGenerator extends TriggerGeneratorPanel<TickTrigger> {
 	 */
 	@Override
 	public TickTrigger generate(TriggerAction action) {
+		try {
+			int n = Integer.parseInt(tickTextField.getText());
+			return new TickTrigger(n, action);
+		} catch(NumberFormatException e) {
+			tickTextField.setBorder(BorderFactory.createLineBorder(Color.RED));
+		}
+		
 		return null;
 	}
 	
@@ -60,7 +69,8 @@ public class TickGenerator extends TriggerGeneratorPanel<TickTrigger> {
 		
 		tickTextField = new JTextField("0");
 		
-		add(new JLabel("After tick", SwingConstants.RIGHT));
+		// This label refuses to align right
+		add(new JLabel("On tick", SwingConstants.RIGHT));
 		add(tickTextField);
 		Dimension d = new Dimension(150, 60);
 		add(new Box.Filler(d, d, d));
