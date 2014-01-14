@@ -130,9 +130,7 @@ public class TriggerFrame extends JFrame {
 				
 				if(p instanceof NBActionGenerator) {
 					// TODO: Fix on merge
-					// ((NBActionGenerator)
-					// p).setGridType(panel.getForestFire().type);
-					((NBActionGenerator) p).setGridType(0);
+					((NBActionGenerator) p).setGridType(panel.getForestFire().type);
 				}
 			} catch(Exception e1) {
 				e1.printStackTrace();
