@@ -217,6 +217,7 @@ public class ExForestFire extends SimulatableSystem {
 		plantVegetation(totaltrees,ExForestFireCellType.TREE);
 		plantVegetation(totalbushes, ExForestFireCellType.BUSH);
 	}
+	
 	public void plantVegetation(int total, ExForestFireCellType cellType){
 		Random rand = new Random();
 		int t = 0;
@@ -224,7 +225,7 @@ public class ExForestFire extends SimulatableSystem {
 		int tries = 0;
 		while(t < total) {
 			rx = rand.nextInt(grid.grid.length);
-			ry = rand.nextInt((grid.grid[0].length - 1)) + 1;
+			ry = rand.nextInt((grid.grid[0].length - 1));
 			if(grid.getCell(rx, ry) == null) {
 				grid.setCell(new ExForestFireCell(rx, ry, cellType));
 				t++;
