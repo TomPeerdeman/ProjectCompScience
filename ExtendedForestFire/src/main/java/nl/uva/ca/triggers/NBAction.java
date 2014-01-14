@@ -18,6 +18,7 @@ public class NBAction implements TriggerAction {
 	
 	/**
 	 * @param nb
+	 * @param type
 	 */
 	public NBAction(double[][] nb, int type) {
 		this.nb = nb;

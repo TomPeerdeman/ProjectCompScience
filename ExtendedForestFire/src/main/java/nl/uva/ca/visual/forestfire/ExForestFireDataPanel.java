@@ -379,35 +379,19 @@ public class ExForestFireDataPanel extends JPanel implements
 	}
 	
 	public void updateType() {
-		// String[] probabilities = {gridProb1.getText(),
-		// gridProb2.getText(),gridProb3.getText(),gridProb4.getText(),gridProb5.getText(),gridProb6.getText(),gridProb7.getText(),gridProb8.getText()};
 		int i = gridtype.getSelectedIndex();
 		switch(i) {
 			case 0:
-				fire.type = 0;
-				data.type = 0;
-				fire.getSimulator().afterSimulateTick();
-				revalidate();
-				repaint();
-				onRandomize();
-				break;
 			case 1:
-				fire.type = 1;
-				data.type = 1;
-				fire.getSimulator().afterSimulateTick();
-				
-				revalidate();
-				repaint();
-				onRandomize();
-				break;
 			case 2:
-				fire.type = 2;
-				data.type = 2;
-				fire.getSimulator().afterSimulateTick();
+				fire.type = i;
+				data.type = i;
+				onRandomize();
+				control.reset();
 				
 				revalidate();
 				repaint();
-				onRandomize();
+				
 				break;
 		}
 		
