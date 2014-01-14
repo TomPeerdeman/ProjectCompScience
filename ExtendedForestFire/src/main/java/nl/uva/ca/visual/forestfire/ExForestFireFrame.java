@@ -9,6 +9,7 @@ import nl.tompeerdeman.ca.forestfire.ForestFireData;
 import nl.tompeerdeman.ca.visual.CaPanel;
 
 import nl.uva.ca.ExForestFire;
+import nl.uva.ca.TriggerManager;
 import nl.uva.ca.visual.ExCaFrame;
 
 public class ExForestFireFrame extends ExCaFrame {
@@ -40,7 +41,11 @@ public class ExForestFireFrame extends ExCaFrame {
 		
 		main.add(capanel);
 		
-		ExForestFireDataPanel dataPanel = new ExForestFireDataPanel(fire);
+		TriggerManager triggerManager = new TriggerManager(fire);
+		ExForestFireDataPanel dataPanel =
+			new ExForestFireDataPanel(fire, triggerManager);
+		
+		sim.addChangeListener(triggerManager);
 		sim.addChangeListener(dataPanel);
 		
 		ExForestFireLegend legend =
