@@ -57,7 +57,7 @@ public class ExForestFirePanel extends CaPanel {
 	
 			// add more colors for different terrains
 			if(cell == null) {
-				g.setColor(Color.WHITE);
+				g.setColor(Brown);
 			} else {
 				g.setColor(((ExForestFireCellType) cell.getType()).getColor());
 			}
