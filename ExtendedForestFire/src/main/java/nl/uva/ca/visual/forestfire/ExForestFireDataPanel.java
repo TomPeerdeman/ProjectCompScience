@@ -339,6 +339,7 @@ public class ExForestFireDataPanel extends JPanel implements
 		} catch(NumberFormatException e) {
 			return false;
 		}
+		enableDropdowns();
 		return true;
 	}
 	
@@ -346,6 +347,7 @@ public class ExForestFireDataPanel extends JPanel implements
 	public boolean onReset() {
 		triggerManager.reset();
 		fire.resetGrid();
+		enableDropdowns();
 		return true;
 	}
 	
@@ -413,6 +415,10 @@ public class ExForestFireDataPanel extends JPanel implements
 	
 	@Override
 	public boolean onStart() {
+		triggerAddButton.setEnabled(false);
+		triggerEditButton.setEnabled(false);
+		triggerDelButton.setEnabled(false);
+		disableDropdowns();
 		return true;
 	}
 	
@@ -423,7 +429,25 @@ public class ExForestFireDataPanel extends JPanel implements
 	
 	@Override
 	public boolean onStop() {
+		triggerAddButton.setEnabled(true);
+		if(triggerManager.triggers.size() > 0) {
+			triggerEditButton.setEnabled(true);
+			triggerDelButton.setEnabled(true);
+		}
+		enableDropdowns();
 		return true;
+	}
+	
+	public void enableDropdowns() {
+		gridtype.setEnabled(true);
+		waterCheck.setEnabled(true);
+		ffCheck.setEnabled(true);
+	}
+	
+	public void disableDropdowns() {
+		gridtype.setEnabled(false);
+		waterCheck.setEnabled(false);
+		ffCheck.setEnabled(false);
 	}
 	
 	/*

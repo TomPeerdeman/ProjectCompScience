@@ -127,16 +127,16 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 		
 		c.gridx = offsx + 1;
 		c.gridy = offsy;
-		add(gridProb1, c);
+		add(gridProb2, c);
 		
 		c.gridx++;
-		add(gridProb2, c);
+		add(gridProb3, c);
 		
 		// Row 2
 		
 		c.gridx = offsx;
 		c.gridy++;
-		add(gridProb3, c);
+		add(gridProb4, c);
 		
 		c.gridwidth = 2;
 		
@@ -146,16 +146,16 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 		c.gridwidth = 1;
 		
 		c.gridx = offsx + 3;
-		add(gridProb4, c);
+		add(gridProb5, c);
 		
 		// row 3
 		
 		c.gridx = offsx + 1;
 		c.gridy++;
-		add(gridProb5, c);
+		add(gridProb7, c);
 		
 		c.gridx++;
-		add(gridProb6, c);
+		add(gridProb8, c);
 	}
 	
 	private void drawTriangleGrid(int offsx, int offsy) {
@@ -163,13 +163,13 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 		
 		c.gridx = offsx;
 		c.gridy = offsy + 2;
-		add(gridProb2, c);
+		add(gridProb4, c);
 		
 		// column 2
 		
 		c.gridx++;
 		c.gridy = offsy;
-		add(gridProb1, c);
+		add(gridProb2, c);
 		
 		c.gridy++;
 		add(new JLabel("Fire", SwingConstants.CENTER), c);
@@ -178,7 +178,7 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 		
 		c.gridx++;
 		c.gridy++;
-		add(gridProb3, c);
+		add(gridProb5, c);
 	}
 	
 	/*

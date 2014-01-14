@@ -8,8 +8,6 @@ import java.util.Random;
 
 import nl.tompeerdeman.ca.Grid;
 import nl.tompeerdeman.ca.SimulatableSystem;
-import nl.tompeerdeman.ca.forestfire.ForestFireCell;
-import nl.tompeerdeman.ca.forestfire.ForestFireCellType;
 
 public class ExForestFire extends SimulatableSystem {
 	public static final double[][] NB_NEUMANN = {
@@ -93,7 +91,7 @@ public class ExForestFire extends SimulatableSystem {
 	public void randomizeGrid(final long seed) {
 		// TODO: mega awesome terrain generation here
 		grid.clear();
-
+		
 		Random rand = new Random();
 		if(seed > 0) {
 			rand.setSeed(seed);
@@ -137,17 +135,18 @@ public class ExForestFire extends SimulatableSystem {
 			if(points > 1) {
 				// connect random water points
 				for(int i = 0; i < points; i++) {
-					if(type == 0 || type == 1){
-					randomWaterStandard(pointcoord[i][0], pointcoord[i][1],
-							pointcoord[pointcoord[i][2]][0],
-							pointcoord[pointcoord[i][2]][1]);
+					if(type == 0 || type == 1) {
+						randomWaterStandard(pointcoord[i][0], pointcoord[i][1],
+								pointcoord[pointcoord[i][2]][0],
+								pointcoord[pointcoord[i][2]][1]);
 					}
-					else{
-					randomWaterTriangle(pointcoord[i][0], pointcoord[i][1],
-							pointcoord[pointcoord[i][2]][0],
-							pointcoord[pointcoord[i][2]][1]);
+					else {
+						randomWaterTriangle(pointcoord[i][0], pointcoord[i][1],
+								pointcoord[pointcoord[i][2]][0],
+								pointcoord[pointcoord[i][2]][1]);
 					}
-					grid.setCell(new ExForestFireCell(pointcoord[i][0], pointcoord[i][1], ExForestFireCellType.WATER));
+					grid.setCell(new ExForestFireCell(pointcoord[i][0],
+							pointcoord[i][1], ExForestFireCellType.WATER));
 				}
 			}
 			
@@ -170,12 +169,14 @@ public class ExForestFire extends SimulatableSystem {
 					}
 				}
 				// normal walking
-				if(type == 0 || type == 1){
-					randomWaterStandard(pointcoord[index][0], pointcoord[index][1], 0, edge);
+				if(type == 0 || type == 1) {
+					randomWaterStandard(pointcoord[index][0],
+							pointcoord[index][1], 0, edge);
 				}
 				// triangle walking
-				else{
-					randomWaterTriangle(pointcoord[index][0], pointcoord[index][1], 0, edge);
+				else {
+					randomWaterTriangle(pointcoord[index][0],
+							pointcoord[index][1], 0, edge);
 				}
 			}
 			else {
@@ -188,37 +189,39 @@ public class ExForestFire extends SimulatableSystem {
 						index = i;
 					}
 				}
-				//normal walking
-				if(type == 0 || type == 1){
-					randomWaterStandard(pointcoord[index][0], pointcoord[index][1], edge, 0);
+				// normal walking
+				if(type == 0 || type == 1) {
+					randomWaterStandard(pointcoord[index][0],
+							pointcoord[index][1], edge, 0);
 				}
 				// triangle walking
-				else{
-					randomWaterTriangle(pointcoord[index][0], pointcoord[index][1], edge, 0);
+				else {
+					randomWaterTriangle(pointcoord[index][0],
+							pointcoord[index][1], edge, 0);
 				}
 			}
 		}
 		int watercount = 0;
-		for(int i = 0; i < grid.grid.length; i ++){
-			for(int j = 0; j < grid.grid.length; j ++){
+		for(int i = 0; i < grid.grid.length; i++) {
+			for(int j = 0; j < grid.grid.length; j++) {
 				ExForestFireCell cell =
-						(ExForestFireCell) grid.getCell(i, j);
+					(ExForestFireCell) grid.getCell(i, j);
 				// only water or empty at this point
 				if(cell != null)
 					watercount++;
 			}
 		}
 		final int totaltrees =
-				(int) Math.ceil(treeDensity
-						* (grid.grid.length * (grid.grid[0].length - 1) - watercount));
+			(int) Math.ceil(treeDensity
+					* (grid.grid.length * (grid.grid[0].length - 1) - watercount));
 		final int totalbushes =
-				(int) Math.ceil(bushDensity
-						* (grid.grid.length * (grid.grid[0].length - 1) - watercount));
-		plantVegetation(totaltrees,ExForestFireCellType.TREE);
+			(int) Math.ceil(bushDensity
+					* (grid.grid.length * (grid.grid[0].length - 1) - watercount));
+		plantVegetation(totaltrees, ExForestFireCellType.TREE);
 		plantVegetation(totalbushes, ExForestFireCellType.BUSH);
 	}
 	
-	public void plantVegetation(int total, ExForestFireCellType cellType){
+	public void plantVegetation(int total, ExForestFireCellType cellType) {
 		Random rand = new Random();
 		int t = 0;
 		int rx, ry;
@@ -346,7 +349,8 @@ public class ExForestFire extends SimulatableSystem {
 				if(goX) {
 					xcurr++;
 				}
-				else if((ycurr % 2 == 1 && xcurr % 2 == 0) || (ycurr % 2 == 0 && xcurr % 2 == 1)){
+				else if((ycurr % 2 == 1 && xcurr % 2 == 0)
+						|| (ycurr % 2 == 0 && xcurr % 2 == 1)) {
 					ycurr++;
 				}
 				else {
@@ -357,7 +361,8 @@ public class ExForestFire extends SimulatableSystem {
 				if(goX) {
 					xcurr--;
 				}
-				else if((ycurr % 2 == 0 && xcurr % 2 == 0) || (ycurr % 2 == 1 && xcurr % 2 == 1)){
+				else if((ycurr % 2 == 0 && xcurr % 2 == 0)
+						|| (ycurr % 2 == 1 && xcurr % 2 == 1)) {
 					ycurr--;
 				}
 				else {
@@ -368,7 +373,8 @@ public class ExForestFire extends SimulatableSystem {
 				if(goX) {
 					xcurr++;
 				}
-				else if((ycurr % 2 == 0 && xcurr % 2 == 0) || (ycurr % 2 == 1 && xcurr % 2 == 1)){
+				else if((ycurr % 2 == 0 && xcurr % 2 == 0)
+						|| (ycurr % 2 == 1 && xcurr % 2 == 1)) {
 					ycurr--;
 				}
 				else {
@@ -379,7 +385,8 @@ public class ExForestFire extends SimulatableSystem {
 				if(goX) {
 					xcurr--;
 				}
-				else if((ycurr % 2 == 1 && xcurr % 2 == 0) || (ycurr % 2 == 0 && xcurr % 2 == 1)){
+				else if((ycurr % 2 == 1 && xcurr % 2 == 0)
+						|| (ycurr % 2 == 0 && xcurr % 2 == 1)) {
 					ycurr++;
 				}
 				else {
@@ -389,40 +396,42 @@ public class ExForestFire extends SimulatableSystem {
 			else if(xend > xcurr) {
 				xcurr++;
 			}
-			else if(yend > ycurr && ((ycurr % 2 == 1 && xcurr % 2 == 0) || (ycurr % 2 == 0 && xcurr % 2 == 1))) {
+			else if(yend > ycurr
+					&& ((ycurr % 2 == 1 && xcurr % 2 == 0) || (ycurr % 2 == 0 && xcurr % 2 == 1))) {
 				ycurr++;
 			}
 			else if(xend < xcurr) {
 				xcurr--;
 			}
-			else if(yend < ycurr && ((ycurr % 2 == 0 && xcurr % 2 == 0) || (ycurr % 2 == 1 && xcurr % 2 == 1))) {
+			else if(yend < ycurr
+					&& ((ycurr % 2 == 0 && xcurr % 2 == 0) || (ycurr % 2 == 1 && xcurr % 2 == 1))) {
 				ycurr--;
 			}
 			
 			// if no movement was made, i'm stuck going up or down, fix me
-			if(xprev == xcurr && yprev == ycurr){
+			if(xprev == xcurr && yprev == ycurr) {
 				same = true;
-				if(xcurr < grid.grid.length-1 && xcurr > 0){
-					if(rand.nextInt(2) < 0){
-						grid.setCell(new ExForestFireCell(xcurr-1, ycurr,
+				if(xcurr < grid.grid.length - 1 && xcurr > 0) {
+					if(rand.nextInt(2) < 0) {
+						grid.setCell(new ExForestFireCell(xcurr - 1, ycurr,
 								ExForestFireCellType.WATER));
-						ycurr = triangleUpDownFix(xcurr-1, ycurr, yend);
+						ycurr = triangleUpDownFix(xcurr - 1, ycurr, yend);
 					}
-					else{
-						grid.setCell(new ExForestFireCell(xcurr+1, ycurr,
+					else {
+						grid.setCell(new ExForestFireCell(xcurr + 1, ycurr,
 								ExForestFireCellType.WATER));
-						ycurr = triangleUpDownFix(xcurr+1, ycurr, yend);
+						ycurr = triangleUpDownFix(xcurr + 1, ycurr, yend);
 					}
 				}
-				else if(xcurr == grid.grid.length-1){
-					grid.setCell(new ExForestFireCell(xcurr-1, ycurr,
+				else if(xcurr == grid.grid.length - 1) {
+					grid.setCell(new ExForestFireCell(xcurr - 1, ycurr,
 							ExForestFireCellType.WATER));
-					ycurr = triangleUpDownFix(xcurr-1, ycurr, yend);
+					ycurr = triangleUpDownFix(xcurr - 1, ycurr, yend);
 				}
-				else{
-					grid.setCell(new ExForestFireCell(xcurr+1, ycurr,
+				else {
+					grid.setCell(new ExForestFireCell(xcurr + 1, ycurr,
 							ExForestFireCellType.WATER));
-					ycurr = triangleUpDownFix(xcurr+1, ycurr, yend);
+					ycurr = triangleUpDownFix(xcurr + 1, ycurr, yend);
 				}
 			}
 			
@@ -442,27 +451,27 @@ public class ExForestFire extends SimulatableSystem {
 			
 		}
 		
-		 //Debug, see starting points
-		 //if(grid.getCell(xstart, ystart) != null) {
-		 //grid.getCell(xstart, ystart).setType(
-		 //ExForestFireCellType.BURNING_TREE);
-		 //} else {
-		 //grid.setCell(new ExForestFireCell(xstart, ystart,
-		 //ExForestFireCellType.BURNING_TREE));
-		 //}
+		// Debug, see starting points
+		// if(grid.getCell(xstart, ystart) != null) {
+		// grid.getCell(xstart, ystart).setType(
+		// ExForestFireCellType.BURNING_TREE);
+		// } else {
+		// grid.setCell(new ExForestFireCell(xstart, ystart,
+		// ExForestFireCellType.BURNING_TREE));
+		// }
 	}
 	
-	public int triangleUpDownFix(int xcurr, int ycurr, int yend){
+	public int triangleUpDownFix(int xcurr, int ycurr, int yend) {
 		// i'm stuck going up
-		if(ycurr < yend){
-			grid.setCell(new ExForestFireCell(xcurr, ycurr+1,
+		if(ycurr < yend) {
+			grid.setCell(new ExForestFireCell(xcurr, ycurr + 1,
 					ExForestFireCellType.WATER));
 			ycurr++;
 		}
 		// i'm stuck going down
-		else{
-			grid.setCell(new ExForestFireCell(xcurr, ycurr-1,
-					ExForestFireCellType.WATER));	
+		else {
+			grid.setCell(new ExForestFireCell(xcurr, ycurr - 1,
+					ExForestFireCellType.WATER));
 			ycurr--;
 		}
 		return ycurr;
