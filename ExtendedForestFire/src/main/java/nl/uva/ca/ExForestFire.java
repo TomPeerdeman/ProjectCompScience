@@ -90,7 +90,6 @@ public class ExForestFire extends SimulatableSystem {
 	
 	public void randomizeGrid(final long seed) {
 		// TODO: mega awesome terrain generation here
-		
 		grid.clear();
 		
 		/*
@@ -133,9 +132,16 @@ public class ExForestFire extends SimulatableSystem {
 			if(points > 1) {
 				// connect random water points
 				for(int i = 0; i < points; i++) {
-					randomWater(pointcoord[i][0], pointcoord[i][1],
+					if(type == 0 || type == 1){
+					randomWaterStandard(pointcoord[i][0], pointcoord[i][1],
 							pointcoord[pointcoord[i][2]][0],
 							pointcoord[pointcoord[i][2]][1]);
+					}
+					else{
+					randomWaterTriangle(pointcoord[i][0], pointcoord[i][1],
+							pointcoord[pointcoord[i][2]][0],
+							pointcoord[pointcoord[i][2]][1]);
+					}
 				}
 			}
 			
@@ -157,7 +163,14 @@ public class ExForestFire extends SimulatableSystem {
 						index = i;
 					}
 				}
-				randomWater(pointcoord[index][0], pointcoord[index][1], 0, edge);
+				// normal walking
+				if(type == 0 || type == 1){
+					randomWaterStandard(pointcoord[index][0], pointcoord[index][1], 0, edge);
+				}
+				// triangle walking
+				else{
+					randomWaterTriangle(pointcoord[index][0], pointcoord[index][1], 0, edge);
+				}
 			}
 			else {
 				for(int i = 0; i < points; i++) {
@@ -169,12 +182,19 @@ public class ExForestFire extends SimulatableSystem {
 						index = i;
 					}
 				}
-				randomWater(pointcoord[index][0], pointcoord[index][1], edge, 0);
+				//normal walking
+				if(type == 0 || type == 1){
+					randomWaterStandard(pointcoord[index][0], pointcoord[index][1], edge, 0);
+				}
+				// triangle walking
+				else{
+					randomWaterTriangle(pointcoord[index][0], pointcoord[index][1], edge, 0);
+				}
 			}
 		}
 	}
 	
-	public void randomWater(int xstart, int ystart, int xend, int yend) {
+	public void randomWaterStandard(int xstart, int ystart, int xend, int yend) {
 		int xcurr = xstart;
 		int ycurr = ystart;
 		
@@ -255,6 +275,181 @@ public class ExForestFire extends SimulatableSystem {
 		// grid.setCell(new ExForestFireCell(xstart, ystart,
 		// ExForestFireCellType.BURNING_TREE));
 		// }
+	}
+	
+	public void randomWaterTriangle(int xstart, int ystart, int xend, int yend) {
+		int xcurr = xstart;
+		int ycurr = ystart;
+		int xprev;
+		int yprev;
+		
+		// calculate distance left
+		int distance = Math.abs(xcurr - xend) + Math.abs(ycurr - yend);
+		int distX = Math.abs(xcurr - xend);
+		int distY = Math.abs(ycurr - yend);
+		Random rand = new Random();
+		
+		// find out the correct possible direction and randomly choose one
+		while(distance > 0) {
+			xprev = xcurr;
+			yprev = ycurr;
+			boolean goX = rand.nextInt(distX + distY) < distX;
+			
+			if(xend > xcurr && yend > ycurr) {
+				if(goX) {
+					xcurr++;
+				}
+				else if((ycurr % 2 == 1 && xcurr % 2 == 0) || (ycurr % 2 == 0 && xcurr % 2 == 1)){
+					ycurr++;
+				}
+				else {
+					xcurr++;
+				}
+			}
+			else if(xend < xcurr && yend < ycurr) {
+				if(goX) {
+					xcurr--;
+				}
+				else if((ycurr % 2 == 0 && xcurr % 2 == 0) || (ycurr % 2 == 1 && xcurr % 2 == 1)){
+					ycurr--;
+				}
+				else {
+					xcurr--;
+				}
+			}
+			else if(xend > xcurr && yend < ycurr) {
+				if(goX) {
+					xcurr++;
+				}
+				else if((ycurr % 2 == 0 && xcurr % 2 == 0) || (ycurr % 2 == 1 && xcurr % 2 == 1)){
+					ycurr--;
+				}
+				else {
+					xcurr++;
+				}
+			}
+			else if(xend < xcurr && yend > ycurr) {
+				if(goX) {
+					xcurr--;
+				}
+				else if((ycurr % 2 == 1 && xcurr % 2 == 0) || (ycurr % 2 == 0 && xcurr % 2 == 1)){
+					ycurr++;
+				}
+				else {
+					xcurr--;
+				}
+			}
+			else if(xend > xcurr) {
+				xcurr++;
+			}
+			else if(yend > ycurr && ((ycurr % 2 == 1 && xcurr % 2 == 0) || (ycurr % 2 == 0 && xcurr % 2 == 1))) {
+				ycurr++;
+			}
+			else if(xend < xcurr) {
+				xcurr--;
+			}
+			else if(yend < ycurr && ((ycurr % 2 == 0 && xcurr % 2 == 0) || (ycurr % 2 == 1 && xcurr % 2 == 1))) {
+				ycurr--;
+			}
+			
+			// if no movement was made, i'm stuck going up or down, fix me
+			if(xprev == xcurr && yprev == ycurr){
+				if(xcurr < grid.grid.length-1 && xcurr > 0){
+					if(rand.nextInt(2) < 0){
+						grid.setCell(new ExForestFireCell(xcurr-1, ycurr,
+								ExForestFireCellType.WATER));
+						// i'm stuck going up
+						if(ycurr < yend){
+							grid.setCell(new ExForestFireCell(xcurr-1, ycurr+1,
+									ExForestFireCellType.WATER));	
+							ycurr++;
+						}
+						// i'm stuck going down
+						else{
+							grid.setCell(new ExForestFireCell(xcurr-1, ycurr-1,
+									ExForestFireCellType.WATER));	
+							ycurr--;
+						}
+					}
+					else{
+						System.out.println("right");
+						// i'm stuck going up
+						grid.setCell(new ExForestFireCell(xcurr+1, ycurr,
+								ExForestFireCellType.WATER));
+						if(ycurr < yend){
+							grid.setCell(new ExForestFireCell(xcurr+1, ycurr+1,
+									ExForestFireCellType.WATER));	
+							ycurr++;
+						}
+						// i'm stuck going down
+						else{
+							grid.setCell(new ExForestFireCell(xcurr+1, ycurr-1,
+									ExForestFireCellType.WATER));	
+							ycurr--;
+						}
+					}
+				}
+				else if(xcurr == grid.grid.length-1){
+					// i'm stuck going up
+					grid.setCell(new ExForestFireCell(xcurr-1, ycurr,
+							ExForestFireCellType.WATER));
+					if(ycurr < yend){
+						grid.setCell(new ExForestFireCell(xcurr-1, ycurr+1,
+								ExForestFireCellType.WATER));	
+						ycurr++;
+					}
+					// i'm stuck going down
+					else{
+						grid.setCell(new ExForestFireCell(xcurr-1, ycurr-1,
+								ExForestFireCellType.WATER));	
+						ycurr--;
+					}				
+				}
+				else{
+					// i'm stuck going up
+					grid.setCell(new ExForestFireCell(xcurr+1, ycurr,
+							ExForestFireCellType.WATER));
+					if(ycurr < yend){
+						grid.setCell(new ExForestFireCell(xcurr+1, ycurr+1,
+								ExForestFireCellType.WATER));	
+						ycurr++;
+					}
+					// i'm stuck going down
+					else{
+						grid.setCell(new ExForestFireCell(xcurr+1, ycurr-1,
+								ExForestFireCellType.WATER));	
+						ycurr--;
+					}
+				}
+			}
+			
+			// if we intersect with an existing river, break
+			ExForestFireCell cell =
+				(ExForestFireCell) grid.getCell(xcurr, ycurr);
+			if(cell == null)
+				grid.setCell(new ExForestFireCell(xcurr, ycurr,
+						ExForestFireCellType.WATER));
+			
+			distX = Math.abs(xcurr - xend);
+			distY = Math.abs(ycurr - yend);
+			distance = distX + distY;
+			System.out.println("Distance: (" +distX + " ; " + distY + ") <><> Current location: (" + xcurr + " ;"  + ycurr + ") <><> End location(" + xend + " ;"  + yend + ")");
+			
+		}
+		
+		 //Debug, see starting points
+		 //if(grid.getCell(xstart, ystart) != null) {
+		 //grid.getCell(xstart, ystart).setType(
+		 //ExForestFireCellType.BURNING_TREE);
+		 //} else {
+		 //grid.setCell(new ExForestFireCell(xstart, ystart,
+		 //ExForestFireCellType.BURNING_TREE));
+		 //}
+	}
+	
+	// work in progress
+	public int triangleUpDownFix(int xcurr, int ycurr, int yend){
+		return 0;
 	}
 	
 	public void igniteGrid() {
