@@ -474,6 +474,7 @@ public class ExForestFireDataPanel extends JPanel implements
 				drawStandardGrid();
 				revalidate();
 				repaint();
+				onRandomize();
 				break;
 			case 1:
 				fire.type = 1;
@@ -545,6 +546,7 @@ public class ExForestFireDataPanel extends JPanel implements
 				c.gridwidth = 2;
 				revalidate();
 				repaint();
+				onRandomize();
 				break;
 			case 2:
 				fire.type = 2;
@@ -616,6 +618,7 @@ public class ExForestFireDataPanel extends JPanel implements
 				
 				revalidate();
 				repaint();
+				onRandomize();
 				break;
 		}
 	}
