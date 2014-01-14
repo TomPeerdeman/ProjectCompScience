@@ -4,10 +4,12 @@
  */
 package nl.uva.ca.visual.trigger.forestfire;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
@@ -24,15 +26,8 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 	private static final long serialVersionUID = 2553481122213934488L;
 	
 	private GridBagConstraints c;
-	
-	private JTextField gridProb1;
-	private JTextField gridProb2;
-	private JTextField gridProb3;
-	private JTextField gridProb4;
-	private JTextField gridProb5;
-	private JTextField gridProb6;
-	private JTextField gridProb7;
-	private JTextField gridProb8;
+	private JTextField[] gridProb;
+	private int type;
 	
 	/**
 	 * 
@@ -62,17 +57,20 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		
-		gridProb1 = new JTextField("1");
-		gridProb2 = new JTextField("2");
-		gridProb3 = new JTextField("3");
-		gridProb4 = new JTextField("4");
-		gridProb5 = new JTextField("5");
-		gridProb6 = new JTextField("6");
-		gridProb7 = new JTextField("7");
-		gridProb8 = new JTextField("8");
+		gridProb = new JTextField[8];
+		
+		gridProb[0] = new JTextField("1");
+		gridProb[1] = new JTextField("2");
+		gridProb[2] = new JTextField("3");
+		gridProb[3] = new JTextField("4");
+		gridProb[4] = new JTextField("5");
+		gridProb[5] = new JTextField("6");
+		gridProb[6] = new JTextField("7");
+		gridProb[7] = new JTextField("8");
 	}
 	
 	public void setGridType(int type) {
+		this.type = type;
 		switch(type) {
 			case 0:
 				drawStandardGrid(0, 0);
@@ -91,37 +89,37 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 		
 		c.gridx = offsx;
 		c.gridy = offsy;
-		add(gridProb1, c);
+		add(gridProb[0], c);
 		
 		c.gridy++;
-		add(gridProb4, c);
+		add(gridProb[3], c);
 		
 		c.gridy++;
-		add(gridProb6, c);
+		add(gridProb[5], c);
 		
 		// column 2
 		
 		c.gridx++;
 		c.gridy = offsy;
-		add(gridProb2, c);
+		add(gridProb[1], c);
 		
 		c.gridy++;
 		add(new JLabel("Fire", SwingConstants.CENTER), c);
 		
 		c.gridy++;
-		add(gridProb7, c);
+		add(gridProb[6], c);
 		
 		// column 3
 		
 		c.gridx++;
 		c.gridy = offsy;
-		add(gridProb3, c);
+		add(gridProb[2], c);
 		
 		c.gridy++;
-		add(gridProb5, c);
+		add(gridProb[4], c);
 		
 		c.gridy++;
-		add(gridProb8, c);
+		add(gridProb[7], c);
 	}
 	
 	private void drawHexGrid(int offsx, int offsy) {
@@ -129,16 +127,16 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 		
 		c.gridx = offsx + 1;
 		c.gridy = offsy;
-		add(gridProb2, c);
+		add(gridProb[1], c);
 		
 		c.gridx++;
-		add(gridProb3, c);
+		add(gridProb[2], c);
 		
 		// Row 2
 		
 		c.gridx = offsx;
 		c.gridy++;
-		add(gridProb4, c);
+		add(gridProb[3], c);
 		
 		c.gridwidth = 2;
 		
@@ -148,16 +146,16 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 		c.gridwidth = 1;
 		
 		c.gridx = offsx + 3;
-		add(gridProb5, c);
+		add(gridProb[4], c);
 		
 		// row 3
 		
 		c.gridx = offsx + 1;
 		c.gridy++;
-		add(gridProb7, c);
+		add(gridProb[6], c);
 		
 		c.gridx++;
-		add(gridProb8, c);
+		add(gridProb[7], c);
 	}
 	
 	private void drawTriangleGrid(int offsx, int offsy) {
@@ -165,13 +163,13 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 		
 		c.gridx = offsx;
 		c.gridy = offsy + 2;
-		add(gridProb4, c);
+		add(gridProb[3], c);
 		
 		// column 2
 		
 		c.gridx++;
 		c.gridy = offsy;
-		add(gridProb2, c);
+		add(gridProb[1], c);
 		
 		c.gridy++;
 		add(new JLabel("Fire", SwingConstants.CENTER), c);
@@ -180,7 +178,7 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 		
 		c.gridx++;
 		c.gridy++;
-		add(gridProb5, c);
+		add(gridProb[4], c);
 		
 		c.gridwidth = 3;
 		c.gridx = offsx;
@@ -196,13 +194,13 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 		
 		c.gridx = offsx;
 		c.gridy = offsy + 4;
-		add(gridProb7, c);
+		add(gridProb[6], c);
 		
 		// column 2
 		
 		c.gridx++;
 		c.gridy = offsy + 6;
-		add(gridProb3, c);
+		add(gridProb[2], c);
 		
 		c.gridy--;
 		add(new JLabel("Fire", SwingConstants.CENTER), c);
@@ -211,7 +209,7 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 		
 		c.gridx++;
 		c.gridy = offsy + 4;
-		add(gridProb6, c);
+		add(gridProb[5], c);
 	}
 	
 	/*
@@ -221,6 +219,59 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 	 */
 	@Override
 	public NBAction generate() {
-		return new NBAction(null);
+		double[] gridValues = new double[8];
+		boolean yay = true;
+		for(int i = 0; i < 8; i++) {
+			try {
+				gridValues[i] = Double.parseDouble(gridProb[i].getText());
+			} catch(NumberFormatException e) {
+				gridProb[i].setBorder(BorderFactory.createLineBorder(Color.RED));
+				yay = false;
+			}
+		}
+		
+		if(!yay)
+			return null;
+		
+		double[][] grid;
+		if(type == 0) {
+			grid = new double[3][3];
+			
+			grid[0][0] = gridValues[0];
+			grid[0][1] = gridValues[1];
+			grid[0][2] = gridValues[2];
+			
+			grid[1][0] = gridValues[3];
+			grid[1][2] = gridValues[4];
+			
+			grid[2][0] = gridValues[5];
+			grid[2][1] = gridValues[6];
+			grid[2][2] = gridValues[7];
+		} else if(type == 1) {
+			grid = new double[3][3];
+			
+			grid[0][1] = gridValues[1];
+			grid[0][2] = gridValues[2];
+			
+			grid[1][0] = gridValues[3];
+			grid[1][2] = gridValues[4];
+			
+			grid[2][1] = gridValues[6];
+			grid[2][2] = gridValues[7];
+		} else if(type == 2) {
+			grid = new double[4][3];
+			
+			grid[0][1] = gridValues[1];
+			grid[1][0] = gridValues[3];
+			grid[1][2] = gridValues[4];
+			
+			grid[2][0] = gridValues[6];
+			grid[2][2] = gridValues[5];
+			grid[3][1] = gridValues[2];
+		} else {
+			return null;
+		}
+		
+		return new NBAction(grid);
 	}
 }
