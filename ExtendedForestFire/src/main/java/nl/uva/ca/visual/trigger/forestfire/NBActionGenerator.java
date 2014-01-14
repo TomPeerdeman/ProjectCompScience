@@ -4,10 +4,12 @@
  */
 package nl.uva.ca.visual.trigger.forestfire;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JLabel;
+import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -179,6 +181,37 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 		c.gridx++;
 		c.gridy++;
 		add(gridProb5, c);
+		
+		c.gridwidth = 3;
+		c.gridx = offsx;
+		c.gridy = offsy + 3;
+		Dimension d = new Dimension(1, 5);
+		JSeparator sep = new JSeparator();
+		sep.setPreferredSize(d);
+		add(sep, c);
+		
+		c.gridwidth = 1;
+		
+		// column 1
+		
+		c.gridx = offsx;
+		c.gridy = offsy + 4;
+		add(gridProb7, c);
+		
+		// column 2
+		
+		c.gridx++;
+		c.gridy = offsy + 6;
+		add(gridProb3, c);
+		
+		c.gridy--;
+		add(new JLabel("Fire", SwingConstants.CENTER), c);
+		
+		// column 3
+		
+		c.gridx++;
+		c.gridy = offsy + 4;
+		add(gridProb6, c);
 	}
 	
 	/*

@@ -72,7 +72,7 @@ public class TickGenerator extends TriggerGeneratorPanel<TickTrigger> {
 		// This label refuses to align right
 		add(new JLabel("On tick", SwingConstants.RIGHT));
 		add(tickTextField);
-		Dimension d = new Dimension(150, 60);
+		Dimension d = new Dimension(150, 85);
 		add(new Box.Filler(d, d, d));
 	}
 }

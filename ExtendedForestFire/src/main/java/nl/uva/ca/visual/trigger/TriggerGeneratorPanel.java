@@ -23,8 +23,8 @@ public abstract class TriggerGeneratorPanel<T extends Trigger> extends
 	 * 
 	 */
 	public TriggerGeneratorPanel() {
-		setSize(150, 100);
-		Dimension d = new Dimension(150, 100);
+		setSize(150, 130);
+		Dimension d = new Dimension(150, 130);
 		setPreferredSize(d);
 		setMinimumSize(d);
 		
@@ -32,8 +32,8 @@ public abstract class TriggerGeneratorPanel<T extends Trigger> extends
 	}
 	
 	public TriggerGeneratorPanel(Trigger parent) {
-		setSize(150, 100);
-		Dimension d = new Dimension(150, 100);
+		setSize(150, 130);
+		Dimension d = new Dimension(150, 130);
 		setPreferredSize(d);
 		setMinimumSize(d);
 		

@@ -79,7 +79,7 @@ public class TriggerFrame extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLayout(new GridBagLayout());
-		setSize(300, 200);
+		setSize(300, 220);
 		
 		this.setLocation(955, 360);
 		
