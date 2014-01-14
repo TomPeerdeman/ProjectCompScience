@@ -23,12 +23,13 @@ public class ExForestFirePanel extends CaPanel {
 	
 	@Override
 	public void paintTile(Graphics2D g, int x, int y) {
+		Color Brown = new Color(0x7A4300);
 		if(fire.type == 0){
 			ExForestFireCell cell = (ExForestFireCell) grid.getCell(x, y);
 
 			// add more colors for different terrains
 			if(cell == null) {
-				g.setColor(Color.WHITE);
+				g.setColor(Brown);
 			} else {
 				g.setColor(((ExForestFireCellType) cell.getType()).getColor());
 			}
@@ -40,7 +41,7 @@ public class ExForestFirePanel extends CaPanel {
 
 			// add more colors for different terrains
 			if(cell == null) {
-				g.setColor(Color.WHITE);
+				g.setColor(Brown);
 			} else {
 				g.setColor(((ExForestFireCellType) cell.getType()).getColor());
 			}
