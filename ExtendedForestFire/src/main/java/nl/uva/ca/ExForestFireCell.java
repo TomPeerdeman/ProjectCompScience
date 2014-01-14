@@ -11,6 +11,7 @@ import nl.tompeerdeman.ca.Simulator;
 
 public class ExForestFireCell extends Cell {
 	private double temperature;
+	private int nBurningTicks;
 	
 	/**
 	 * @param x
@@ -19,6 +20,8 @@ public class ExForestFireCell extends Cell {
 	 */
 	public ExForestFireCell(int x, int y, ExForestFireCellType t) {
 		super(x, y, t);
+		temperature = 0.0;
+		nBurningTicks = 0;
 	}
 	
 	@Override
@@ -58,57 +61,99 @@ public class ExForestFireCell extends Cell {
 	 */
 	@Override
 	public boolean simulate(Grid grid, DataSet data, Simulator sim) {
-		@SuppressWarnings("unused")
 		ExForestFireData ffdata = (ExForestFireData) data;
 		ExForestFireCell c;
 		
-		// TODO: Implement
-		
 		// debug
-		/*System.out.println(ffdata.type);
-		for(int i = 0; i < 3; i++){
-			for(int j = 0; j < 3; j++)
-				System.out.print(ffdata.neighborhood[i][j] + " ");
-			System.out.println(" ");
-		}
-		System.out.println(" ");*/
-		if(ffdata.type == 0){
+		/*
+		 * System.out.println(ffdata.type);
+		 * for(int i = 0; i < 3; i++){
+		 * for(int j = 0; j < 3; j++)
+		 * System.out.print(ffdata.neighborhood[i][j] + " ");
+		 * System.out.println(" ");
+		 * }
+		 * System.out.println(" ");
+		 */
+		if(ffdata.type == 0) {
 			int x, y;
 			for(int ny = 0; ny < 3; ny++) {
 				for(int nx = 0; nx < 3; nx++) {
 					x = this.x + nx - 1;
-					y = this.y + ny - 1;
+					// Grid y increases north so cell above is y + 1
+					y = this.y - ny + 1;
 					if(x >= 0 && y >= 0 && x < grid.grid.length
 							&& y < grid.grid[0].length) {
 						c = (ExForestFireCell) grid.getCell(x, y);
-						System.out.println(ffdata.neighborhood[nx][ny]);
-						// If there is a probability given in the range 0-1, draw a random number
-						if(ffdata.neighborhood[nx][ny] < 1.0 && ffdata.neighborhood[nx][ny] > 0.0){
+						// If there is a probability given in the range 0-1,
+						// draw a random number
+						if(ffdata.neighborhood[ny][nx] < 1.0
+								&& ffdata.neighborhood[ny][nx] > 0.0) {
 							double randomDouble = Math.random();
-							// If the probability is reached, put the cell on fire, if it is a burnable cell
-							if(randomDouble <= ffdata.neighborhood[nx][ny]){
-								setFire(ffdata, ExForestFireCellType.BURNING_TREE, c, sim);
-								setFire(ffdata, ExForestFireCellType.BURNING_BUSH, c, sim);
+							// If the probability is reached, put the cell on
+							// fire, if it is a burnable cell
+							if(randomDouble <= ffdata.neighborhood[ny][nx]) {
+								setFire(ffdata,
+										ExForestFireCellType.BURNING_TREE, c,
+										sim);
+								setFire(ffdata,
+										ExForestFireCellType.BURNING_BUSH, c,
+										sim);
 							}
 						}
-						// If the probability is 1, put the cell on fire if it is a burnable cell
-						else if(ffdata.neighborhood[nx][ny] == 1.0){
-							setFire(ffdata, ExForestFireCellType.BURNING_TREE, c, sim);
-							setFire(ffdata, ExForestFireCellType.BURNING_BUSH, c, sim);
+						// If the probability is 1, put the cell on fire if it
+						// is a burnable cell
+						else if(ffdata.neighborhood[ny][nx] == 1.0) {
+							setFire(ffdata, ExForestFireCellType.BURNING_TREE,
+									c, sim);
+							setFire(ffdata, ExForestFireCellType.BURNING_BUSH,
+									c, sim);
 						}
 						
 					}
 				}
 			}
 		}
+		
+		if(type == ExForestFireCellType.BURNING_BUSH) {
+			nBurningTicks++;
+			if(nBurningTicks >= ffdata.nTicksBushBurn) {
+				type = ExForestFireCellType.BURNT_BUSH;
+				ffdata.burning--;
+				ffdata.burnt++;
+				
+				if(ffdata.burning == 0) {
+					sim.stop();
+				}
+				
+				// Don't simulate this cell anymore.
+				return false;
+			}
+		} else if(type == ExForestFireCellType.BURNING_TREE) {
+			nBurningTicks++;
+			if(nBurningTicks >= ffdata.nTicksTreeBurn) {
+				ffdata.burning--;
+				ffdata.burnt++;
+				type = ExForestFireCellType.BURNT_TREE;
+				
+				if(ffdata.burning == 0) {
+					sim.stop();
+				}
+				
+				// Don't simulate this cell anymore.
+				return false;
+			}
+		}
 		return true;
 	}
-	public void setFire(ExForestFireData ffdata, ExForestFireCellType type, ExForestFireCell c, Simulator sim){
+	
+	public void setFire(ExForestFireData ffdata, ExForestFireCellType type,
+			ExForestFireCell c, Simulator sim) {
 		// Check for trees
 		if(c != null && c.getType() == ExForestFireCellType.TREE) {
 			c.setType(ExForestFireCellType.BURNING_TREE);
 			ffdata.burning++;
 			ffdata.trees--;
+			sim.addSimulatable(c);
 		}
 		// Check for Bushes
 		else if(c != null && c.getType() == ExForestFireCellType.BUSH) {

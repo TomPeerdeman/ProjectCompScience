@@ -85,7 +85,7 @@ public class ExForestFire extends SimulatableSystem {
 		data =
 			new ExForestFireData(grid, nb,
 					((firefighters) ? fireFightTresh : -1.0),
-					extinguishProb, useTemperature, type);
+					extinguishProb, useTemperature, type, 10, 4);
 	}
 	
 	public void randomizeGrid(final long seed) {

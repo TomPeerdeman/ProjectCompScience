@@ -95,14 +95,14 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 		
 		gridProb = new JTextField[8];
 		
-		gridProb[0] = new JTextField("1");
-		gridProb[1] = new JTextField("2");
-		gridProb[2] = new JTextField("3");
-		gridProb[3] = new JTextField("4");
-		gridProb[4] = new JTextField("5");
-		gridProb[5] = new JTextField("6");
-		gridProb[6] = new JTextField("7");
-		gridProb[7] = new JTextField("8");
+		gridProb[0] = new JTextField("0.1");
+		gridProb[1] = new JTextField("0.1");
+		gridProb[2] = new JTextField("0.1");
+		gridProb[3] = new JTextField("0.1");
+		gridProb[4] = new JTextField("0.1");
+		gridProb[5] = new JTextField("0.1");
+		gridProb[6] = new JTextField("0.1");
+		gridProb[7] = new JTextField("0.1");
 	}
 	
 	public void setGridType(int type) {
@@ -260,6 +260,9 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 		for(int i = 0; i < 8; i++) {
 			try {
 				gridValues[i] = Double.parseDouble(gridProb[i].getText());
+				if(gridValues[i] > 1.0 || gridValues[i] < 0.0) {
+					throw new NumberFormatException();
+				}
 			} catch(NumberFormatException e) {
 				gridProb[i].setBorder(BorderFactory.createLineBorder(Color.RED));
 				yay = false;
