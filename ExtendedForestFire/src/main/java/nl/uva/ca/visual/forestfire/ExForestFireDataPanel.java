@@ -301,22 +301,22 @@ public class ExForestFireDataPanel extends JPanel implements
 			triggerManager.reset();
 			
 			double d = Double.parseDouble(density.getText());
-			if(d < 0){ 
+			if(d < 0) {
 				d = 0;
 				density.setText("0.0");
 			}
-			else if(d > 1.0){ 
+			else if(d > 1.0) {
 				d = 1.0;
 				density.setText("1.0");
 			}
 			fire.treeDensity = d;
 			
 			d = Double.parseDouble(density2.getText());
-			if(d < 0){ 
+			if(d < 0) {
 				d = 0;
 				density2.setText("0.0");
 			}
-			else if(d > 1.0){ 
+			else if(d > 1.0) {
 				d = 1.0;
 				density2.setText("1.0");
 			}
@@ -324,16 +324,15 @@ public class ExForestFireDataPanel extends JPanel implements
 			
 			d = Double.parseDouble(density.getText());
 			double d2 = Double.parseDouble(density2.getText());
-			if((d + d2) > 1.0){
-				double x = d + d2 -1.0;
-				d = d - x/2;
-				d2 = d2 - x/2;
+			if((d + d2) > 1.0) {
+				double x = d + d2 - 1.0;
+				d = d - x / 2;
+				d2 = d2 - x / 2;
 				density.setText(Double.toString(d));
 				density2.setText(Double.toString(d2));
 				fire.treeDensity = d;
 				fire.bushDensity = d2;
 			}
-			
 			
 			fire.randomizeGrid(0);
 			fire.igniteGrid();
@@ -400,11 +399,15 @@ public class ExForestFireDataPanel extends JPanel implements
 			case 2:
 				fire.type = 2;
 				fire.getSimulator().afterSimulateTick();
-								
+				
 				revalidate();
 				repaint();
 				onRandomize();
 				break;
+		}
+		
+		if(triggerFrame != null) {
+			triggerFrame.dispose();
 		}
 	}
 	
