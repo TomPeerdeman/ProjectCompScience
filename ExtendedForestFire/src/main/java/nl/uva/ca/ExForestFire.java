@@ -142,6 +142,7 @@ public class ExForestFire extends SimulatableSystem {
 							pointcoord[pointcoord[i][2]][0],
 							pointcoord[pointcoord[i][2]][1]);
 					}
+					grid.setCell(new ExForestFireCell(pointcoord[i][0], pointcoord[i][1], ExForestFireCellType.WATER));
 				}
 			}
 			
@@ -293,6 +294,7 @@ public class ExForestFire extends SimulatableSystem {
 		while(distance > 0) {
 			xprev = xcurr;
 			yprev = ycurr;
+			boolean same = false;
 			boolean goX = rand.nextInt(distX + distY) < distX;
 			
 			if(xend > xcurr && yend > ycurr) {
@@ -354,86 +356,44 @@ public class ExForestFire extends SimulatableSystem {
 			
 			// if no movement was made, i'm stuck going up or down, fix me
 			if(xprev == xcurr && yprev == ycurr){
+				same = true;
 				if(xcurr < grid.grid.length-1 && xcurr > 0){
 					if(rand.nextInt(2) < 0){
 						grid.setCell(new ExForestFireCell(xcurr-1, ycurr,
 								ExForestFireCellType.WATER));
-						// i'm stuck going up
-						if(ycurr < yend){
-							grid.setCell(new ExForestFireCell(xcurr-1, ycurr+1,
-									ExForestFireCellType.WATER));	
-							ycurr++;
-						}
-						// i'm stuck going down
-						else{
-							grid.setCell(new ExForestFireCell(xcurr-1, ycurr-1,
-									ExForestFireCellType.WATER));	
-							ycurr--;
-						}
+						ycurr = triangleUpDownFix(xcurr-1, ycurr, yend);
 					}
 					else{
-						System.out.println("right");
-						// i'm stuck going up
 						grid.setCell(new ExForestFireCell(xcurr+1, ycurr,
 								ExForestFireCellType.WATER));
-						if(ycurr < yend){
-							grid.setCell(new ExForestFireCell(xcurr+1, ycurr+1,
-									ExForestFireCellType.WATER));	
-							ycurr++;
-						}
-						// i'm stuck going down
-						else{
-							grid.setCell(new ExForestFireCell(xcurr+1, ycurr-1,
-									ExForestFireCellType.WATER));	
-							ycurr--;
-						}
+						ycurr = triangleUpDownFix(xcurr+1, ycurr, yend);
 					}
 				}
 				else if(xcurr == grid.grid.length-1){
-					// i'm stuck going up
 					grid.setCell(new ExForestFireCell(xcurr-1, ycurr,
 							ExForestFireCellType.WATER));
-					if(ycurr < yend){
-						grid.setCell(new ExForestFireCell(xcurr-1, ycurr+1,
-								ExForestFireCellType.WATER));	
-						ycurr++;
-					}
-					// i'm stuck going down
-					else{
-						grid.setCell(new ExForestFireCell(xcurr-1, ycurr-1,
-								ExForestFireCellType.WATER));	
-						ycurr--;
-					}				
+					ycurr = triangleUpDownFix(xcurr-1, ycurr, yend);
 				}
 				else{
-					// i'm stuck going up
 					grid.setCell(new ExForestFireCell(xcurr+1, ycurr,
 							ExForestFireCellType.WATER));
-					if(ycurr < yend){
-						grid.setCell(new ExForestFireCell(xcurr+1, ycurr+1,
-								ExForestFireCellType.WATER));	
-						ycurr++;
-					}
-					// i'm stuck going down
-					else{
-						grid.setCell(new ExForestFireCell(xcurr+1, ycurr-1,
-								ExForestFireCellType.WATER));	
-						ycurr--;
-					}
+					ycurr = triangleUpDownFix(xcurr+1, ycurr, yend);
 				}
 			}
 			
-			// if we intersect with an existing river, break
+			// if we intersect with an existing river,
+			// break (if normal conditions occurred)
 			ExForestFireCell cell =
 				(ExForestFireCell) grid.getCell(xcurr, ycurr);
 			if(cell == null)
 				grid.setCell(new ExForestFireCell(xcurr, ycurr,
 						ExForestFireCellType.WATER));
+			else if(same == false)
+				break;
 			
 			distX = Math.abs(xcurr - xend);
 			distY = Math.abs(ycurr - yend);
 			distance = distX + distY;
-			System.out.println("Distance: (" +distX + " ; " + distY + ") <><> Current location: (" + xcurr + " ;"  + ycurr + ") <><> End location(" + xend + " ;"  + yend + ")");
 			
 		}
 		
@@ -447,9 +407,20 @@ public class ExForestFire extends SimulatableSystem {
 		 //}
 	}
 	
-	// work in progress
 	public int triangleUpDownFix(int xcurr, int ycurr, int yend){
-		return 0;
+		// i'm stuck going up
+		if(ycurr < yend){
+			grid.setCell(new ExForestFireCell(xcurr, ycurr+1,
+					ExForestFireCellType.WATER));
+			ycurr++;
+		}
+		// i'm stuck going down
+		else{
+			grid.setCell(new ExForestFireCell(xcurr, ycurr-1,
+					ExForestFireCellType.WATER));	
+			ycurr--;
+		}
+		return ycurr;
 	}
 	
 	public void igniteGrid() {
