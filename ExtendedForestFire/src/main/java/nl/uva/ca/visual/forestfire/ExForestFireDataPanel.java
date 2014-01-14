@@ -385,6 +385,7 @@ public class ExForestFireDataPanel extends JPanel implements
 		switch(i) {
 			case 0:
 				fire.type = 0;
+				data.type = 0;
 				fire.getSimulator().afterSimulateTick();
 				revalidate();
 				repaint();
@@ -392,6 +393,7 @@ public class ExForestFireDataPanel extends JPanel implements
 				break;
 			case 1:
 				fire.type = 1;
+				data.type = 1;
 				fire.getSimulator().afterSimulateTick();
 				
 				revalidate();
@@ -400,6 +402,7 @@ public class ExForestFireDataPanel extends JPanel implements
 				break;
 			case 2:
 				fire.type = 2;
+				data.type = 2;
 				fire.getSimulator().afterSimulateTick();
 				
 				revalidate();

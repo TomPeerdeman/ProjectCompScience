@@ -21,6 +21,7 @@ public class ExForestFireData implements DataSet {
 	public double fireFightTresh;
 	public double extinguishProb;
 	public boolean useTemperature;
+	public int type;
 	
 	/**
 	 * @param grid
@@ -30,12 +31,13 @@ public class ExForestFireData implements DataSet {
 	 * @param useTemperature
 	 */
 	public ExForestFireData(Grid grid, double[][] neighborhood,
-			double fireFightTresh, double extinguishProb, boolean useTemperature) {
+			double fireFightTresh, double extinguishProb, boolean useTemperature, int type) {
 		this.grid = grid;
 		this.neighborhood = neighborhood;
 		this.fireFightTresh = fireFightTresh;
 		this.extinguishProb = extinguishProb;
 		this.useTemperature = useTemperature;
+		this.type = type;
 		
 		reset();
 	}

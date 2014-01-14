@@ -67,7 +67,7 @@ public class ExForestFire extends SimulatableSystem {
 	 * @param type
 	 */
 	public ExForestFire(int nx, int ny, long seed,
-			boolean[][] nb, boolean randWater, boolean firefighters,
+			double[][] nb, boolean randWater, boolean firefighters,
 			double treeDensity,
 			double bushDensity, double fireFightTresh, double extinguishProb,
 			boolean useTemperature, int type) {
@@ -83,9 +83,9 @@ public class ExForestFire extends SimulatableSystem {
 		igniteGrid();
 		
 		data =
-			new ExForestFireData(grid, NB_NEUMANN,
+			new ExForestFireData(grid, nb,
 					((firefighters) ? fireFightTresh : -1.0),
-					extinguishProb, useTemperature);
+					extinguishProb, useTemperature, type);
 	}
 	
 	public void randomizeGrid(final long seed) {
