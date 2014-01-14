@@ -33,7 +33,7 @@ public class TriggerManager implements SimulateChangeListener {
 			TRIGGERS.put("Tick", TickGenerator.class);
 			
 			ACTIONS.put("Neighborhood", NBActionGenerator.class);
-			ACTIONS.put("Test", TestActionGenerator.class);
+			ACTIONS.put("Print test", TestActionGenerator.class);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

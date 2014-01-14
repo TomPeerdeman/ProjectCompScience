@@ -22,7 +22,7 @@ public class TriggerPanel extends JPanel {
 	 * 
 	 */
 	public TriggerPanel() {
-		setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+		setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 		setSize(140, 100);
 		Dimension d = new Dimension(140, 100);
 		setPreferredSize(d);

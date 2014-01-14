@@ -25,6 +25,7 @@ import nl.uva.ca.Trigger;
 import nl.uva.ca.TriggerAction;
 import nl.uva.ca.TriggerManager;
 import nl.uva.ca.visual.forestfire.ExForestFireDataPanel;
+import nl.uva.ca.visual.trigger.forestfire.NBActionGenerator;
 
 /**
  *
@@ -126,6 +127,13 @@ public class TriggerFrame extends JFrame {
 				}
 				panels.put(e.getKey(), p);
 				actionPanel.add(p, e.getKey());
+				
+				if(p instanceof NBActionGenerator) {
+					// TODO: Fix on merge
+					// ((NBActionGenerator)
+					// p).setGridType(panel.getForestFire().type);
+					((NBActionGenerator) p).setGridType(0);
+				}
 			} catch(Exception e1) {
 				e1.printStackTrace();
 			}

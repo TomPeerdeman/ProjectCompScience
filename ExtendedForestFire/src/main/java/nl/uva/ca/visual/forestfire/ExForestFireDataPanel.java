@@ -669,4 +669,8 @@ public class ExForestFireDataPanel extends JPanel implements
 		triggerModel.set(idx, newTrigger);
 		triggerManager.triggers.set(idx, newTrigger);
 	}
+	
+	public ExForestFire getForestFire() {
+		return fire;
+	}
 }
