@@ -8,6 +8,8 @@ import java.util.Random;
 
 import nl.tompeerdeman.ca.Grid;
 import nl.tompeerdeman.ca.SimulatableSystem;
+import nl.tompeerdeman.ca.forestfire.ForestFireCell;
+import nl.tompeerdeman.ca.forestfire.ForestFireCellType;
 
 public class ExForestFire extends SimulatableSystem {
 	public static final double[][] NB_NEUMANN = {
@@ -91,7 +93,11 @@ public class ExForestFire extends SimulatableSystem {
 	public void randomizeGrid(final long seed) {
 		// TODO: mega awesome terrain generation here
 		grid.clear();
-		
+
+		Random rand = new Random();
+		if(seed > 0) {
+			rand.setSeed(seed);
+		}
 		/*
 		 * for(int y = 0; y < grid.grid[0].length; y++) {
 		 * grid.setCell(new ExForestFireCell(49, y, ExForestFireCellType.BUSH));
@@ -103,7 +109,6 @@ public class ExForestFire extends SimulatableSystem {
 		 * }
 		 */
 		if(randWater) {
-			Random rand = new Random();
 			// generate a number of random water points
 			int points = rand.nextInt(5) + 1;
 			int[][] pointcoord = new int[5][3];
@@ -193,6 +198,45 @@ public class ExForestFire extends SimulatableSystem {
 				}
 			}
 		}
+		int watercount = 0;
+		for(int i = 0; i < grid.grid.length; i ++){
+			for(int j = 0; j < grid.grid.length; j ++){
+				ExForestFireCell cell =
+						(ExForestFireCell) grid.getCell(i, j);
+				// only water or empty at this point
+				if(cell != null)
+					watercount++;
+			}
+		}
+		final int totaltrees =
+				(int) Math.ceil(treeDensity
+						* (grid.grid.length * (grid.grid[0].length - 1) - watercount));
+		final int totalbushes =
+				(int) Math.ceil(bushDensity
+						* (grid.grid.length * (grid.grid[0].length - 1) - watercount));
+		plantVegetation(totaltrees,ExForestFireCellType.TREE);
+		plantVegetation(totalbushes, ExForestFireCellType.BUSH);
+	}
+	public void plantVegetation(int total, ExForestFireCellType cellType){
+		Random rand = new Random();
+		int t = 0;
+		int rx, ry;
+		int tries = 0;
+		while(t < total) {
+			rx = rand.nextInt(grid.grid.length);
+			ry = rand.nextInt((grid.grid[0].length - 1)) + 1;
+			if(grid.getCell(rx, ry) == null) {
+				grid.setCell(new ExForestFireCell(rx, ry, cellType));
+				t++;
+				tries = 0;
+			} else {
+				tries++;
+				if(tries > 100) {
+					break;
+				}
+			}
+		}
+		
 	}
 	
 	public void randomWaterStandard(int xstart, int ystart, int xend, int yend) {
