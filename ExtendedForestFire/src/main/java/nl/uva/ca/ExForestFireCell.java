@@ -62,6 +62,6 @@ public class ExForestFireCell extends Cell {
 		ExForestFireData ffdata = (ExForestFireData) data;
 		
 		// TODO: Implement
-		return false;
+		return true;
 	}
 }
