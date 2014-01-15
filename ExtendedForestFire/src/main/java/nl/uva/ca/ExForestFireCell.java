@@ -80,17 +80,11 @@ public class ExForestFireCell extends Cell {
 				for(int nx = 0; nx < 5; nx++) {
 					x2 = this.x + nx - 2;
 					// Grid y increases north so cell above is y + 1
-<<<<<<< HEAD
 					y2 = this.y - ny + 2;
 					if(ny == 0){
 						if(nx == 0){
 							prob = ffdata.neighborhood[0][0] / probvar; 							
-=======
-					y = this.y - ny + 2;
-					if(ny == 0) {
-						if(nx == 0) {
-							prob = ffdata.neighborhood[0][0] / probvar;
->>>>>>> 5721f6bac43f205494dc9898f1e68713841513ce
+
 						}
 						else if(nx == 1) {
 							prob =
@@ -162,7 +156,6 @@ public class ExForestFireCell extends Cell {
 							prob = ffdata.neighborhood[2][2] / probvar;
 						}
 					}
-<<<<<<< HEAD
 					checkFireRadius2(x2, y2, grid, ffdata, c, sim, prob);	
 				}
 			}
@@ -174,20 +167,7 @@ public class ExForestFireCell extends Cell {
 				for(int nx = 0; nx < 3; nx++) {
 					if((ny == 0 && (nx == 1 || nx == 2)) || (ny == 1 && (nx == 0 || nx == 2)) || (ny == 2 && (nx == 1 || nx == 2))){
 						if(this.y %2 == 1)
-=======
-					checkFireRadius2(x, y, nx, ny, grid, ffdata, c, sim, prob);
-				}
-			}
-		}
-		else if(ffdata.type == 1) {
-			int x, y;
-			for(int ny = 0; ny < 3; ny++) {
-				for(int nx = 0; nx < 3; nx++) {
-					if((ny == 0 && (nx == 1 || nx == 2))
-							|| (ny == 1 && (nx == 0 || nx == 2))
-							|| (ny == 2 && (nx == 1 || nx == 2))) {
-						if(this.y % 2 == 1 || ny == 1)
->>>>>>> 5721f6bac43f205494dc9898f1e68713841513ce
+
 							x = this.x + nx - 1;
 						else
 							x = this.x + nx - 2;
@@ -320,14 +300,8 @@ public class ExForestFireCell extends Cell {
 	}
 	
 	// checkFire for neighbors with distance 2 from me
-<<<<<<< HEAD
 	public void checkFireRadius2(int x, int y, Grid grid, ExForestFireData ffdata, 
 			ExForestFireCell c, Simulator sim, double prob){
-=======
-	public void checkFireRadius2(int x, int y, int nx, int ny, Grid grid,
-			ExForestFireData ffdata,
-			ExForestFireCell c, Simulator sim, double prob) {
->>>>>>> 5721f6bac43f205494dc9898f1e68713841513ce
 		if(x >= 0 && y >= 0 && x < grid.grid.length
 				&& y < grid.grid[0].length) {
 			c = (ExForestFireCell) grid.getCell(x, y);
