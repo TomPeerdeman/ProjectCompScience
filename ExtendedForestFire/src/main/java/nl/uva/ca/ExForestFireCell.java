@@ -113,6 +113,53 @@ public class ExForestFireCell extends Cell {
 				}
 			}
 		}
+		else if(ffdata.type == 1){
+			System.out.println("Cell coordinates: (" + this.x + " ; " +this.y + ") type: " + this.type);
+			int x, y;
+			for(int ny = 0; ny < 3; ny++) {
+				for(int nx = 0; nx < 3; nx++) {
+					if((ny == 0 && (nx == 1 || nx == 2)) || (ny == 1 && (nx == 0 || nx == 2)) || (ny == 2 && (nx == 1 || nx == 2))){
+						if(this.y %2 == 1 || ny == 1)
+							x = this.x + nx - 1;
+						else
+							x = this.x + nx - 2;
+						// Grid y increases north so cell above is y + 1
+						y = this.y - ny + 1;
+						if(x >= 0 && y >= 0 && x < grid.grid.length
+								&& y < grid.grid[0].length) {
+							c = (ExForestFireCell) grid.getCell(x, y);
+							// If there is a probability given in the range 0-1,
+							// draw a random number
+							if(ffdata.neighborhood[ny][nx] < 1.0
+									&& ffdata.neighborhood[ny][nx] > 0.0) {
+								double randomDouble = Math.random();
+								// If the probability is reached, put the cell on
+								// fire, if it is a burnable cell
+								if(randomDouble <= ffdata.neighborhood[ny][nx]) {
+									setFire(ffdata,
+											ExForestFireCellType.BURNING_TREE, c,
+											sim);
+									setFire(ffdata,
+											ExForestFireCellType.BURNING_BUSH, c,
+											sim);
+								}
+							}
+							// If the probability is 1, put the cell on fire if it
+							// is a burnable cell
+							else if(ffdata.neighborhood[ny][nx] == 1.0) {
+								System.out.println("Imah burn Cell : " + x + " ; " + y);
+								setFire(ffdata, ExForestFireCellType.BURNING_TREE,
+										c, sim);
+								setFire(ffdata, ExForestFireCellType.BURNING_BUSH,
+										c, sim);
+							}
+						}
+						
+					}
+				}
+			}
+			
+		}
 		
 		if(type == ExForestFireCellType.BURNING_BUSH) {
 			nBurningTicks++;
