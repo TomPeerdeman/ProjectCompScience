@@ -65,7 +65,7 @@ public class ExForestFireCell extends Cell {
 		ExForestFireCell c = null;
 		int probvar = 2;
 		if(ffdata.type == 0) {
-			int x, y;
+			int x, y, x2, y2;
 			double prob = 0.0;
 			for(int ny = 0; ny < 3; ny++) {
 				for(int nx = 0; nx < 3; nx++) {
@@ -78,9 +78,9 @@ public class ExForestFireCell extends Cell {
 			}
 			for(int ny = 0; ny < 5; ny++) {
 				for(int nx = 0; nx < 5; nx++) {
-					x = this.x + nx - 2;
+					x2 = this.x + nx - 2;
 					// Grid y increases north so cell above is y + 1
-					y = this.y - ny + 2;
+					y2 = this.y - ny + 2;
 					if(ny == 0){
 						if(nx == 0){
 							prob = ffdata.neighborhood[0][0] / probvar; 							
@@ -113,7 +113,6 @@ public class ExForestFireCell extends Cell {
 						else if(nx == 4){
 							prob = ((ffdata.neighborhood[0][2] / probvar) + (ffdata.neighborhood[1][2] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 3;
 						}
-						
 					}
 					else if(ny == 3){
 						if(nx == 0){
@@ -139,18 +138,18 @@ public class ExForestFireCell extends Cell {
 						else if(nx == 4){
 							prob = ffdata.neighborhood[2][2] / probvar; 							
 						}
-						
 					}
-					checkFireRadius2(x, y, nx, ny, grid, ffdata, c, sim, prob);	
+					checkFireRadius2(x2, y2, grid, ffdata, c, sim, prob);	
 				}
 			}
 		}
 		else if(ffdata.type == 1){
-			int x, y;
+			int x, y, x2, y2;
+			double prob = 0.0;
 			for(int ny = 0; ny < 3; ny++) {
 				for(int nx = 0; nx < 3; nx++) {
 					if((ny == 0 && (nx == 1 || nx == 2)) || (ny == 1 && (nx == 0 || nx == 2)) || (ny == 2 && (nx == 1 || nx == 2))){
-						if(this.y %2 == 1 || ny == 1)
+						if(this.y %2 == 1)
 							x = this.x + nx - 1;
 						else
 							x = this.x + nx - 2;
@@ -158,6 +157,32 @@ public class ExForestFireCell extends Cell {
 						y = this.y - ny + 1;
 						checkFire(x, y, nx, ny, grid, ffdata, c, sim);						
 					}
+				}
+			}
+			System.out.println("oldCoord: (" + this.x + " ; " + this.y + ")" );
+			for(int ny = 0; ny < 5; ny++) {
+				for(int nx = 0; nx < 5; nx++) {
+					if(this.y %2 == 1)
+						x2 = this.x + nx - 2;
+					else
+						x2 = this.x + nx - 3;
+					// Grid y increases north so cell above is y + 1
+					y2 = this.y - ny + 2;
+					if(ny == 4){
+						if(nx == 1){
+							System.out.println("Newcoord: (" + x2 + " ; " + y2 + ")" );
+							prob = ffdata.neighborhood[0][1] / probvar;
+						}
+						else if(nx == 2){
+							System.out.println("Newcoord: (" + x2 + " ; " + y2 + ")" );
+							prob = ((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[0][1] / probvar)) / 2; 						
+						}
+						else if(nx == 3){
+							System.out.println("Newcoord: (" + x2 + " ; " + y2 + ")" );
+							prob = ffdata.neighborhood[0][2] / probvar; 						
+						}
+					}
+					checkFireRadius2(x2, y2, grid, ffdata, c, sim, prob);	
 				}
 			}
 		}
@@ -257,7 +282,7 @@ public class ExForestFireCell extends Cell {
 	}
 	
 	// checkFire for neighbors with distance 2 from me
-	public void checkFireRadius2(int x, int y, int nx, int ny, Grid grid, ExForestFireData ffdata, 
+	public void checkFireRadius2(int x, int y, Grid grid, ExForestFireData ffdata, 
 			ExForestFireCell c, Simulator sim, double prob){
 		if(x >= 0 && y >= 0 && x < grid.grid.length
 				&& y < grid.grid[0].length) {
