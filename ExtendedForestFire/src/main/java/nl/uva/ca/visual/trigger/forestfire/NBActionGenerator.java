@@ -49,12 +49,12 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 			double[][] grid = nba.getNb();
 			if(type == 2) {
 				gridProb[1].setText(String.valueOf(grid[0][1]));
-				gridProb[3].setText(String.valueOf(grid[1][0]));
-				gridProb[4].setText(String.valueOf(grid[1][2]));
+				gridProb[3].setText(String.valueOf(grid[0][0]));
+				gridProb[4].setText(String.valueOf(grid[0][2]));
 				
-				gridProb[6].setText(String.valueOf(grid[2][0]));
-				gridProb[5].setText(String.valueOf(grid[2][2]));
-				gridProb[2].setText(String.valueOf(grid[3][1]));
+				gridProb[6].setText(String.valueOf(grid[1][0]));
+				gridProb[5].setText(String.valueOf(grid[1][2]));
+				gridProb[2].setText(String.valueOf(grid[1][1]));
 			} else if(type == 1) {
 				gridProb[1].setText(String.valueOf(grid[0][1]));
 				gridProb[2].setText(String.valueOf(grid[0][2]));
@@ -300,15 +300,15 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 			grid[2][1] = gridValues[6];
 			grid[2][2] = gridValues[7];
 		} else if(type == 2) {
-			grid = new double[4][3];
+			grid = new double[2][3];
 			
 			grid[0][1] = gridValues[1];
-			grid[1][0] = gridValues[3];
-			grid[1][2] = gridValues[4];
+			grid[0][0] = gridValues[3];
+			grid[0][2] = gridValues[4];
 			
-			grid[2][0] = gridValues[6];
-			grid[2][2] = gridValues[5];
-			grid[3][1] = gridValues[2];
+			grid[1][0] = gridValues[6];
+			grid[1][2] = gridValues[5];
+			grid[1][1] = gridValues[2];
 		} else {
 			return null;
 		}

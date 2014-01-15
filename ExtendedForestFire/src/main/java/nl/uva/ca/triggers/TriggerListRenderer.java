@@ -48,14 +48,15 @@ public class TriggerListRenderer extends JLabel implements
 		setText(value.toString());
 		
 		if(isSelected) {
-			if(triggerManager.triggers.get(index).isActivated()) {
+			if(index >= 0 && index < triggerManager.triggers.size()
+					&& triggerManager.triggers.get(index).isActivated()) {
 				setBackground(new Color(0xB033CC77, true));
 			} else {
 				setBackground(new Color(0xB0FF4444, true));
 			}
 			setForeground(list.getSelectionForeground());
 		} else {
-			if(index > 0 && index < triggerManager.triggers.size()
+			if(index >= 0 && index < triggerManager.triggers.size()
 					&& triggerManager.triggers.get(index).isActivated()) {
 				setBackground(new Color(0x7033CC77, true));
 			} else {
