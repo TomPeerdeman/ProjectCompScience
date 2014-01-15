@@ -61,7 +61,7 @@ public class BushBurnTicksGenerator extends
 		
 		c.gridx = 0;
 		c.gridy = 0;
-		add(new JLabel("Burn ticks"), c);
+		add(new JLabel("Burn ticks [0->"), c);
 		
 		burnTicksField = new JTextField("10");
 		c.gridy++;

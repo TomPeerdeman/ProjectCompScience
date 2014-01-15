@@ -483,11 +483,13 @@ public class ExForestFireDataPanel extends JPanel implements
 		triggerEditButton.setEnabled(true);
 		triggerDelButton.setEnabled(true);
 		triggerList.setSelectedIndex(idx);
+		fire.getSimulator().afterSimulateTick();
 	}
 	
 	public void onEditTrigger(int idx, Trigger newTrigger) {
 		triggerModel.set(idx, newTrigger);
 		triggerManager.triggers.set(idx, newTrigger);
+		fire.getSimulator().afterSimulateTick();
 	}
 	
 	public ExForestFire getForestFire() {

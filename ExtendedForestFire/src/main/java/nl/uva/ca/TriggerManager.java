@@ -18,6 +18,7 @@ import nl.uva.ca.visual.trigger.TriggerActionGeneratorPanel;
 import nl.uva.ca.visual.trigger.TriggerGeneratorPanel;
 import nl.uva.ca.visual.trigger.forestfire.BushBurnTicksGenerator;
 import nl.uva.ca.visual.trigger.forestfire.NBActionGenerator;
+import nl.uva.ca.visual.trigger.forestfire.PercBurnedGenerator;
 import nl.uva.ca.visual.trigger.forestfire.TickGenerator;
 import nl.uva.ca.visual.trigger.forestfire.TreeBurnTicksGenerator;
 
@@ -33,6 +34,7 @@ public class TriggerManager implements SimulateChangeListener {
 	static {
 		try {
 			TRIGGERS.put("Tick", TickGenerator.class);
+			TRIGGERS.put("% burned", PercBurnedGenerator.class);
 			
 			ACTIONS.put("Neighborhood", NBActionGenerator.class);
 			ACTIONS.put("Print test", TestActionGenerator.class);

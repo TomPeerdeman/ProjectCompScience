@@ -52,6 +52,9 @@ public class TickGenerator extends TriggerGeneratorPanel<TickTrigger> {
 	public TickTrigger generate(TriggerAction action) {
 		try {
 			int n = Integer.parseInt(tickTextField.getText());
+			if(n < 0) {
+				throw new NumberFormatException();
+			}
 			return new TickTrigger(n, action);
 		} catch(NumberFormatException e) {
 			tickTextField.setBorder(BorderFactory.createLineBorder(Color.RED));
@@ -72,7 +75,7 @@ public class TickGenerator extends TriggerGeneratorPanel<TickTrigger> {
 		tickTextField = new JTextField("0");
 		
 		// This label refuses to align right
-		add(new JLabel("On tick", SwingConstants.RIGHT));
+		add(new JLabel("On tick [0->", SwingConstants.RIGHT));
 		add(tickTextField);
 		Dimension d = new Dimension(150, 85);
 		add(new Box.Filler(d, d, d));

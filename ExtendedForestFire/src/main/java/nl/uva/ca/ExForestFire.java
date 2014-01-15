@@ -486,6 +486,7 @@ public class ExForestFire extends SimulatableSystem {
 				// BURNING_TREE.
 				if(cell.getType() == ExForestFireCellType.BUSH) {
 					cell.setType(ExForestFireCellType.BURNING_BUSH);
+					
 				} else if(cell.getType() == ExForestFireCellType.TREE) {
 					cell.setType(ExForestFireCellType.BURNING_TREE);
 				}
