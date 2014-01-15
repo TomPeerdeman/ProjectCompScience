@@ -29,6 +29,7 @@ public class ExForestFireData implements DataSet {
 	public boolean useTemperature;
 	public int nTicksTreeBurn;
 	public int nTicksBushBurn;
+	public int probDivider;
 	public int type;
 	
 	/**
@@ -51,6 +52,7 @@ public class ExForestFireData implements DataSet {
 		this.extinguishProb = extinguishProb;
 		this.useTemperature = useTemperature;
 		this.type = type;
+		this.probDivider = 2;
 		
 		nTicksTreeBurn = treeBurnTicks;
 		nTicksBushBurn = bushBurnTicks;
@@ -60,6 +62,9 @@ public class ExForestFireData implements DataSet {
 	
 	@Override
 	public void reset() {
+		fireFighters = false;
+		probDivider = 2;
+		
 		burning = 0;
 		burnt = 0;
 		bushes = 0;
