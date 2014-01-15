@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 import nl.uva.ca.TriggerAction;
 import nl.uva.ca.triggers.NBAction;
@@ -265,6 +266,7 @@ public class NBActionGenerator extends TriggerActionGeneratorPanel<NBAction> {
 				if(gridValues[i] > 1.0 || gridValues[i] < 0.0) {
 					throw new NumberFormatException();
 				}
+				gridProb[i].setBorder(UIManager.getBorder("TextField.border"));
 			} catch(NumberFormatException e) {
 				gridProb[i].setBorder(BorderFactory.createLineBorder(Color.RED));
 				yay = false;
