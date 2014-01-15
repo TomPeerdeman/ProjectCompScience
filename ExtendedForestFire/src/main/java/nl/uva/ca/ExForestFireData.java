@@ -18,7 +18,13 @@ public class ExForestFireData implements DataSet {
 	public long burning;
 	public long burnt;
 	
+	/**
+	 * UNUSED
+	 * 
+	 * @deprecated use fireFighters
+	 */
 	public double fireFightTresh;
+	public boolean fireFighters;
 	public double extinguishProb;
 	public boolean useTemperature;
 	public int nTicksTreeBurn;

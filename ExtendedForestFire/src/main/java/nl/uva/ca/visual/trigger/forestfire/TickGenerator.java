@@ -6,13 +6,13 @@ package nl.uva.ca.visual.trigger.forestfire;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
 import nl.uva.ca.Trigger;
 import nl.uva.ca.TriggerAction;
@@ -24,6 +24,8 @@ import nl.uva.ca.visual.trigger.TriggerGeneratorPanel;
  */
 public class TickGenerator extends TriggerGeneratorPanel<TickTrigger> {
 	private static final long serialVersionUID = -5189809393993119923L;
+	
+	private GridBagConstraints c;
 	private JTextField tickTextField;
 	
 	/**
@@ -70,14 +72,26 @@ public class TickGenerator extends TriggerGeneratorPanel<TickTrigger> {
 	 */
 	@Override
 	public void init() {
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setLayout(new GridBagLayout());
 		
-		tickTextField = new JTextField("0");
+		c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		
+		c.gridx = 0;
+		c.gridy = 0;
 		
 		// This label refuses to align right
-		add(new JLabel("On tick [0->", SwingConstants.RIGHT));
-		add(tickTextField);
+		add(new JLabel("On tick [0->"), c);
+		
+		c.gridy++;
+		
+		tickTextField = new JTextField("0");
+		add(tickTextField, c);
+		
+		c.gridy++;
 		Dimension d = new Dimension(150, 85);
-		add(new Box.Filler(d, d, d));
+		add(new Box.Filler(d, d, d), c);
 	}
 }
