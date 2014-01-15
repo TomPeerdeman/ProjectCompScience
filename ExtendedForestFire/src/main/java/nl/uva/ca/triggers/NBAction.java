@@ -54,4 +54,14 @@ public class NBAction implements TriggerAction {
 	public String toString() {
 		return "set neighborhood";
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see nl.uva.ca.TriggerAction#getActionName()
+	 */
+	@Override
+	public String getActionName() {
+		return "Neighborhood";
+	}
 }

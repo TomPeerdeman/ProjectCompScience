@@ -51,4 +51,14 @@ public class TickTrigger extends Trigger {
 	public String toString() {
 		return "On tick " + tick + " " + action;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see nl.uva.ca.Trigger#getTriggerName()
+	 */
+	@Override
+	public String getTriggerName() {
+		return "Tick";
+	}
 }

@@ -37,7 +37,9 @@ public class TickGenerator extends TriggerGeneratorPanel<TickTrigger> {
 	 */
 	public TickGenerator(Trigger parent) {
 		super(parent);
-		tickTextField.setText("" + ((TickTrigger) parent).getTick());
+		if(parent instanceof TickTrigger) {
+			tickTextField.setText("" + ((TickTrigger) parent).getTick());
+		}
 	}
 	
 	/*

@@ -48,4 +48,9 @@ public abstract class Trigger {
 	 * @return True if this trigger is activated, otherwise false
 	 */
 	public abstract boolean process(SimulatableSystem sim);
+	
+	/**
+	 * @return The name of this trigger as used in TriggerManager.TRIGGERS
+	 */
+	public abstract String getTriggerName();
 }

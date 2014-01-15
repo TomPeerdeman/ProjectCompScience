@@ -1,22 +1,25 @@
 /**
- * File: TestAction.java
+ * File: TreeBurnTicksAction.java
  * 
  */
 package nl.uva.ca.triggers;
 
 import nl.tompeerdeman.ca.DataSet;
 
+import nl.uva.ca.ExForestFireData;
 import nl.uva.ca.TriggerAction;
 
 /**
  *
  */
-public class TestAction implements TriggerAction {
+public class TreeBurnTicksAction implements TriggerAction {
+	protected final int burnTicks;
 	
 	/**
-	 * 
+	 * @param burnTicks
 	 */
-	public TestAction() {
+	public TreeBurnTicksAction(int burnTicks) {
+		this.burnTicks = burnTicks;
 	}
 	
 	/*
@@ -26,12 +29,19 @@ public class TestAction implements TriggerAction {
 	 */
 	@Override
 	public void execute(DataSet data) {
-		System.out.println("Test trigger activated");
+		((ExForestFireData) data).nTicksTreeBurn = burnTicks;
 	}
 	
 	@Override
 	public String toString() {
-		return "test print";
+		return "set tree burn ticks";
+	}
+	
+	/**
+	 * @return the burnTicks
+	 */
+	public int getBurnTicks() {
+		return burnTicks;
 	}
 	
 	/*
@@ -41,6 +51,6 @@ public class TestAction implements TriggerAction {
 	 */
 	@Override
 	public String getActionName() {
-		return "Print test";
+		return "Tree burn ticks";
 	}
 }

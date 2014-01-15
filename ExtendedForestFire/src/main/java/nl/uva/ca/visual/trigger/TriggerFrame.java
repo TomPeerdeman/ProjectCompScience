@@ -11,6 +11,7 @@ import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -113,6 +114,8 @@ public class TriggerFrame extends JFrame {
 				triggerPanel.show((String) triggers.getSelectedItem());
 			}
 		});
+		if(superTrigger != null)
+			triggers.setSelectedItem(superTrigger.getTriggerName());
 		triggerPanel.show((String) triggers.getSelectedItem());
 		
 		actionPanel = new TriggerPanel();
@@ -133,6 +136,8 @@ public class TriggerFrame extends JFrame {
 					// TODO: Fix on merge
 					((NBActionGenerator) p).setGridType(panel.getForestFire().type);
 				}
+			} catch(InvocationTargetException ie) {
+				ie.getCause().printStackTrace();
 			} catch(Exception e1) {
 				e1.printStackTrace();
 			}
@@ -146,6 +151,8 @@ public class TriggerFrame extends JFrame {
 				actionPanel.show((String) actions.getSelectedItem());
 			}
 		});
+		if(superTrigger != null)
+			actions.setSelectedItem(superTrigger.getAction().getActionName());
 		actionPanel.show((String) actions.getSelectedItem());
 		
 		applyButton = new JButton("Create");

@@ -16,8 +16,10 @@ import nl.tompeerdeman.ca.Simulator;
 import nl.uva.ca.visual.trigger.TestActionGenerator;
 import nl.uva.ca.visual.trigger.TriggerActionGeneratorPanel;
 import nl.uva.ca.visual.trigger.TriggerGeneratorPanel;
+import nl.uva.ca.visual.trigger.forestfire.BushBurnTicksGenerator;
 import nl.uva.ca.visual.trigger.forestfire.NBActionGenerator;
 import nl.uva.ca.visual.trigger.forestfire.TickGenerator;
+import nl.uva.ca.visual.trigger.forestfire.TreeBurnTicksGenerator;
 
 /**
  *
@@ -34,6 +36,8 @@ public class TriggerManager implements SimulateChangeListener {
 			
 			ACTIONS.put("Neighborhood", NBActionGenerator.class);
 			ACTIONS.put("Print test", TestActionGenerator.class);
+			ACTIONS.put("Bush burn ticks", BushBurnTicksGenerator.class);
+			ACTIONS.put("Tree burn ticks", TreeBurnTicksGenerator.class);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
