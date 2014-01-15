@@ -63,15 +63,85 @@ public class ExForestFireCell extends Cell {
 	public boolean simulate(Grid grid, DataSet data, Simulator sim) {
 		ExForestFireData ffdata = (ExForestFireData) data;
 		ExForestFireCell c = null;
-
+		int probvar = 2;
 		if(ffdata.type == 0) {
 			int x, y;
+			double prob = 0.0;
 			for(int ny = 0; ny < 3; ny++) {
 				for(int nx = 0; nx < 3; nx++) {
 					x = this.x + nx - 1;
 					// Grid y increases north so cell above is y + 1
 					y = this.y - ny + 1;
 					checkFire(x, y, nx, ny, grid, ffdata, c, sim);
+					
+				}
+			}
+			for(int ny = 0; ny < 5; ny++) {
+				for(int nx = 0; nx < 5; nx++) {
+					x = this.x + nx - 2;
+					// Grid y increases north so cell above is y + 1
+					y = this.y - ny + 2;
+					if(ny == 0){
+						if(nx == 0){
+							prob = ffdata.neighborhood[0][0] / probvar; 							
+						}
+						else if(nx == 1){
+							prob = ((ffdata.neighborhood[0][0] / probvar) + (ffdata.neighborhood[0][1] / probvar)) / 2; 							
+						}
+						else if(nx == 2){
+							prob = ((ffdata.neighborhood[0][0] / probvar) + (ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[0][2] / probvar)) / 3; 							
+						}
+						else if(nx == 3){
+							prob = ((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[0][2] / probvar)) / 2; 							
+						}
+						else if(nx == 4){
+							prob = ffdata.neighborhood[0][2] / probvar; 							
+						}
+					}
+					else if(ny == 1){
+						if(nx == 0){
+							prob = ((ffdata.neighborhood[0][0] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2; 						
+						}
+						else if(nx == 4){
+							prob = ((ffdata.neighborhood[0][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2; 							
+						}
+					}
+					else if(ny == 2){
+						if(nx == 0){
+							prob = ((ffdata.neighborhood[0][0] / probvar) + (ffdata.neighborhood[1][0] / probvar) + (ffdata.neighborhood[2][0] / probvar)) / 3;
+						}
+						else if(nx == 4){
+							prob = ((ffdata.neighborhood[0][2] / probvar) + (ffdata.neighborhood[1][2] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 3;
+						}
+						
+					}
+					else if(ny == 3){
+						if(nx == 0){
+							prob = ((ffdata.neighborhood[2][0] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2; 						
+						}
+						else if(nx == 4){
+							prob = ((ffdata.neighborhood[2][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2; 							
+						}
+					}
+					else if(ny == 4){
+						if(nx == 0){
+							prob = ffdata.neighborhood[2][0] / probvar; 							
+						}
+						else if(nx == 1){
+							prob = ((ffdata.neighborhood[2][0] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2; 							
+						}
+						else if(nx == 2){
+							prob = ((ffdata.neighborhood[2][0] / probvar) + (ffdata.neighborhood[2][1] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 3; 							
+						}
+						else if(nx == 3){
+							prob = ((ffdata.neighborhood[2][1] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 2; 							
+						}
+						else if(nx == 4){
+							prob = ffdata.neighborhood[2][2] / probvar; 							
+						}
+						
+					}
+					checkFireRadius2(x, y, nx, ny, grid, ffdata, c, sim, prob);	
 				}
 			}
 		}
@@ -120,6 +190,7 @@ public class ExForestFireCell extends Cell {
 				}
 			}
 		}
+
 		
 		if(type == ExForestFireCellType.BURNING_BUSH) {
 			nBurningTicks++;
@@ -181,6 +252,31 @@ public class ExForestFireCell extends Cell {
 						c, sim);
 				setFire(ffdata, ExForestFireCellType.BURNING_BUSH,
 						c, sim);
+			}
+		}
+	}
+	
+	// checkFire for neighbors with distance 2 from me
+	public void checkFireRadius2(int x, int y, int nx, int ny, Grid grid, ExForestFireData ffdata, 
+			ExForestFireCell c, Simulator sim, double prob){
+		if(x >= 0 && y >= 0 && x < grid.grid.length
+				&& y < grid.grid[0].length) {
+			c = (ExForestFireCell) grid.getCell(x, y);
+			// If there is a probability given in the range 0-1,
+			// draw a random number
+			if(prob < 1.0
+					&& prob > 0.0) {
+				double randomDouble = Math.random();
+				// If the probability is reached, put the cell on
+				// fire, if it is a burnable cell
+				if(randomDouble <= prob) {
+					setFire(ffdata,
+							ExForestFireCellType.BURNING_TREE, c,
+							sim);
+					setFire(ffdata,
+							ExForestFireCellType.BURNING_BUSH, c,
+							sim);
+				}
 			}
 		}
 	}
