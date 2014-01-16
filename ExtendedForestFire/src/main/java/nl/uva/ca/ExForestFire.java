@@ -521,24 +521,24 @@ public class ExForestFire extends SimulatableSystem {
 				if(xcurr < grid.grid.length - 1 && xcurr > 0) {
 					if(rand.nextInt(2) < 0) {
 						grid.setCell(new ExForestFireCell(xcurr - 1, ycurr,
-								ExForestFireCellType.WATER));
-						ycurr = triangleUpDownFix(xcurr - 1, ycurr, yend);
+								cellType));
+						ycurr = triangleUpDownFix(xcurr - 1, ycurr, yend, cellType);
 					}
 					else {
 						grid.setCell(new ExForestFireCell(xcurr + 1, ycurr,
-								ExForestFireCellType.WATER));
-						ycurr = triangleUpDownFix(xcurr + 1, ycurr, yend);
+								cellType));
+						ycurr = triangleUpDownFix(xcurr + 1, ycurr, yend, cellType);
 					}
 				}
 				else if(xcurr == grid.grid.length - 1) {
 					grid.setCell(new ExForestFireCell(xcurr - 1, ycurr,
-							ExForestFireCellType.WATER));
-					ycurr = triangleUpDownFix(xcurr - 1, ycurr, yend);
+							cellType));
+					ycurr = triangleUpDownFix(xcurr - 1, ycurr, yend, cellType);
 				}
 				else {
 					grid.setCell(new ExForestFireCell(xcurr + 1, ycurr,
-							ExForestFireCellType.WATER));
-					ycurr = triangleUpDownFix(xcurr + 1, ycurr, yend);
+							cellType));
+					ycurr = triangleUpDownFix(xcurr + 1, ycurr, yend, cellType);
 				}
 			}
 			
@@ -568,17 +568,17 @@ public class ExForestFire extends SimulatableSystem {
 		// }
 	}
 	
-	private int triangleUpDownFix(int xcurr, int ycurr, int yend) {
+	private int triangleUpDownFix(int xcurr, int ycurr, int yend, ExForestFireCellType cellType) {
 		// i'm stuck going up
 		if(ycurr < yend) {
 			grid.setCell(new ExForestFireCell(xcurr, ycurr + 1,
-					ExForestFireCellType.WATER));
+					cellType));
 			ycurr++;
 		}
 		// i'm stuck going down
 		else {
 			grid.setCell(new ExForestFireCell(xcurr, ycurr - 1,
-					ExForestFireCellType.WATER));
+					cellType));
 			ycurr--;
 		}
 		return ycurr;
