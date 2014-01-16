@@ -268,7 +268,7 @@ public class ExForestFireCell extends Cell {
 							// System.out.println("i wasnt null");
 							newCell.addFireFighter();
 							sim.addSimulatable(newCell);
-						} else {
+						} else if(newCell == null) {
 							// System.out.println("i was null");
 							newCell =
 								new ExForestFireCell(newX, newY, null);
