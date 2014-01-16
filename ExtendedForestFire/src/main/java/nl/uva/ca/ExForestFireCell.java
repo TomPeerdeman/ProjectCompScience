@@ -50,6 +50,7 @@ public class ExForestFireCell extends Cell {
 	 */
 	public boolean removeFireFighter(Grid grid) {
 		type = secondaryType;
+		secondaryType = null;
 		if(type == null) {
 			grid.clearCell(x, y);
 			return false;
@@ -91,11 +92,10 @@ public class ExForestFireCell extends Cell {
 		ExForestFireData ffdata = (ExForestFireData) data;
 		ExForestFireCell c = null;
 		int probvar = ffdata.probDivider;
-		ExForestFireCell myCell =
-			(ExForestFireCell) grid.getCell(this.x, this.y);
+		
 		if(ffdata.type == 0) {
-			if(myCell.getType() == ExForestFireCellType.BURNING_TREE
-					|| myCell.getType() == ExForestFireCellType.BURNING_BUSH) {
+			if(type == ExForestFireCellType.BURNING_TREE
+					|| type == ExForestFireCellType.BURNING_BUSH) {
 				int x, y, x2, y2;
 				double prob = 0.0;
 				for(int ny = 0; ny < 3; ny++) {
@@ -209,7 +209,7 @@ public class ExForestFireCell extends Cell {
 					}
 				}
 			}
-			else if(myCell.getType() == ExForestFireCellType.FIRE_FIGHTER) {
+			else if(type == ExForestFireCellType.FIRE_FIGHTER) {
 				if(!ffdata.fireFighters) {
 					System.out.println("imah ff");
 					return removeFireFighter(grid);
@@ -223,13 +223,15 @@ public class ExForestFireCell extends Cell {
 					int indexX = this.x, indexY = this.y;
 					int newX = this.x, newY = this.y;
 					// search nearest fire
-					for(int i = 0; i < grid.grid[0].length; i++) {
-						for(int j = 0; j < grid.grid.length; j++) {
+					for(int i = Math.max(0, this.x - 3); i < Math.min(
+							grid.grid[0].length, this.x + 3); i++) {
+						for(int j = Math.max(0, this.y - 3); j < Math.min(
+								grid.grid.length, this.y + 3); j++) {
 							ExForestFireCell cell =
 								(ExForestFireCell) grid.getCell(i, j);
 							if(cell != null) {
-								if(grid.getCell(i, j).getType() == ExForestFireCellType.BURNING_TREE
-										|| grid.getCell(i, j).getType() == ExForestFireCellType.BURNING_BUSH) {
+								if(cell.getType() == ExForestFireCellType.BURNING_TREE
+										|| cell.getType() == ExForestFireCellType.BURNING_BUSH) {
 									newDistance =
 										Math.abs(j - this.x)
 												+ Math.abs(i - this.y);
@@ -245,7 +247,7 @@ public class ExForestFireCell extends Cell {
 					// System.out.println("Distance to fire: " + distToFire +
 					// " Im at: (" +this.x+ " ; " +this.y+ ") Fire is at: ("
 					// +indexX+" ; "+ indexY+ ")");
-					if(distToFire > 1) {
+					if(distToFire > 1 && distToFire < 200) {
 						// move to nearest fire
 						if(indexX < this.x)
 							newX--;
@@ -271,12 +273,14 @@ public class ExForestFireCell extends Cell {
 							newCell.addFireFighter();
 							sim.addSimulatable(newCell);
 						}
+						
+						// Remove FFighter from this cell.
 						return removeFireFighter(grid);
 					}
 				}
-				System.out.println("");
+				// System.out.println("");
 			}
-			else if(myCell.getType() == ExForestFireCellType.PATH) {
+			else if(type == ExForestFireCellType.PATH) {
 				if(ffdata.fireFighters) {
 					// maybe break here after x ticks fire fighter adding?
 					
@@ -284,13 +288,13 @@ public class ExForestFireCell extends Cell {
 					// Set to firefighter in 1% of the cases (change to variable
 					// maybe?)
 					if(r.nextInt(101) == 1)
-						myCell.setType(ExForestFireCellType.FIRE_FIGHTER);
+						addFireFighter();
 				}
 			}
 		}
 		else if(ffdata.type == 1) {
-			if(myCell.getType() == ExForestFireCellType.BURNING_TREE
-					|| myCell.getType() == ExForestFireCellType.BURNING_BUSH) {
+			if(type == ExForestFireCellType.BURNING_TREE
+					|| type == ExForestFireCellType.BURNING_BUSH) {
 				int x, y, x2, y2;
 				double prob = 0.0;
 				for(int ny = 0; ny < 3; ny++) {
@@ -415,8 +419,8 @@ public class ExForestFireCell extends Cell {
 		}
 		
 		else if(ffdata.type == 2) {
-			if(myCell.getType() == ExForestFireCellType.BURNING_TREE
-					|| myCell.getType() == ExForestFireCellType.BURNING_BUSH) {
+			if(type == ExForestFireCellType.BURNING_TREE
+					|| type == ExForestFireCellType.BURNING_BUSH) {
 				int x, y, x2, y2;
 				double prob = 0.0;
 				for(int ny = 0; ny < 3; ny++) {
