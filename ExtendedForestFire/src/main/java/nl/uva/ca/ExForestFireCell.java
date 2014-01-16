@@ -187,17 +187,72 @@ public class ExForestFireCell extends Cell {
 			}
 			else if (myCell.getType() == ExForestFireCellType.FIRE_FIGHTER){
 				if(!ffdata.fireFighters){
-					Cell thisCell = grid.getCell(this.x, this.y);
 					System.out.println("imah ff");
-					thisCell.setType(ExForestFireCellType.EXTINGUISHED_TREE);
+					myCell.setType(ExForestFireCellType.EXTINGUISHED_TREE);
 					return false;
 				}
 				else{
-					// maybe break here after x ticks fire fighter adding?
+					ExForestFireCell newCell;
+					// initialize max distance to fire
+					// can't be more than 200
+					int distToFire = 200;
+					int newDistance;
+					int indexX = this.x, indexY = this.y;
+					int newX =this.x, newY = this.y;
+					// search nearest fire
+					for(int i = 0; i < grid.grid[0].length; i ++){
+						for(int j = 0; j < grid.grid.length; j ++){
+							ExForestFireCell cell = (ExForestFireCell) grid.getCell(i, j);
+							if(cell != null){
+								if(grid.getCell(i, j).getType() == ExForestFireCellType.BURNING_TREE
+								|| grid.getCell(i, j).getType() == ExForestFireCellType.BURNING_BUSH){
+								newDistance =
+									Math.abs(j - this.x)
+											+ Math.abs(i - this.y);
+									if(newDistance < distToFire) {
+										distToFire = newDistance;
+										indexX = j;
+										indexY = i;
+									}
+								}
+							}
+						}
+					}
+					//System.out.println("Distance to fire: " + distToFire + " Im at: (" +this.x+ " ; " +this.y+ ") Fire is at: (" +indexX+" ; "+ indexY+ ")");
+					if(distToFire > 1){
+						// move to nearest fire
+						if(indexX < this.x)
+							newX--;
+						else if(indexX > this.x)
+							newX++;
+						if(indexY < this.y)
+							newY--;
+						else if(indexY > this.y)
+							newY++;
+						//System.out.println("Im at: (" +this.x+ " ; " +this.y+ ") im going to: (" +newX+" ; "+ newY+ ")");
+						newCell = (ExForestFireCell) grid.getCell(newX, newY);
+						if(newCell != null){
+							//System.out.println("i wasnt null");
+							newCell.setType(ExForestFireCellType.FIRE_FIGHTER);
+							sim.addSimulatable(newCell);
+						}
+						/* this nullpointers in the next run
+						else{
+							System.out.println("i was null");
+							newCell= new ExForestFireCell(newX, newY,
+								 ExForestFireCellType.FIRE_FIGHTER);
+						}
+						*/
+					}
+
 				}
+				System.out.println("");
 			}
 			else if(myCell.getType() == ExForestFireCellType.PATH){
 				if(ffdata.fireFighters){
+					// maybe break here after x ticks fire fighter adding?
+					
+					
 					Random r = new Random();
 					// Set to firefighter in 1% of the cases (change to variable maybe?)
 					if(r.nextInt(101) == 1)
