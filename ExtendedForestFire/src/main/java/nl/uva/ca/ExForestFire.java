@@ -136,14 +136,16 @@ public class ExForestFire extends SimulatableSystem {
 				// connect random water points
 				for(int i = 0; i < points; i++) {
 					if(type == 0 || type == 1) {
-						randomWaterStandard(pointcoord[i][0], pointcoord[i][1],
+						randPathStd(pointcoord[i][0], pointcoord[i][1],
 								pointcoord[pointcoord[i][2]][0],
-								pointcoord[pointcoord[i][2]][1]);
+								pointcoord[pointcoord[i][2]][1],
+								ExForestFireCellType.WATER);
 					}
 					else {
-						randomWaterTriangle(pointcoord[i][0], pointcoord[i][1],
+						randPathTriangle(pointcoord[i][0], pointcoord[i][1],
 								pointcoord[pointcoord[i][2]][0],
-								pointcoord[pointcoord[i][2]][1]);
+								pointcoord[pointcoord[i][2]][1],
+								ExForestFireCellType.WATER);
 					}
 					grid.setCell(new ExForestFireCell(pointcoord[i][0],
 							pointcoord[i][1], ExForestFireCellType.WATER));
@@ -170,13 +172,15 @@ public class ExForestFire extends SimulatableSystem {
 				}
 				// normal walking
 				if(type == 0 || type == 1) {
-					randomWaterStandard(pointcoord[index][0],
-							pointcoord[index][1], 0, edge);
+					randPathStd(pointcoord[index][0],
+							pointcoord[index][1], 0, edge,
+							ExForestFireCellType.WATER);
 				}
 				// triangle walking
 				else {
-					randomWaterTriangle(pointcoord[index][0],
-							pointcoord[index][1], 0, edge);
+					randPathTriangle(pointcoord[index][0],
+							pointcoord[index][1], 0, edge,
+							ExForestFireCellType.WATER);
 				}
 			}
 			else {
@@ -191,13 +195,15 @@ public class ExForestFire extends SimulatableSystem {
 				}
 				// normal walking
 				if(type == 0 || type == 1) {
-					randomWaterStandard(pointcoord[index][0],
-							pointcoord[index][1], edge, 0);
+					randPathStd(pointcoord[index][0],
+							pointcoord[index][1], edge, 0,
+							ExForestFireCellType.WATER);
 				}
 				// triangle walking
 				else {
-					randomWaterTriangle(pointcoord[index][0],
-							pointcoord[index][1], edge, 0);
+					randPathTriangle(pointcoord[index][0],
+							pointcoord[index][1], edge, 0,
+							ExForestFireCellType.WATER);
 				}
 			}
 		}
@@ -217,6 +223,9 @@ public class ExForestFire extends SimulatableSystem {
 		final int totalbushes =
 			(int) Math.ceil(bushDensity
 					* (grid.grid.length * (grid.grid[0].length - 1) - watercount));
+		
+		buildRoads(rand);
+		
 		plantVegetation(totaltrees, ExForestFireCellType.TREE);
 		plantVegetation(totalbushes, ExForestFireCellType.BUSH);
 	}
@@ -240,10 +249,108 @@ public class ExForestFire extends SimulatableSystem {
 				}
 			}
 		}
-		
 	}
 	
-	public void randomWaterStandard(int xstart, int ystart, int xend, int yend) {
+	private void buildRoads(Random rand) {
+		// [2-4] edge points
+		int edgePoints = rand.nextInt(3) + 2;
+		int nPoints = rand.nextInt(4) + edgePoints;
+		
+		// System.out.printf("%d %d\n\n", edgePoints, nPoints);
+		
+		int[][] points = new int[nPoints][2];
+		
+		int n = rand.nextInt(400);
+		
+		for(int i = 0; i < edgePoints; i++) {
+			n += rand.nextInt(200) + 100;
+			n %= 400;
+			
+			int edge = n % 100;
+			int p = n / 100;
+			if(p == 2 || p == 3) {
+				edge = 99 - edge;
+			}
+			// System.out.printf("%d %d %d\n", n, edge, p);
+			if(p == 1) {
+				points[i][0] = 99;
+				points[i][1] = edge;
+			} else if(p == 3) {
+				points[i][0] = 0;
+				points[i][1] = edge;
+			} else if(p == 2) {
+				points[i][0] = edge;
+				points[i][1] = 99;
+			} else {
+				points[i][0] = edge;
+				points[i][1] = 0;
+			}
+			
+		}
+		// System.out.println();
+		
+		for(int i = edgePoints; i < nPoints; i++) {
+			// generate coordinates for each point
+			points[i][0] = rand.nextInt(80) + 10;
+			points[i][1] = rand.nextInt(80) + 10;
+			// System.out.printf("%d %d\n", points[i][0], points[i][1]);
+		}
+		// System.out.println();
+		
+		int nConnections[] = new int[nPoints];
+		
+		for(int j = 0; j < nPoints; j++) {
+			grid.setCell(new ExForestFireCell(points[j][0], points[j][1],
+					ExForestFireCellType.PATH));
+			/*
+			 * Don't build a road from this node if it already has 2 or more
+			 * connections.
+			 * Also skip id this is an edge node and it already has 1 or more
+			 * connections.
+			 */
+			if(nConnections[j] >= 2 || (j < edgePoints && nConnections[j] >= 1))
+				continue;
+			
+			double min = Double.POSITIVE_INFINITY;
+			int minIdx = -1;
+			for(int i = 0; i < nPoints; i++) {
+				// Skip self and nodes that already have 3 connections
+				if(i == j || nConnections[i] >= 3
+						|| points[j][0] == points[i][0]
+						|| points[j][1] == points[i][1])
+					continue;
+				
+				double d =
+					pointDist(points[j][0], points[j][1], points[i][0],
+							points[i][1]);
+				if(d < min) {
+					min = d;
+					minIdx = i;
+				}
+			}
+			
+			if(minIdx >= 0) {
+				nConnections[j]++;
+				nConnections[minIdx]++;
+				
+				if(type == 0 || type == 1) {
+					randPathStd(points[j][0], points[j][1], points[minIdx][0],
+							points[minIdx][1], ExForestFireCellType.PATH);
+				} else {
+					randPathTriangle(points[j][0], points[j][1],
+							points[minIdx][0], points[minIdx][1],
+							ExForestFireCellType.PATH);
+				}
+			}
+		}
+	}
+	
+	private double pointDist(int startX, int startY, int endX, int endY) {
+		return Math.abs(startX - endX) + Math.abs(startY - endY);
+	}
+	
+	public void randPathStd(int xstart, int ystart, int xend, int yend,
+			ExForestFireCellType cellType) {
 		int xcurr = xstart;
 		int ycurr = ystart;
 		
@@ -306,8 +413,9 @@ public class ExForestFire extends SimulatableSystem {
 			ExForestFireCell cell =
 				(ExForestFireCell) grid.getCell(xcurr, ycurr);
 			if(cell == null)
-				grid.setCell(new ExForestFireCell(xcurr, ycurr,
-						ExForestFireCellType.WATER));
+				grid.setCell(new ExForestFireCell(xcurr, ycurr, cellType));
+			else if(cellType == ExForestFireCellType.PATH)
+				grid.getCell(xcurr, ycurr).setType(cellType);
 			else
 				break;
 			
@@ -326,7 +434,8 @@ public class ExForestFire extends SimulatableSystem {
 		// }
 	}
 	
-	public void randomWaterTriangle(int xstart, int ystart, int xend, int yend) {
+	public void randPathTriangle(int xstart, int ystart, int xend, int yend,
+			ExForestFireCellType cellType) {
 		int xcurr = xstart;
 		int ycurr = ystart;
 		int xprev;
@@ -501,7 +610,6 @@ public class ExForestFire extends SimulatableSystem {
 				
 				if(cell != null) {
 					switch((ExForestFireCellType) cell.getType()) {
-					
 						case BURNING_BUSH:
 						case BURNT_BUSH:
 						case EXTINGUISHED_BUSH:
@@ -517,7 +625,6 @@ public class ExForestFire extends SimulatableSystem {
 						default:
 							// Ignore water and existing BUSH & TREE cell's.
 							break;
-					
 					}
 				}
 			}

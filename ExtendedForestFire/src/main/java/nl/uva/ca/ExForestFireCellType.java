@@ -18,7 +18,8 @@ public enum ExForestFireCellType implements CellType {
 	BURNT_BUSH("Burnt bush", Color.BLACK),
 	EXTINGUISHED_TREE("Extinguished tree", new Color(0x37799)),
 	EXTINGUISHED_BUSH("Extinguished bush", new Color(0x39999)),
-	FIRE_FIGHTER("Fire Fighters", Color.YELLOW);
+	FIRE_FIGHTER("Fire Fighters", Color.YELLOW),
+	PATH("Path", new Color(0xCC8811));
 	
 	private final String desc;
 	private final Color color;
