@@ -279,7 +279,7 @@ public class ExForestFireCell extends Cell {
 							sim.addSimulatable(newCell);
 						}
 						else
-							return true
+							return true;
 						
 						// Remove FFighter from this cell.
 						return removeFireFighter(grid);
