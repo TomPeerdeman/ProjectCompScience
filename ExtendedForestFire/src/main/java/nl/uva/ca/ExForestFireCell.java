@@ -4,6 +4,8 @@
  */
 package nl.uva.ca;
 
+import java.util.Random;
+
 import nl.tompeerdeman.ca.Cell;
 import nl.tompeerdeman.ca.DataSet;
 import nl.tompeerdeman.ca.Grid;
@@ -28,7 +30,8 @@ public class ExForestFireCell extends Cell {
 	public boolean shouldSimulate() {
 		return type == ExForestFireCellType.BURNING_BUSH
 				|| type == ExForestFireCellType.BURNING_TREE
-				|| type == ExForestFireCellType.FIRE_FIGHTER;
+				|| type == ExForestFireCellType.FIRE_FIGHTER
+				|| type == ExForestFireCellType.PATH;
 	}
 	
 	/**
@@ -65,9 +68,10 @@ public class ExForestFireCell extends Cell {
 		ExForestFireData ffdata = (ExForestFireData) data;
 		ExForestFireCell c = null;
 		int probvar = ffdata.probDivider;
+		ExForestFireCell myCell = (ExForestFireCell) grid.getCell(this.x, this.y);
 		if(ffdata.type == 0) {
-			if(grid.getCell(this.x, this.y).getType() == ExForestFireCellType.BURNING_TREE
-				|| grid.getCell(this.x, this.y).getType() == ExForestFireCellType.BURNING_BUSH){
+			if(myCell.getType() == ExForestFireCellType.BURNING_TREE
+				|| myCell.getType() == ExForestFireCellType.BURNING_BUSH){
 				int x, y, x2, y2;
 				double prob = 0.0;
 				for(int ny = 0; ny < 3; ny++) {
@@ -181,18 +185,29 @@ public class ExForestFireCell extends Cell {
 					}
 				}
 			}
-			else{
+			else if (myCell.getType() == ExForestFireCellType.FIRE_FIGHTER){
 				if(!ffdata.fireFighters){
 					Cell thisCell = grid.getCell(this.x, this.y);
 					System.out.println("imah ff");
 					thisCell.setType(ExForestFireCellType.EXTINGUISHED_TREE);
 					return false;
 				}
+				else{
+					// maybe break here after x ticks fire fighter adding?
+				}
+			}
+			else if(myCell.getType() == ExForestFireCellType.PATH){
+				if(ffdata.fireFighters){
+					Random r = new Random();
+					// Set to firefighter in 1% of the cases (change to variable maybe?)
+					if(r.nextInt(101) == 1)
+						myCell.setType(ExForestFireCellType.FIRE_FIGHTER);
+				}
 			}
 		}
 		else if(ffdata.type == 1){
-			if(grid.getCell(this.x, this.y).getType() == ExForestFireCellType.BURNING_TREE
-				|| grid.getCell(this.x, this.y).getType() == ExForestFireCellType.BURNING_BUSH){
+			if(myCell.getType() == ExForestFireCellType.BURNING_TREE
+				|| myCell.getType() == ExForestFireCellType.BURNING_BUSH){
 				int x, y, x2, y2;
 				double prob = 0.0;
 				for(int ny = 0; ny < 3; ny++) {
@@ -305,8 +320,8 @@ public class ExForestFireCell extends Cell {
 		}
 		
 		else if(ffdata.type == 2) {
-			if(grid.getCell(this.x, this.y).getType() == ExForestFireCellType.BURNING_TREE
-				|| grid.getCell(this.x, this.y).getType() == ExForestFireCellType.BURNING_BUSH){
+			if(myCell.getType() == ExForestFireCellType.BURNING_TREE
+				|| myCell.getType() == ExForestFireCellType.BURNING_BUSH){
 				int x, y, x2, y2;
 				double prob = 0.0;
 				for(int ny = 0; ny < 3; ny++) {
