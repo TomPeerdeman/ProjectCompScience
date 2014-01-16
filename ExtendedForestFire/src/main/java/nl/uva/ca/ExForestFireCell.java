@@ -268,8 +268,6 @@ public class ExForestFireCell extends Cell {
 							// System.out.println("i wasnt null");
 							newCell.addFireFighter();
 							sim.addSimulatable(newCell);
-							// Remove FFighter from this cell.
-							return removeFireFighter(grid);
 						} else if(newCell == null) {
 							// System.out.println("i was null");
 							newCell =
@@ -279,9 +277,12 @@ public class ExForestFireCell extends Cell {
 							// New cell is FFighter only.
 							newCell.addFireFighter();
 							sim.addSimulatable(newCell);
-							// Remove FFighter from this cell.
-							return removeFireFighter(grid);
 						}
+						else
+							return true
+						
+						// Remove FFighter from this cell.
+						return removeFireFighter(grid);
 					}
 				}
 				// System.out.println("");
