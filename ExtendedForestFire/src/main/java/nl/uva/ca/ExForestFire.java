@@ -254,9 +254,7 @@ public class ExForestFire extends SimulatableSystem {
 	private void buildRoads(Random rand) {
 		// [2-4] edge points
 		int edgePoints = rand.nextInt(3) + 2;
-		int nPoints = rand.nextInt(4) + edgePoints;
-		
-		// System.out.printf("%d %d\n\n", edgePoints, nPoints);
+		int nPoints = rand.nextInt(3) + edgePoints + 1;
 		
 		int[][] points = new int[nPoints][2];
 		
@@ -271,7 +269,7 @@ public class ExForestFire extends SimulatableSystem {
 			if(p == 2 || p == 3) {
 				edge = 99 - edge;
 			}
-			// System.out.printf("%d %d %d\n", n, edge, p);
+			
 			if(p == 1) {
 				points[i][0] = 99;
 				points[i][1] = edge;
@@ -287,15 +285,13 @@ public class ExForestFire extends SimulatableSystem {
 			}
 			
 		}
-		// System.out.println();
 		
 		for(int i = edgePoints; i < nPoints; i++) {
-			// generate coordinates for each point
+			// Generate coordinates for each point. No edge points!
 			points[i][0] = rand.nextInt(80) + 10;
 			points[i][1] = rand.nextInt(80) + 10;
-			// System.out.printf("%d %d\n", points[i][0], points[i][1]);
+			
 		}
-		// System.out.println();
 		
 		int nConnections[] = new int[nPoints];
 		boolean[][] connected = new boolean[nPoints][nPoints];
@@ -344,11 +340,6 @@ public class ExForestFire extends SimulatableSystem {
 							ExForestFireCellType.PATH);
 				}
 			}
-		}
-		
-		for(int j = 0; j < nPoints; j++) {
-			grid.setCell(new ExForestFireCell(points[j][0], points[j][1],
-					ExForestFireCellType.BURNT_BUSH));
 		}
 	}
 	
@@ -421,8 +412,8 @@ public class ExForestFire extends SimulatableSystem {
 				(ExForestFireCell) grid.getCell(xcurr, ycurr);
 			if(cell == null)
 				grid.setCell(new ExForestFireCell(xcurr, ycurr, cellType));
-			else if(cellType == ExForestFireCellType.PATH)
-				grid.getCell(xcurr, ycurr).setType(cellType);
+			else if(cell.getType() != ExForestFireCellType.PATH)
+				cell.setType(cellType);
 			else
 				break;
 			
@@ -557,7 +548,7 @@ public class ExForestFire extends SimulatableSystem {
 				(ExForestFireCell) grid.getCell(xcurr, ycurr);
 			if(cell == null)
 				grid.setCell(new ExForestFireCell(xcurr, ycurr, cellType));
-			else if(cellType == ExForestFireCellType.PATH)
+			else if(cell.getType() != ExForestFireCellType.PATH)
 				grid.getCell(xcurr, ycurr).setType(cellType);
 			else if(!same)
 				break;
