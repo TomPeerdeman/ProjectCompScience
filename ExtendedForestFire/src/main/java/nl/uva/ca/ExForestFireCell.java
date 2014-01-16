@@ -237,16 +237,16 @@ public class ExForestFireCell extends Cell {
 												+ Math.abs(i - this.y);
 									if(newDistance < distToFire) {
 										distToFire = newDistance;
-										indexX = j;
-										indexY = i;
+										indexX = i;
+										indexY = j;
 									}
 								}
 							}
 						}
 					}
-					// System.out.println("Distance to fire: " + distToFire +
-					// " Im at: (" +this.x+ " ; " +this.y+ ") Fire is at: ("
-					// +indexX+" ; "+ indexY+ ")");
+					 // System.out.println("Distance to fire: " + distToFire +
+					 // " Im at: (" +this.x+ " ; " +this.y+ ") Fire is at: ("
+					 // +indexX+" ; "+ indexY+ ")");
 					if(distToFire > 1 && distToFire < 200) {
 						// move to nearest fire
 						if(indexX < this.x)
