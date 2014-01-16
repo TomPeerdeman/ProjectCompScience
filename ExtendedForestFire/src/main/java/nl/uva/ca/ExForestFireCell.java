@@ -260,13 +260,18 @@ public class ExForestFireCell extends Cell {
 						// System.out.println("Im at: (" +this.x+ " ; " +this.y+
 						// ") im going to: (" +newX+" ; "+ newY+ ")");
 						newCell = (ExForestFireCell) grid.getCell(newX, newY);
-						if(newCell != null) {
+						
+						if(newCell != null
+								&& newCell.getType() != ExForestFireCellType.BURNING_BUSH
+								&& newCell.getType() != ExForestFireCellType.BURNING_TREE
+								&& newCell.getType() != ExForestFireCellType.FIRE_FIGHTER) {
 							// System.out.println("i wasnt null");
 							newCell.addFireFighter();
 							sim.addSimulatable(newCell);
 						} else {
 							// System.out.println("i was null");
-							newCell = new ExForestFireCell(newX, newY, null);
+							newCell =
+								new ExForestFireCell(newX, newY, null);
 							// Add new cell to grid.
 							grid.setCell(newCell);
 							// New cell is FFighter only.
@@ -564,7 +569,7 @@ public class ExForestFireCell extends Cell {
 		return true;
 	}
 	
-	public void checkFire(int x, int y, int nx, int ny, Grid grid,
+	private void checkFire(int x, int y, int nx, int ny, Grid grid,
 			ExForestFireData ffdata,
 			ExForestFireCell c, Simulator sim) {
 		if(x >= 0 && y >= 0 && x < grid.grid.length
@@ -598,7 +603,7 @@ public class ExForestFireCell extends Cell {
 	}
 	
 	// checkFire for neighbors with distance 2 from me
-	public void checkFireRadius2(int x, int y, Grid grid,
+	private void checkFireRadius2(int x, int y, Grid grid,
 			ExForestFireData ffdata,
 			ExForestFireCell c, Simulator sim, double prob) {
 		if(x >= 0 && y >= 0 && x < grid.grid.length
@@ -623,7 +628,7 @@ public class ExForestFireCell extends Cell {
 		}
 	}
 	
-	public void setFire(ExForestFireData ffdata, ExForestFireCellType type,
+	private void setFire(ExForestFireData ffdata, ExForestFireCellType type,
 			ExForestFireCell c, Simulator sim) {
 		// Check for trees
 		if(c != null && c.getType() == ExForestFireCellType.TREE) {

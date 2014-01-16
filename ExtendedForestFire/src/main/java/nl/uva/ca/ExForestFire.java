@@ -610,6 +610,13 @@ public class ExForestFire extends SimulatableSystem {
 				ExForestFireCell cell = (ExForestFireCell) grid.getCell(x, y);
 				
 				if(cell != null) {
+					if(cell.getType() == ExForestFireCellType.FIRE_FIGHTER) {
+						cell.removeFireFighter(grid);
+						if(cell.getType() == null) {
+							grid.clearCell(x, y);
+							continue;
+						}
+					}
 					switch((ExForestFireCellType) cell.getType()) {
 						case BURNING_BUSH:
 						case BURNT_BUSH:
@@ -622,9 +629,6 @@ public class ExForestFire extends SimulatableSystem {
 						case EXTINGUISHED_TREE:
 							// Reset all variants of TREE back to a TREE type.
 							cell.setType(ExForestFireCellType.TREE);
-							break;
-						case FIRE_FIGHTER:
-							cell.removeFireFighter(grid);
 							break;
 						default:
 							// Ignore water and existing BUSH & TREE cell's.
