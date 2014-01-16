@@ -27,7 +27,8 @@ public class ExForestFireCell extends Cell {
 	@Override
 	public boolean shouldSimulate() {
 		return type == ExForestFireCellType.BURNING_BUSH
-				|| type == ExForestFireCellType.BURNING_TREE;
+				|| type == ExForestFireCellType.BURNING_TREE
+				|| type == ExForestFireCellType.FIRE_FIGHTER;
 	}
 	
 	/**
@@ -65,325 +66,342 @@ public class ExForestFireCell extends Cell {
 		ExForestFireCell c = null;
 		int probvar = ffdata.probDivider;
 		if(ffdata.type == 0) {
-			int x, y, x2, y2;
-			double prob = 0.0;
-			for(int ny = 0; ny < 3; ny++) {
-				for(int nx = 0; nx < 3; nx++) {
-					x = this.x + nx - 1;
-					// Grid y increases north so cell above is y + 1
-					y = this.y - ny + 1;
-					checkFire(x, y, nx, ny, grid, ffdata, c, sim);
-					
+			if(grid.getCell(this.x, this.y).getType() == ExForestFireCellType.BURNING_TREE
+				|| grid.getCell(this.x, this.y).getType() == ExForestFireCellType.BURNING_BUSH){
+				int x, y, x2, y2;
+				double prob = 0.0;
+				for(int ny = 0; ny < 3; ny++) {
+					for(int nx = 0; nx < 3; nx++) {
+						x = this.x + nx - 1;
+						// Grid y increases north so cell above is y + 1
+						y = this.y - ny + 1;
+						checkFire(x, y, nx, ny, grid, ffdata, c, sim);
+						
+					}
+				}
+				boolean fire = false;
+				for(int ny = 0; ny < 5; ny++) {
+					for(int nx = 0; nx < 5; nx++) {
+						fire = false;
+						x2 = this.x + nx - 2;
+						// Grid y increases north so cell above is y + 1
+						y2 = this.y - ny + 2;
+						if(ny == 0){
+							if(nx == 0){
+								prob = ffdata.neighborhood[0][0] / probvar; 	
+								fire = true;
+							}
+							else if(nx == 1) {
+								prob =
+									((ffdata.neighborhood[0][0] / probvar) + (ffdata.neighborhood[0][1] / probvar)) / 2;	
+								fire = true;
+							}
+							else if(nx == 2) {
+								prob =
+									((ffdata.neighborhood[0][0] / probvar)
+											+ (ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[0][2] / probvar)) / 3;	
+								fire = true;
+							}
+							else if(nx == 3) {
+								prob =
+									((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[0][2] / probvar)) / 2;	
+								fire = true;
+							}
+							else if(nx == 4) {
+								prob = ffdata.neighborhood[0][2] / probvar;	
+								fire = true;
+							}
+						}
+						else if(ny == 1) {
+							if(nx == 0) {
+								prob =
+									((ffdata.neighborhood[0][0] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2;	
+								fire = true;
+							}
+							else if(nx == 4) {
+								prob =
+									((ffdata.neighborhood[0][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2;	
+								fire = true;
+							}
+						}
+						else if(ny == 2) {
+							if(nx == 0) {
+								prob =
+									((ffdata.neighborhood[0][0] / probvar)
+											+ (ffdata.neighborhood[1][0] / probvar) + (ffdata.neighborhood[2][0] / probvar)) / 3;	
+								fire = true;
+							}
+							else if(nx == 4) {
+								prob =
+									((ffdata.neighborhood[0][2] / probvar)
+											+ (ffdata.neighborhood[1][2] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 3;	
+								fire = true;
+							}
+						}
+						else if(ny == 3) {
+							if(nx == 0) {
+								prob =
+									((ffdata.neighborhood[2][0] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2;	
+								fire = true;
+							}
+							else if(nx == 4) {
+								prob =
+									((ffdata.neighborhood[2][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2;	
+								fire = true;
+							}
+						}
+						else if(ny == 4) {
+							if(nx == 0) {
+								prob = ffdata.neighborhood[2][0] / probvar;	
+								fire = true;
+							}
+							else if(nx == 1) {
+								prob =
+									((ffdata.neighborhood[2][0] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2;	
+								fire = true;
+							}
+							else if(nx == 2) {
+								prob =
+									((ffdata.neighborhood[2][0] / probvar)
+											+ (ffdata.neighborhood[2][1] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 3;	
+								fire = true;
+							}
+							else if(nx == 3) {
+								prob =
+									((ffdata.neighborhood[2][1] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 2;	
+								fire = true;
+							}
+							else if(nx == 4) {
+								prob = ffdata.neighborhood[2][2] / probvar;	
+								fire = true;
+							}
+						}
+						if(fire)
+							checkFireRadius2(x2, y2, grid, ffdata, c, sim, prob);	
+					}
 				}
 			}
-			boolean fire = false;
-			for(int ny = 0; ny < 5; ny++) {
-				for(int nx = 0; nx < 5; nx++) {
-					fire = false;
-					x2 = this.x + nx - 2;
-					// Grid y increases north so cell above is y + 1
-					y2 = this.y - ny + 2;
-					if(ny == 0){
-						if(nx == 0){
-							prob = ffdata.neighborhood[0][0] / probvar; 	
-							fire = true;
-						}
-						else if(nx == 1) {
-							prob =
-								((ffdata.neighborhood[0][0] / probvar) + (ffdata.neighborhood[0][1] / probvar)) / 2;	
-							fire = true;
-						}
-						else if(nx == 2) {
-							prob =
-								((ffdata.neighborhood[0][0] / probvar)
-										+ (ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[0][2] / probvar)) / 3;	
-							fire = true;
-						}
-						else if(nx == 3) {
-							prob =
-								((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[0][2] / probvar)) / 2;	
-							fire = true;
-						}
-						else if(nx == 4) {
-							prob = ffdata.neighborhood[0][2] / probvar;	
-							fire = true;
-						}
-					}
-					else if(ny == 1) {
-						if(nx == 0) {
-							prob =
-								((ffdata.neighborhood[0][0] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2;	
-							fire = true;
-						}
-						else if(nx == 4) {
-							prob =
-								((ffdata.neighborhood[0][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2;	
-							fire = true;
-						}
-					}
-					else if(ny == 2) {
-						if(nx == 0) {
-							prob =
-								((ffdata.neighborhood[0][0] / probvar)
-										+ (ffdata.neighborhood[1][0] / probvar) + (ffdata.neighborhood[2][0] / probvar)) / 3;	
-							fire = true;
-						}
-						else if(nx == 4) {
-							prob =
-								((ffdata.neighborhood[0][2] / probvar)
-										+ (ffdata.neighborhood[1][2] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 3;	
-							fire = true;
-						}
-					}
-					else if(ny == 3) {
-						if(nx == 0) {
-							prob =
-								((ffdata.neighborhood[2][0] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2;	
-							fire = true;
-						}
-						else if(nx == 4) {
-							prob =
-								((ffdata.neighborhood[2][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2;	
-							fire = true;
-						}
-					}
-					else if(ny == 4) {
-						if(nx == 0) {
-							prob = ffdata.neighborhood[2][0] / probvar;	
-							fire = true;
-						}
-						else if(nx == 1) {
-							prob =
-								((ffdata.neighborhood[2][0] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2;	
-							fire = true;
-						}
-						else if(nx == 2) {
-							prob =
-								((ffdata.neighborhood[2][0] / probvar)
-										+ (ffdata.neighborhood[2][1] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 3;	
-							fire = true;
-						}
-						else if(nx == 3) {
-							prob =
-								((ffdata.neighborhood[2][1] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 2;	
-							fire = true;
-						}
-						else if(nx == 4) {
-							prob = ffdata.neighborhood[2][2] / probvar;	
-							fire = true;
-						}
-					}
-					if(fire)
-						checkFireRadius2(x2, y2, grid, ffdata, c, sim, prob);	
+			else{
+				if(!ffdata.fireFighters){
+					Cell thisCell = grid.getCell(this.x, this.y);
+					System.out.println("imah ff");
+					thisCell.setType(ExForestFireCellType.EXTINGUISHED_TREE);
+					return false;
 				}
 			}
 		}
 		else if(ffdata.type == 1){
-			int x, y, x2, y2;
-			double prob = 0.0;
-			for(int ny = 0; ny < 3; ny++) {
-				for(int nx = 0; nx < 3; nx++) {
-					if((ny == 0 && (nx == 1 || nx == 2)) || (ny == 1 && (nx == 0 || nx == 2)) || (ny == 2 && (nx == 1 || nx == 2))){
-						if(this.y %2 == 1 || ny == 1)
-							x = this.x + nx - 1;
-						else
-							x = this.x + nx - 2;
-						// Grid y increases north so cell above is y + 1
-						y = this.y - ny + 1;
-						checkFire(x, y, nx, ny, grid, ffdata, c, sim);
+			if(grid.getCell(this.x, this.y).getType() == ExForestFireCellType.BURNING_TREE
+				|| grid.getCell(this.x, this.y).getType() == ExForestFireCellType.BURNING_BUSH){
+				int x, y, x2, y2;
+				double prob = 0.0;
+				for(int ny = 0; ny < 3; ny++) {
+					for(int nx = 0; nx < 3; nx++) {
+						if((ny == 0 && (nx == 1 || nx == 2)) || (ny == 1 && (nx == 0 || nx == 2)) || (ny == 2 && (nx == 1 || nx == 2))){
+							if(this.y %2 == 1 || ny == 1)
+								x = this.x + nx - 1;
+							else
+								x = this.x + nx - 2;
+							// Grid y increases north so cell above is y + 1
+							y = this.y - ny + 1;
+							checkFire(x, y, nx, ny, grid, ffdata, c, sim);
+						}
 					}
 				}
-			}
-			boolean fire = false;
-			for(int ny = 0; ny < 5; ny++) {
-				for(int nx = 0; nx < 5; nx++) {
-					fire = false;
-					x2 = this.x + nx - 2;
-					// Grid y increases north so cell above is y + 1
-					y2 = this.y - ny + 2;
-					if(ny == 0){
-						if(nx == 1){
-							prob = ffdata.neighborhood[0][1] / probvar;
-							fire = true;
-						}
-						else if(nx == 2){
-							prob = ((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[0][1] / probvar)) / 2; 		
-							fire = true;				
-						}
-						else if(nx == 3){
-							prob = ffdata.neighborhood[0][2] / probvar; 	
-							fire = true;					
-						}
-					}
-					else if(ny == 1){
-						if(this.y % 2 == 0){
-							if(nx == 0){
-								prob = ((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2;
+				boolean fire = false;
+				for(int ny = 0; ny < 5; ny++) {
+					for(int nx = 0; nx < 5; nx++) {
+						fire = false;
+						x2 = this.x + nx - 2;
+						// Grid y increases north so cell above is y + 1
+						y2 = this.y - ny + 2;
+						if(ny == 0){
+							if(nx == 1){
+								prob = ffdata.neighborhood[0][1] / probvar;
 								fire = true;
+							}
+							else if(nx == 2){
+								prob = ((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[0][1] / probvar)) / 2; 		
+								fire = true;				
 							}
 							else if(nx == 3){
-								prob = ((ffdata.neighborhood[0][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2;
-								fire = true;
+								prob = ffdata.neighborhood[0][2] / probvar; 	
+								fire = true;					
 							}
 						}
-						else if(this.y % 2 == 1){
-							if(nx == 1){
-								prob = ((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2;
+						else if(ny == 1){
+							if(this.y % 2 == 0){
+								if(nx == 0){
+									prob = ((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2;
+									fire = true;
+								}
+								else if(nx == 3){
+									prob = ((ffdata.neighborhood[0][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2;
+									fire = true;
+								}
+							}
+							else if(this.y % 2 == 1){
+								if(nx == 1){
+									prob = ((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2;
+									fire = true;
+								}
+								else if(nx == 4){
+									prob = ((ffdata.neighborhood[0][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2;
+									fire = true;
+								}
+							}
+						}
+						else if(ny == 2){
+							if(nx == 0){
+								prob = ffdata.neighborhood[1][0] / probvar;
 								fire = true;
 							}
 							else if(nx == 4){
-								prob = ((ffdata.neighborhood[0][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2;
-								fire = true;
+								prob = ffdata.neighborhood[1][2] / probvar; 		
+								fire = true;				
 							}
 						}
-					}
-					else if(ny == 2){
-						if(nx == 0){
-							prob = ffdata.neighborhood[1][0] / probvar;
-							fire = true;
+						else if(ny == 3){
+							if(this.y % 2 == 0){
+								if(nx == 0){
+									prob = ((ffdata.neighborhood[1][0] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2;
+									fire = true;
+								}
+								else if(nx == 3){
+									prob = ((ffdata.neighborhood[1][2] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 2;
+									fire = true;
+								}
+							}
+							else if(this.y % 2 == 1){
+								if(nx == 1){
+									prob = ((ffdata.neighborhood[1][0] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2;
+									fire = true;
+								}
+								else if(nx == 4){
+									prob = ((ffdata.neighborhood[1][2] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 2;
+									fire = true;
+								}
+							}
 						}
-						else if(nx == 4){
-							prob = ffdata.neighborhood[1][2] / probvar; 		
-							fire = true;				
-						}
-					}
-					else if(ny == 3){
-						if(this.y % 2 == 0){
-							if(nx == 0){
-								prob = ((ffdata.neighborhood[1][0] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2;
+						else if(ny == 4){
+							if(nx == 1){
+								prob = ffdata.neighborhood[2][1] / probvar;
 								fire = true;
+							}
+							else if(nx == 2){
+								prob = ((ffdata.neighborhood[2][1] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2; 		
+								fire = true;				
 							}
 							else if(nx == 3){
-								prob = ((ffdata.neighborhood[1][2] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 2;
-								fire = true;
+								prob = ffdata.neighborhood[2][2] / probvar; 	
+								fire = true;					
 							}
 						}
-						else if(this.y % 2 == 1){
-							if(nx == 1){
-								prob = ((ffdata.neighborhood[1][0] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2;
-								fire = true;
-							}
-							else if(nx == 4){
-								prob = ((ffdata.neighborhood[1][2] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 2;
-								fire = true;
-							}
-						}
+						if(fire)
+							checkFireRadius2(x2, y2, grid, ffdata, c, sim, prob);	
 					}
-					else if(ny == 4){
-						if(nx == 1){
-							prob = ffdata.neighborhood[2][1] / probvar;
-							fire = true;
-						}
-						else if(nx == 2){
-							prob = ((ffdata.neighborhood[2][1] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2; 		
-							fire = true;				
-						}
-						else if(nx == 3){
-							prob = ffdata.neighborhood[2][2] / probvar; 	
-							fire = true;					
-						}
-					}
-					if(fire)
-						checkFireRadius2(x2, y2, grid, ffdata, c, sim, prob);	
 				}
 			}
 		}
 		
 		else if(ffdata.type == 2) {
-			int x, y, x2, y2;
-			double prob = 0.0;
-			for(int ny = 0; ny < 3; ny++) {
-				for(int nx = 0; nx < 3; nx++) {
-					if((ny == 1 && this.x % 2 == 1 && this.y % 2 == 0)
-							|| (ny == 1 && this.x % 2 == 0 && this.y % 2 == 1)
-							|| (ny == 0 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 0)
-							|| (ny == 0 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 1)) {
-						x = this.x + nx - 1;
-						// Grid y increases north so cell above is y + 1
-						y = this.y - ny + 1;
-						
-						checkFire(x, y, nx, ny, grid, ffdata, c, sim);
-					}
-					else if((ny == 1 && this.x % 2 == 0 && this.y % 2 == 0)
-							|| (ny == 1 && this.x % 2 == 1 && this.y % 2 == 1)
-							|| (ny == 2 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 0)
-							|| (ny == 2 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 1)) {
-						x = this.x + nx - 1;
-						// Grid y increases north so cell above is y + 1
-						y = this.y - ny + 1;
-						int tempny;
-						tempny = ny - 1;
-						checkFire(x, y, nx, tempny, grid, ffdata, c, sim);
+			if(grid.getCell(this.x, this.y).getType() == ExForestFireCellType.BURNING_TREE
+				|| grid.getCell(this.x, this.y).getType() == ExForestFireCellType.BURNING_BUSH){
+				int x, y, x2, y2;
+				double prob = 0.0;
+				for(int ny = 0; ny < 3; ny++) {
+					for(int nx = 0; nx < 3; nx++) {
+						if((ny == 1 && this.x % 2 == 1 && this.y % 2 == 0)
+								|| (ny == 1 && this.x % 2 == 0 && this.y % 2 == 1)
+								|| (ny == 0 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 0)
+								|| (ny == 0 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 1)) {
+							x = this.x + nx - 1;
+							// Grid y increases north so cell above is y + 1
+							y = this.y - ny + 1;
+							
+							checkFire(x, y, nx, ny, grid, ffdata, c, sim);
+						}
+						else if((ny == 1 && this.x % 2 == 0 && this.y % 2 == 0)
+								|| (ny == 1 && this.x % 2 == 1 && this.y % 2 == 1)
+								|| (ny == 2 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 0)
+								|| (ny == 2 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 1)) {
+							x = this.x + nx - 1;
+							// Grid y increases north so cell above is y + 1
+							y = this.y - ny + 1;
+							int tempny;
+							tempny = ny - 1;
+							checkFire(x, y, nx, tempny, grid, ffdata, c, sim);
+						}
 					}
 				}
-			}
-			boolean fire = false;
-			for(int ny = 0; ny < 5; ny++) {
-				for(int nx = 0; nx < 5; nx++) {
-					fire = false;
-					x2 = this.x + nx - 2;
-					// Grid y increases north so cell above is y + 1
-					y2 = this.y - ny + 2;
-					// triangle type 1
-					if((this.x % 2 == 0 && this.y % 2 == 0) || (this.x % 2 == 1 && this.y % 2 == 1)){
-						if(ny == 1){
-							if(nx == 1){
-								prob = (ffdata.neighborhood[0][0] / probvar);
-								fire = true;								
+				boolean fire = false;
+				for(int ny = 0; ny < 5; ny++) {
+					for(int nx = 0; nx < 5; nx++) {
+						fire = false;
+						x2 = this.x + nx - 2;
+						// Grid y increases north so cell above is y + 1
+						y2 = this.y - ny + 2;
+						// triangle type 1
+						if((this.x % 2 == 0 && this.y % 2 == 0) || (this.x % 2 == 1 && this.y % 2 == 1)){
+							if(ny == 1){
+								if(nx == 1){
+									prob = (ffdata.neighborhood[0][0] / probvar);
+									fire = true;								
+								}
+								else if(nx == 3){
+									prob = (ffdata.neighborhood[0][2] / probvar);
+									fire = true;								
+								}
 							}
-							else if(nx == 3){
-								prob = (ffdata.neighborhood[0][2] / probvar);
-								fire = true;								
+							else if(ny == 2){
+								if(nx == 0){
+									prob = (ffdata.neighborhood[0][0] / probvar);
+									fire = true;
+								}
+								else if(nx == 4){
+									prob = (ffdata.neighborhood[0][2] / probvar);
+									fire = true;								
+								}
+							}
+							if(ny == 3){
+								if(nx == 1 || nx == 3){
+									prob = (ffdata.neighborhood[1][1] / probvar);
+									fire = true;								
+								}
 							}
 						}
-						else if(ny == 2){
-							if(nx == 0){
-								prob = (ffdata.neighborhood[0][0] / probvar);
-								fire = true;
+						// triangle type 2
+						else if((this.x % 2 == 1 && this.y % 2 == 0) || (this.x % 2 == 0 && this.y % 2 == 1)){
+							if(ny == 1){
+								if(nx == 1 || nx == 3){
+									prob = (ffdata.neighborhood[0][1] / probvar);
+									fire = true;								
+								}
 							}
-							else if(nx == 4){
-								prob = (ffdata.neighborhood[0][2] / probvar);
-								fire = true;								
+							else if(ny == 2){
+								if(nx == 0){
+									prob = (ffdata.neighborhood[1][0] / probvar);
+									fire = true;
+								}
+								else if(nx == 4){
+									prob = (ffdata.neighborhood[1][2] / probvar);
+									fire = true;
+								}
+							}
+							else if(ny == 3){
+								if(nx == 1){
+									prob = (ffdata.neighborhood[1][0] / probvar);
+									fire = true;								
+								}
+								else if(nx == 3){
+									prob = (ffdata.neighborhood[1][2] / probvar);
+									fire = true;								
+								}
 							}
 						}
-						if(ny == 3){
-							if(nx == 1 || nx == 3){
-								prob = (ffdata.neighborhood[1][1] / probvar);
-								fire = true;								
-							}
-						}
+						if(fire)
+							checkFireRadius2(x2, y2, grid, ffdata, c, sim, prob);	
 					}
-					// triangle type 2
-					else if((this.x % 2 == 1 && this.y % 2 == 0) || (this.x % 2 == 0 && this.y % 2 == 1)){
-						if(ny == 1){
-							if(nx == 1 || nx == 3){
-								prob = (ffdata.neighborhood[0][1] / probvar);
-								fire = true;								
-							}
-						}
-						else if(ny == 2){
-							if(nx == 0){
-								prob = (ffdata.neighborhood[1][0] / probvar);
-								fire = true;
-							}
-							else if(nx == 4){
-								prob = (ffdata.neighborhood[1][2] / probvar);
-								fire = true;
-							}
-						}
-						else if(ny == 3){
-							if(nx == 1){
-								prob = (ffdata.neighborhood[1][0] / probvar);
-								fire = true;								
-							}
-							else if(nx == 3){
-								prob = (ffdata.neighborhood[1][2] / probvar);
-								fire = true;								
-							}
-						}
-					}
-					if(fire)
-						checkFireRadius2(x2, y2, grid, ffdata, c, sim, prob);	
 				}
 			}
 		}
