@@ -9,7 +9,7 @@ import nl.tompeerdeman.ca.DataSet;
 import nl.tompeerdeman.ca.Grid;
 
 public class ExForestFireData implements DataSet {
-	protected Grid grid;
+	public Grid grid;
 	public double[][] neighborhood;
 	
 	public long bushes;

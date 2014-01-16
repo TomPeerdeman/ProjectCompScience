@@ -4,7 +4,7 @@
  */
 package nl.uva.ca.triggers;
 
-import nl.tompeerdeman.ca.DataSet;
+import nl.tompeerdeman.ca.SimulatableSystem;
 
 import nl.uva.ca.ExForestFireData;
 
@@ -21,8 +21,9 @@ public class BushBurnTicksAction extends TreeBurnTicksAction {
 	}
 	
 	@Override
-	public void execute(DataSet data) {
-		((ExForestFireData) data).nTicksBushBurn = burnTicks;
+	public void execute(SimulatableSystem sys) {
+		((ExForestFireData) sys.getSimulator().getData()).nTicksBushBurn =
+			burnTicks;
 	}
 	
 	@Override

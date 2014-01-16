@@ -34,7 +34,7 @@ public class TickTrigger extends Trigger {
 	public boolean process(SimulatableSystem sys) {
 		Simulator sim = sys.getSimulator();
 		if(sim.getTick() >= tick) {
-			action.execute(sim.getData());
+			action.execute(sys);
 			return true;
 		}
 		return false;

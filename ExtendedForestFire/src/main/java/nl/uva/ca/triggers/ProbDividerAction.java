@@ -4,7 +4,7 @@
  */
 package nl.uva.ca.triggers;
 
-import nl.tompeerdeman.ca.DataSet;
+import nl.tompeerdeman.ca.SimulatableSystem;
 
 import nl.uva.ca.ExForestFireData;
 import nl.uva.ca.TriggerAction;
@@ -35,8 +35,8 @@ public class ProbDividerAction implements TriggerAction {
 	 * @see nl.uva.ca.TriggerAction#execute(nl.tompeerdeman.ca.DataSet)
 	 */
 	@Override
-	public void execute(DataSet data) {
-		((ExForestFireData) data).probDivider = div;
+	public void execute(SimulatableSystem sys) {
+		((ExForestFireData) sys.getSimulator().getData()).probDivider = div;
 	}
 	
 	/*

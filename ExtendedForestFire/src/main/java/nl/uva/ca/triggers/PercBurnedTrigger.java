@@ -35,7 +35,7 @@ public class PercBurnedTrigger extends Trigger {
 		ExForestFireData data = (ExForestFireData) sim.getSimulator().getData();
 		if((double) data.burnt
 				/ (double) (data.burning + data.burnt + data.bushes + data.trees) >= percBurned) {
-			action.execute(data);
+			action.execute(sim);
 			return true;
 		}
 		return false;

@@ -4,7 +4,7 @@
  */
 package nl.uva.ca;
 
-import nl.tompeerdeman.ca.DataSet;
+import nl.tompeerdeman.ca.SimulatableSystem;
 
 /**
  *
@@ -13,9 +13,9 @@ public interface TriggerAction {
 	/**
 	 * Execute this action
 	 * 
-	 * @param data
+	 * @param sys
 	 */
-	public void execute(DataSet data);
+	public void execute(SimulatableSystem sys);
 	
 	/**
 	 * @return The name of this action as used in TriggerManager.ACTIONS

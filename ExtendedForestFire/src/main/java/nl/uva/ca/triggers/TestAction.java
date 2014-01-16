@@ -4,7 +4,7 @@
  */
 package nl.uva.ca.triggers;
 
-import nl.tompeerdeman.ca.DataSet;
+import nl.tompeerdeman.ca.SimulatableSystem;
 
 import nl.uva.ca.TriggerAction;
 
@@ -25,7 +25,7 @@ public class TestAction implements TriggerAction {
 	 * @see nl.uva.ca.TriggerAction#execute(nl.tompeerdeman.ca.DataSet)
 	 */
 	@Override
-	public void execute(DataSet data) {
+	public void execute(SimulatableSystem sys) {
 		System.out.println("Test trigger activated");
 	}
 	
