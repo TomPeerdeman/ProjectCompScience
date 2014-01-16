@@ -31,10 +31,10 @@ public abstract class ExCaLegendPanel extends JPanel {
 		// dx = px horizontal per cell
 		dx = (int) Math.floor(400.0 / nx);
 		
-		setSize(nx * dx, 60);
-		setPreferredSize(new Dimension(nx * dx, 60));
+		setSize(500, 60);
+		setPreferredSize(new Dimension(500, 60));
 		
-		offsx = (getWidth() - nx * dx) / 2;
+		offsx = (getWidth() - 500) / 2;
 	}
 	
 	@Override
@@ -43,7 +43,7 @@ public abstract class ExCaLegendPanel extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		
 		// getWidth could be changed by layout manager
-		offsx = (getWidth() - nx * dx) / 2;
+		offsx = (getWidth() - 500) / 2;
 		
 		// Make text rendering less crappy
 		g2d.setRenderingHint(

@@ -36,7 +36,7 @@ public class ExForestFireLegend extends ExCaLegendPanel {
 		int i = 0;
 		for(ExForestFireCellType type : ExForestFireCellType.values()) {
 			// 3 per column 130px long 15 px high
-			int x = (i / 3) * 130 + offsx;
+			int x = (i / 3) * 150 + offsx;
 			int y = (i % 3) * 15 + 10;
 			drawAt(g2d, x, y, type.getColor(), type.getDesc());
 			i++;

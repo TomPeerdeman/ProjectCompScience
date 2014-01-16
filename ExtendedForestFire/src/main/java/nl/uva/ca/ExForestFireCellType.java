@@ -9,16 +9,16 @@ import java.awt.Color;
 import nl.tompeerdeman.ca.CellType;
 
 public enum ExForestFireCellType implements CellType {
-	WATER("Water", new Color(0x33DDDD)),
 	TREE("Tree", new Color(0x336600)),
 	BUSH("Bush", new Color(0x33CC11)),
+	FIRE_FIGHTER("Fire Fighters", Color.YELLOW),
 	BURNING_TREE("Burning tree", new Color(0xFF2200)),
 	BURNING_BUSH("Burning bush", new Color(0xFF5500)),
 	BURNT_TREE("Burnt tree", Color.BLACK),
 	BURNT_BUSH("Burnt bush", Color.BLACK),
 	EXTINGUISHED_TREE("Extinguished tree", new Color(0x37799)),
 	EXTINGUISHED_BUSH("Extinguished bush", new Color(0x39999)),
-	FIRE_FIGHTER("Fire Fighters", Color.YELLOW),
+	WATER("Water", new Color(0x33DDDD)),
 	PATH("Path", new Color(0xCC8811));
 	
 	private final String desc;
