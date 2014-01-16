@@ -522,12 +522,14 @@ public class ExForestFire extends SimulatableSystem {
 					if(rand.nextInt(2) < 0) {
 						grid.setCell(new ExForestFireCell(xcurr - 1, ycurr,
 								cellType));
-						ycurr = triangleUpDownFix(xcurr - 1, ycurr, yend, cellType);
+						ycurr =
+							triangleUpDownFix(xcurr - 1, ycurr, yend, cellType);
 					}
 					else {
 						grid.setCell(new ExForestFireCell(xcurr + 1, ycurr,
 								cellType));
-						ycurr = triangleUpDownFix(xcurr + 1, ycurr, yend, cellType);
+						ycurr =
+							triangleUpDownFix(xcurr + 1, ycurr, yend, cellType);
 					}
 				}
 				else if(xcurr == grid.grid.length - 1) {
@@ -568,7 +570,8 @@ public class ExForestFire extends SimulatableSystem {
 		// }
 	}
 	
-	private int triangleUpDownFix(int xcurr, int ycurr, int yend, ExForestFireCellType cellType) {
+	private int triangleUpDownFix(int xcurr, int ycurr, int yend,
+			ExForestFireCellType cellType) {
 		// i'm stuck going up
 		if(ycurr < yend) {
 			grid.setCell(new ExForestFireCell(xcurr, ycurr + 1,
@@ -619,6 +622,9 @@ public class ExForestFire extends SimulatableSystem {
 						case EXTINGUISHED_TREE:
 							// Reset all variants of TREE back to a TREE type.
 							cell.setType(ExForestFireCellType.TREE);
+							break;
+						case FIRE_FIGHTER:
+							cell.removeFireFighter(grid);
 							break;
 						default:
 							// Ignore water and existing BUSH & TREE cell's.
