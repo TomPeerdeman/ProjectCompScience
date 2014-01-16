@@ -298,10 +298,9 @@ public class ExForestFire extends SimulatableSystem {
 		// System.out.println();
 		
 		int nConnections[] = new int[nPoints];
+		boolean[][] connected = new boolean[nPoints][nPoints];
 		
 		for(int j = 0; j < nPoints; j++) {
-			grid.setCell(new ExForestFireCell(points[j][0], points[j][1],
-					ExForestFireCellType.PATH));
 			/*
 			 * Don't build a road from this node if it already has 2 or more
 			 * connections.
@@ -317,7 +316,8 @@ public class ExForestFire extends SimulatableSystem {
 				// Skip self and nodes that already have 3 connections
 				if(i == j || nConnections[i] >= 3
 						|| points[j][0] == points[i][0]
-						|| points[j][1] == points[i][1])
+						|| points[j][1] == points[i][1] || connected[j][i]
+						|| connected[i][j])
 					continue;
 				
 				double d =
@@ -332,6 +332,8 @@ public class ExForestFire extends SimulatableSystem {
 			if(minIdx >= 0) {
 				nConnections[j]++;
 				nConnections[minIdx]++;
+				connected[j][minIdx] = true;
+				connected[minIdx][j] = true;
 				
 				if(type == 0 || type == 1) {
 					randPathStd(points[j][0], points[j][1], points[minIdx][0],
@@ -343,13 +345,18 @@ public class ExForestFire extends SimulatableSystem {
 				}
 			}
 		}
+		
+		for(int j = 0; j < nPoints; j++) {
+			grid.setCell(new ExForestFireCell(points[j][0], points[j][1],
+					ExForestFireCellType.BURNT_BUSH));
+		}
 	}
 	
 	private double pointDist(int startX, int startY, int endX, int endY) {
 		return Math.abs(startX - endX) + Math.abs(startY - endY);
 	}
 	
-	public void randPathStd(int xstart, int ystart, int xend, int yend,
+	private void randPathStd(int xstart, int ystart, int xend, int yend,
 			ExForestFireCellType cellType) {
 		int xcurr = xstart;
 		int ycurr = ystart;
@@ -434,7 +441,7 @@ public class ExForestFire extends SimulatableSystem {
 		// }
 	}
 	
-	public void randPathTriangle(int xstart, int ystart, int xend, int yend,
+	private void randPathTriangle(int xstart, int ystart, int xend, int yend,
 			ExForestFireCellType cellType) {
 		int xcurr = xstart;
 		int ycurr = ystart;
@@ -549,15 +556,15 @@ public class ExForestFire extends SimulatableSystem {
 			ExForestFireCell cell =
 				(ExForestFireCell) grid.getCell(xcurr, ycurr);
 			if(cell == null)
-				grid.setCell(new ExForestFireCell(xcurr, ycurr,
-						ExForestFireCellType.WATER));
-			else if(same == false)
+				grid.setCell(new ExForestFireCell(xcurr, ycurr, cellType));
+			else if(cellType == ExForestFireCellType.PATH)
+				grid.getCell(xcurr, ycurr).setType(cellType);
+			else if(!same)
 				break;
 			
 			distX = Math.abs(xcurr - xend);
 			distY = Math.abs(ycurr - yend);
 			distance = distX + distY;
-			
 		}
 		
 		// Debug, see starting points
@@ -570,7 +577,7 @@ public class ExForestFire extends SimulatableSystem {
 		// }
 	}
 	
-	public int triangleUpDownFix(int xcurr, int ycurr, int yend) {
+	private int triangleUpDownFix(int xcurr, int ycurr, int yend) {
 		// i'm stuck going up
 		if(ycurr < yend) {
 			grid.setCell(new ExForestFireCell(xcurr, ycurr + 1,
