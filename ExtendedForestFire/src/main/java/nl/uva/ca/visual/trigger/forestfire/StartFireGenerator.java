@@ -52,10 +52,13 @@ public class StartFireGenerator extends
 			StartFireAction a = (StartFireAction) parent;
 			if(a.isSinglePoint()) {
 				guiSinglePoint();
+				xLowerField.setText(String.valueOf(a.getLowerPoint().x));
+				yLowerField.setText(String.valueOf(a.getLowerPoint().y));
 			} else {
 				guiMultiPoint();
 				xUpperField.setText(String.valueOf(a.getUpperPoint().x));
 				yUpperField.setText(String.valueOf(a.getUpperPoint().y));
+				
 				xLowerField.setText(String.valueOf(a.getLowerPoint().x));
 				yLowerField.setText(String.valueOf(a.getLowerPoint().y));
 				

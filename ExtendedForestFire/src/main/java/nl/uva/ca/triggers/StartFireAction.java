@@ -49,10 +49,21 @@ public class StartFireAction implements TriggerAction {
 		Random rand = new Random();
 		while(n < nPoints && tries < 100) {
 			tries++;
-			int x =
-				rand.nextInt(upperPoint.x - lowerPoint.x + 1) + lowerPoint.x;
-			int y =
-				rand.nextInt(upperPoint.y - lowerPoint.y + 1) + lowerPoint.y;
+			int x;
+			if(upperPoint.x >= 0)
+				x =
+					rand.nextInt(upperPoint.x - lowerPoint.x + 1)
+							+ lowerPoint.x;
+			else
+				x = lowerPoint.x;
+			
+			int y;
+			if(upperPoint.y >= 0)
+				y =
+					rand.nextInt(upperPoint.y - lowerPoint.y + 1)
+							+ lowerPoint.y;
+			else
+				y = lowerPoint.x;
 			
 			ExForestFireCell cell =
 				(ExForestFireCell) ffdata.grid.getCell(x, y);
