@@ -383,20 +383,12 @@ public class ExForestFireCell extends Cell {
 						// move to nearest fire
 						if(distToFire[1] < this.x) {
 							// same row
-							if(distToFire[2] == this.y) {
-								newX--;
-							}
-							// not the same row
-							else if(this.y % 2 == 0)
+							if(distToFire[2] == this.y || this.y % 2 == 0)
 								newX--;
 						}
 						else if(distToFire[1] > this.x) {
 							// same row
-							if(distToFire[2] == this.y) {
-								newX++;
-							}
-							// not the same row
-							else if(this.y % 2 == 1)
+							if(distToFire[2] == this.y || this.y % 2 == 1)
 								newX++;
 						}
 						
