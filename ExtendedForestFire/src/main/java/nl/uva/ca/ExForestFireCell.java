@@ -215,80 +215,30 @@ public class ExForestFireCell extends Cell {
 					return removeFireFighter(grid);
 				}
 				else {
-					ExForestFireCell newCell;
 					// initialize max distance to fire
 					// can't be more than 200
-					int distToFire = 200;
-					int newDistance;
-					int indexX = this.x, indexY = this.y;
 					int newX = this.x, newY = this.y;
-					// search nearest fire
-					for(int i = Math.max(0, this.x - 4); i < Math.min(
-							grid.grid[0].length, this.x + 4); i++) {
-						for(int j = Math.max(0, this.y - 4); j < Math.min(
-								grid.grid.length, this.y + 4); j++) {
-							ExForestFireCell cell =
-								(ExForestFireCell) grid.getCell(i, j);
-							if(cell != null) {
-								if(cell.getType() == ExForestFireCellType.BURNING_TREE
-										|| cell.getType() == ExForestFireCellType.BURNING_BUSH
-										|| cell.getType() == ExForestFireCellType.PATH) {
-									newDistance =
-										Math.abs(j - this.x)
-												+ Math.abs(i - this.y);
-									
-									// Prefer fire over path.
-									if(cell.getType() == ExForestFireCellType.PATH)
-										newDistance += 18;
-									
-									if(newDistance < distToFire) {
-										distToFire = newDistance;
-										indexX = i;
-										indexY = j;
-									}
-								}
-							}
-						}
-					}
-					// System.out.println("Distance to fire: " + distToFire +
+					int[] distToFire = {200, this.x, this.y};
+					
+					distToFire = checkForFire(grid, distToFire);					
+					// System.out.println("Distance to fire: " + distToFire[0] +
 					// " Im at: (" +this.x+ " ; " +this.y+ ") Fire is at: ("
-					// +indexX+" ; "+ indexY+ ")");
-					if(distToFire > 1 && distToFire < 200) {
+					// +distToFire[1]+" ; "+ distToFire[2]+ ")");
+					
+					// search nearest fire
+					if(distToFire[0] > 1 && distToFire[0] < 200) {
 						// move to nearest fire
-						if(indexX < this.x)
+						if(distToFire[1] < this.x)
 							newX--;
-						else if(indexX > this.x)
+						else if(distToFire[1] > this.x)
 							newX++;
-						if(indexY < this.y)
+						if(distToFire[2] < this.y)
 							newY--;
-						else if(indexY > this.y)
+						else if(distToFire[2] > this.y)
 							newY++;
 						// System.out.println("Im at: (" +this.x+ " ; " +this.y+
 						// ") im going to: (" +newX+" ; "+ newY+ ")");
-						newCell = (ExForestFireCell) grid.getCell(newX, newY);
-						
-						if(newCell != null
-								&& newCell.getType() != ExForestFireCellType.BURNING_BUSH
-								&& newCell.getType() != ExForestFireCellType.BURNING_TREE
-								&& newCell.getType() != ExForestFireCellType.FIRE_FIGHTER) {
-							// System.out.println("i wasnt null");
-							newCell.addFireFighter();
-							sim.addSimulatable(newCell);
-						} else if(newCell == null) {
-							// System.out.println("i was null");
-							newCell =
-								new ExForestFireCell(newX, newY, null);
-							// Add new cell to grid.
-							grid.setCell(newCell);
-							// New cell is FFighter only.
-							newCell.addFireFighter();
-							sim.addSimulatable(newCell);
-						}
-						else
-							return true;
-						
-						// Remove FFighter from this cell.
-						return removeFireFighter(grid);
+						return walkFireFighter(grid, newX, newY, sim);
 					}
 				}
 				// System.out.println("");
@@ -424,6 +374,50 @@ public class ExForestFireCell extends Cell {
 			else if(type == ExForestFireCellType.FIRE_FIGHTER) {
 				if(!ffdata.fireFighters) {
 					return removeFireFighter(grid);
+				}
+				else{
+					// initialize max distance to fire
+					// can't be more than 200
+					int newX = this.x, newY = this.y;
+					int[] distToFire = {200, this.x, this.y};
+					
+					distToFire = checkForFire(grid, distToFire);
+					// System.out.println("Distance to fire: " + distToFire[0] +
+					// " Im at: (" +this.x+ " ; " +this.y+ ") Fire is at: ("
+					// +distToFire[1]+" ; "+ distToFire[2]+ ")");
+					if(distToFire[0] > 1 && distToFire[0] < 200) {
+						// move to nearest fire
+						if(distToFire[1] < this.x){
+							// same row
+							if(distToFire[2] == this.y){
+								newX++;								
+							}
+							// not the same row
+							else if(this.y % 2 == 0)
+								newX--;
+						}
+						else if(distToFire[1] > this.x){
+							// same row
+							if(distToFire[2] == this.y){
+								newX++;								
+							}
+							// not the same row
+							else if(this.y % 2 == 1)
+								newX++;
+						}
+						
+						if(distToFire[2] < this.y)
+							newY--;
+						else if(distToFire[2] > this.y)
+							newY++;
+					}
+					// System.out.println("Distance to fire: " + distToFire[0] +
+					// " Im at: (" +this.x+ " ; " +this.y+ ") Fire is at: ("
+					//  +distToFire[1]+" ; "+ distToFire[2]+ ") moving to: ("
+					//  +newX+" ; "+ newY+ ")");
+					// System.out.println("Im at: (" +this.x+ " ; " +this.y+
+					// ") im going to: (" +newX+" ; "+ newY+ ")");
+					return walkFireFighter(grid, newX, newY, sim);
 				}
 			}
 			else if(type == ExForestFireCellType.PATH) {
@@ -672,5 +666,61 @@ public class ExForestFireCell extends Cell {
 			if(r.nextInt(26) == 19)
 				addFireFighter();
 		}
+	}
+	
+	private int[] checkForFire(Grid grid, int[] distToFire){
+		int newDistance;
+		// search nearest fire
+		for(int i = Math.max(0, this.x - 3); i < Math.min(
+				grid.grid[0].length, this.x + 3); i++) {
+			for(int j = Math.max(0, this.y - 3); j < Math.min(
+					grid.grid.length, this.y + 3); j++) {
+				ExForestFireCell cell =
+					(ExForestFireCell) grid.getCell(i, j);
+				if(cell != null) {
+					if(cell.getType() == ExForestFireCellType.BURNING_TREE
+							|| cell.getType() == ExForestFireCellType.BURNING_BUSH) {
+						newDistance =
+							Math.abs(j - this.x)
+									+ Math.abs(i - this.y);
+						if(newDistance < distToFire[0]) {
+							distToFire[0] = newDistance;
+							distToFire[1] = i;
+							distToFire[2] = j;
+						}
+					}
+				}
+			}
+		}
+		return distToFire;
+	}
+	
+	private boolean walkFireFighter(Grid grid, int newX, int newY, Simulator sim){
+		ExForestFireCell newCell;
+
+		newCell = (ExForestFireCell) grid.getCell(newX, newY);
+		
+		if(newCell != null
+				&& newCell.getType() != ExForestFireCellType.BURNING_BUSH
+				&& newCell.getType() != ExForestFireCellType.BURNING_TREE
+				&& newCell.getType() != ExForestFireCellType.FIRE_FIGHTER) {
+			// System.out.println("i wasnt null");
+			newCell.addFireFighter();
+			sim.addSimulatable(newCell);
+		} else if(newCell == null) {
+			// System.out.println("i was null");
+			newCell =
+				new ExForestFireCell(newX, newY, null);
+			// Add new cell to grid.
+			grid.setCell(newCell);
+			// New cell is FFighter only.
+			newCell.addFireFighter();
+			sim.addSimulatable(newCell);
+		}
+		else
+			return true;
+		
+		// Remove FFighter from this cell.
+		return removeFireFighter(grid);
 	}
 }
