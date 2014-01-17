@@ -598,7 +598,7 @@ public class ExForestFire extends SimulatableSystem {
 	
 	public void igniteGrid() {
 		// Fill the bottom line of the grid with burning vegetation.
-		/*for(int x = 0; x < grid.grid.length; x++) {
+		for(int x = 0; x < grid.grid.length; x++) {
 			ExForestFireCell cell = (ExForestFireCell) grid.getCell(x, 0);
 			if(cell != null) {
 				// Set cell's of type BUSH to BURNING_BUSH and TREE to
@@ -610,11 +610,7 @@ public class ExForestFire extends SimulatableSystem {
 					cell.setType(ExForestFireCellType.BURNING_TREE);
 				}
 			}
-		}*/
-		grid.setCell(new ExForestFireCell(23, 23,
-				ExForestFireCellType.BURNING_TREE));
-		grid.setCell(new ExForestFireCell(25, 25,
-				ExForestFireCellType.FIRE_FIGHTER));
+		}
 	}
 	
 	public void resetGrid() {

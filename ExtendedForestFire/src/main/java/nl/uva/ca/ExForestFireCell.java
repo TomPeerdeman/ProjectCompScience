@@ -405,12 +405,6 @@ public class ExForestFireCell extends Cell {
 						else if(distToFire[2] > this.y)
 							newY++;
 					}
-					// System.out.println("Distance to fire: " + distToFire[0] +
-					// " Im at: (" +this.x+ " ; " +this.y+ ") Fire is at: ("
-					// +distToFire[1]+" ; "+ distToFire[2]+ ") moving to: ("
-					// +newX+" ; "+ newY+ ")");
-					// System.out.println("Im at: (" +this.x+ " ; " +this.y+
-					// ") im going to: (" +newX+" ; "+ newY+ ")");
 					return walkFireFighter(grid, newX, newY, sim);
 				}
 			}
@@ -534,6 +528,28 @@ public class ExForestFireCell extends Cell {
 			else if(type == ExForestFireCellType.FIRE_FIGHTER) {
 				if(!ffdata.fireFighters) {
 					return removeFireFighter(grid);
+				}
+				else{
+					// initialize max distance to fire
+					// can't be more than 200
+					int newX = this.x, newY = this.y;
+					int[] distToFire = {200, this.x, this.y};
+					
+					distToFire = searchFire(grid, distToFire);
+					if(distToFire[0] > 1 && distToFire[0] < 200) {
+						// move to nearest fire
+						if(distToFire[2] < this.y && ((this.y % 2 == 0 && this.x % 2 == 0) || (this.y % 2 == 1 && this.x % 2 == 1))){
+							newY--;
+						}
+						else if(distToFire[2] > this.y && ((this.y % 2 == 1 && this.x % 2 == 0) || (this.y % 2 == 0 && this.x % 2 == 1))){
+							newY++;
+						}
+						else if(distToFire[1] < this.x)
+							newX--;
+						else if(distToFire[1] > this.x)
+							newX++;
+					}
+					return walkFireFighter(grid, newX, newY, sim);
 				}
 			}
 			else if(type == ExForestFireCellType.PATH) {
