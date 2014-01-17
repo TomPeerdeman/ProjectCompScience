@@ -384,7 +384,7 @@ public class ExForestFireCell extends Cell {
 						if(distToFire[1] < this.x) {
 							// same row
 							if(distToFire[2] == this.y) {
-								newX++;
+								newX--;
 							}
 							// not the same row
 							else if(this.y % 2 == 0)
