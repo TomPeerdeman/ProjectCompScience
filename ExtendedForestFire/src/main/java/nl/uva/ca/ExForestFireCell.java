@@ -211,7 +211,6 @@ public class ExForestFireCell extends Cell {
 			}
 			else if(type == ExForestFireCellType.FIRE_FIGHTER) {
 				if(!ffdata.fireFighters) {
-					System.out.println("imah ff");
 					return removeFireFighter(grid);
 				}
 				else {
@@ -288,15 +287,7 @@ public class ExForestFireCell extends Cell {
 				// System.out.println("");
 			}
 			else if(type == ExForestFireCellType.PATH) {
-				if(ffdata.fireFighters) {
-					// maybe break here after x ticks fire fighter adding?
-					
-					Random r = new Random();
-					// Set to firefighter in 1% of the cases (change to variable
-					// maybe?)
-					if(r.nextInt(101) == 1)
-						addFireFighter();
-				}
+				setPathToFireFighter(ffdata);
 			}
 		}
 		else if(ffdata.type == 1) {
@@ -423,6 +414,14 @@ public class ExForestFireCell extends Cell {
 					}
 				}
 			}
+			else if(type == ExForestFireCellType.FIRE_FIGHTER) {
+				if(!ffdata.fireFighters) {
+					return removeFireFighter(grid);
+				}
+			}
+			else if(type == ExForestFireCellType.PATH) {
+				setPathToFireFighter(ffdata);
+			}
 		}
 		
 		else if(ffdata.type == 2) {
@@ -537,6 +536,14 @@ public class ExForestFireCell extends Cell {
 					}
 				}
 			}
+			else if(type == ExForestFireCellType.FIRE_FIGHTER) {
+				if(!ffdata.fireFighters) {
+					return removeFireFighter(grid);
+				}
+			}
+			else if(type == ExForestFireCellType.PATH) {
+				setPathToFireFighter(ffdata);
+			}
 		}
 		
 		if(type == ExForestFireCellType.BURNING_BUSH) {
@@ -646,5 +653,17 @@ public class ExForestFireCell extends Cell {
 			ffdata.bushes--;
 			sim.addSimulatable(c);
 		}
+	}
+	
+	private void setPathToFireFighter(ExForestFireData ffdata){
+		if(ffdata.fireFighters) {
+			// maybe break here after x ticks fire fighter adding?
+			
+			Random r = new Random();
+			// Set to firefighter in 1% of the cases (change to variable
+			// maybe?)
+			if(r.nextInt(101) == 1)
+				addFireFighter();
+		}		
 	}
 }
