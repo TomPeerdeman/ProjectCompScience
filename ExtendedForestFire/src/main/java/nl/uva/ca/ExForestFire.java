@@ -6,6 +6,7 @@ package nl.uva.ca;
 
 import java.util.Random;
 
+import nl.tompeerdeman.ca.Cell;
 import nl.tompeerdeman.ca.Grid;
 import nl.tompeerdeman.ca.SimulatableSystem;
 
@@ -297,6 +298,14 @@ public class ExForestFire extends SimulatableSystem {
 		boolean[][] connected = new boolean[nPoints][nPoints];
 		
 		for(int j = 0; j < nPoints; j++) {
+			Cell c = grid.getCell(points[j][0], points[j][1]);
+			if(c != null && c.getType() != ExForestFireCellType.PATH) {
+				c.setType(ExForestFireCellType.PATH);
+			} else if(c == null) {
+				grid.setCell(new ExForestFireCell(points[j][0], points[j][1],
+						ExForestFireCellType.PATH));
+			}
+			
 			/*
 			 * Don't build a road from this node if it already has 2 or more
 			 * connections.

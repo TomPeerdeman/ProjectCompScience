@@ -33,7 +33,8 @@ public class ExForestFireCell extends Cell {
 		return type == ExForestFireCellType.BURNING_BUSH
 				|| type == ExForestFireCellType.BURNING_TREE
 				|| type == ExForestFireCellType.FIRE_FIGHTER
-				|| type == ExForestFireCellType.PATH;
+				|| (type == ExForestFireCellType.PATH && (x == 0 || x == 99
+						|| y == 0 || y == 99));
 	}
 	
 	public void addFireFighter() {
@@ -222,18 +223,24 @@ public class ExForestFireCell extends Cell {
 					int indexX = this.x, indexY = this.y;
 					int newX = this.x, newY = this.y;
 					// search nearest fire
-					for(int i = Math.max(0, this.x - 3); i < Math.min(
-							grid.grid[0].length, this.x + 3); i++) {
-						for(int j = Math.max(0, this.y - 3); j < Math.min(
-								grid.grid.length, this.y + 3); j++) {
+					for(int i = Math.max(0, this.x - 4); i < Math.min(
+							grid.grid[0].length, this.x + 4); i++) {
+						for(int j = Math.max(0, this.y - 4); j < Math.min(
+								grid.grid.length, this.y + 4); j++) {
 							ExForestFireCell cell =
 								(ExForestFireCell) grid.getCell(i, j);
 							if(cell != null) {
 								if(cell.getType() == ExForestFireCellType.BURNING_TREE
-										|| cell.getType() == ExForestFireCellType.BURNING_BUSH) {
+										|| cell.getType() == ExForestFireCellType.BURNING_BUSH
+										|| cell.getType() == ExForestFireCellType.PATH) {
 									newDistance =
 										Math.abs(j - this.x)
 												+ Math.abs(i - this.y);
+									
+									// Prefer fire over path.
+									if(cell.getType() == ExForestFireCellType.PATH)
+										newDistance += 18;
+									
 									if(newDistance < distToFire) {
 										distToFire = newDistance;
 										indexX = i;
@@ -243,9 +250,9 @@ public class ExForestFireCell extends Cell {
 							}
 						}
 					}
-					 // System.out.println("Distance to fire: " + distToFire +
-					 // " Im at: (" +this.x+ " ; " +this.y+ ") Fire is at: ("
-					 // +indexX+" ; "+ indexY+ ")");
+					// System.out.println("Distance to fire: " + distToFire +
+					// " Im at: (" +this.x+ " ; " +this.y+ ") Fire is at: ("
+					// +indexX+" ; "+ indexY+ ")");
 					if(distToFire > 1 && distToFire < 200) {
 						// move to nearest fire
 						if(indexX < this.x)
@@ -655,15 +662,15 @@ public class ExForestFireCell extends Cell {
 		}
 	}
 	
-	private void setPathToFireFighter(ExForestFireData ffdata){
+	private void setPathToFireFighter(ExForestFireData ffdata) {
 		if(ffdata.fireFighters) {
 			// maybe break here after x ticks fire fighter adding?
 			
 			Random r = new Random();
-			// Set to firefighter in 1% of the cases (change to variable
+			// Set to firefighter in 4% of the cases (change to variable
 			// maybe?)
-			if(r.nextInt(101) == 1)
+			if(r.nextInt(26) == 19)
 				addFireFighter();
-		}		
+		}
 	}
 }
