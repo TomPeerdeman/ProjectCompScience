@@ -239,9 +239,7 @@ public class ExForestFireCell extends Cell {
 						
 						return walkFireFighter(grid, newX, newY, sim);
 					}
-					// distToFire[0] is what if fire in neighbor cell?
 					else if(distToFire[0] == 1){
-						System.out.println("Im trying to extinguish");
 						int x, y;
 						double randomDouble;
 						for(int ny = 0; ny < 3; ny++) {
@@ -249,14 +247,11 @@ public class ExForestFireCell extends Cell {
 								x = this.x + nx - 1;
 								y = this.y - ny + 1;
 								if(x >= 0 && x < 100 && y >= 0 && y < 100){
-									System.out.println("Inside Grid");
 									c = (ExForestFireCell) grid.getCell(x, y);
 									// If a tree is burning, try to extinguish
 									if(c != null && c.getType() == ExForestFireCellType.BURNING_TREE) {
 										randomDouble = Math.random();
-										System.out.println("Im a burning tree, random: " + randomDouble + " <= " + ffdata.extinguishProb);
 										if (randomDouble <= ffdata.extinguishProb){
-											System.out.println("Im an extinguished tree");
 											c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
 											ffdata.burning--;
 											ffdata.trees++;
@@ -265,9 +260,7 @@ public class ExForestFireCell extends Cell {
 									// If a bush is burning, try to extinguish
 									else if(c != null && c.getType() == ExForestFireCellType.BURNING_BUSH) {
 										randomDouble = Math.random();
-										System.out.println("Im a burning bush, random: " + randomDouble + " <= " + ffdata.extinguishProb);
 										if (randomDouble <= ffdata.extinguishProb){
-											System.out.println("Im an extinguished bush");
 											c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
 											ffdata.burning--;
 											ffdata.bushes++;
@@ -438,8 +431,47 @@ public class ExForestFireCell extends Cell {
 							newY--;
 						else if(distToFire[2] > this.y)
 							newY++;
-					}
 					return walkFireFighter(grid, newX, newY, sim);
+					}
+					else if(distToFire[0] == 1){
+						int x, y;
+						double randomDouble;
+						for(int ny = 0; ny < 3; ny++) {
+							for(int nx = 0; nx < 3; nx++) {
+								if((ny == 0 && (nx == 1 || nx == 2))
+										|| (ny == 1 && (nx == 0 || nx == 2))
+										|| (ny == 2 && (nx == 1 || nx == 2))) {
+									if(this.y % 2 == 1 || ny == 1)
+										x = this.x + nx - 1;
+									else
+										x = this.x + nx - 2;
+									// Grid y increases north so cell above is y + 1
+									y = this.y - ny + 1;
+									if(x >= 0 && x < 100 && y >= 0 && y < 100){
+										c = (ExForestFireCell) grid.getCell(x, y);
+										// If a tree is burning, try to extinguish
+										if(c != null && c.getType() == ExForestFireCellType.BURNING_TREE) {
+											randomDouble = Math.random();
+											if (randomDouble <= ffdata.extinguishProb){
+												c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
+												ffdata.burning--;
+												ffdata.trees++;
+											}
+										}
+										// If a bush is burning, try to extinguish
+										else if(c != null && c.getType() == ExForestFireCellType.BURNING_BUSH) {
+											randomDouble = Math.random();
+											if (randomDouble <= ffdata.extinguishProb){
+												c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
+												ffdata.burning--;
+												ffdata.bushes++;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 			else if(type == ExForestFireCellType.PATH) {
@@ -726,8 +758,8 @@ public class ExForestFireCell extends Cell {
 							|| cell.getType() == ExForestFireCellType.BURNING_BUSH
 							|| cell.getType() == ExForestFireCellType.PATH) {
 						newDistance =
-							Math.abs(j - this.x)
-									+ Math.abs(i - this.y);
+							Math.abs(i - this.x)
+									+ Math.abs(j - this.y);
 						
 						// Prefer fire over path.
 						if(cell.getType() == ExForestFireCellType.PATH) {
