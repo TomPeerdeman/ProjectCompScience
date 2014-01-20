@@ -614,8 +614,59 @@ public class ExForestFireCell extends Cell {
 							newX--;
 						else if(distToFire[1] > this.x)
 							newX++;
+						return walkFireFighter(grid, newX, newY, sim);
 					}
-					return walkFireFighter(grid, newX, newY, sim);
+					else if(distToFire[0] == 1){
+						int x=-1, y=-1;
+						double randomDouble;
+						boolean area;
+						for(int ny = 0; ny < 3; ny++) {
+							for(int nx = 0; nx < 3; nx++) {
+								area = false;
+								if((ny == 1 && this.x % 2 == 1 && this.y % 2 == 0)
+										|| (ny == 1 && this.x % 2 == 0 && this.y % 2 == 1)
+										|| (ny == 0 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 0)
+										|| (ny == 0 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 1)) {
+									x = this.x + nx - 1;
+									// Grid y increases north so cell above is y + 1
+									y = this.y - ny + 1;
+									area = true;
+								}
+								else if((ny == 1 && this.x % 2 == 0 && this.y % 2 == 0)
+										|| (ny == 1 && this.x % 2 == 1 && this.y % 2 == 1)
+										|| (ny == 2 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 0)
+										|| (ny == 2 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 1)) {
+									x = this.x + nx - 1;
+									// Grid y increases north so cell above is y + 1
+									y = this.y - ny + 1;
+									area = true;
+								}
+								if(area){
+									if(x >= 0 && x < 100 && y >= 0 && y < 100){
+										c = (ExForestFireCell) grid.getCell(x, y);
+										// If a tree is burning, try to extinguish
+										if(c != null && c.getType() == ExForestFireCellType.BURNING_TREE) {
+											randomDouble = Math.random();
+											if (randomDouble <= ffdata.extinguishProb){
+												c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
+												ffdata.burning--;
+												ffdata.trees++;
+											}
+										}
+										// If a bush is burning, try to extinguish
+										else if(c != null && c.getType() == ExForestFireCellType.BURNING_BUSH) {
+											randomDouble = Math.random();
+											if (randomDouble <= ffdata.extinguishProb){
+												c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
+												ffdata.burning--;
+												ffdata.bushes++;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 			else if(type == ExForestFireCellType.PATH) {
