@@ -53,9 +53,7 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JLabel barren;
 	private JLabel densityText;
 	private JLabel density2Text;
-	private JLabel tempText;
 	private JLabel typeText;
-	private JLabel firefighters;
 	private JLabel randwater;
 	private JLabel fracBurned;
 	// oppReached to be removed later
@@ -63,11 +61,9 @@ public class ExForestFireDataPanel extends JPanel implements
 	
 	private JComboBox<String> gridtype;
 	private JComboBox<String> waterCheck;
-	private JComboBox<String> ffCheck;
 	
 	private JTextField density;
 	private JTextField density2;
-	private JTextField temp;
 	private JTextField fftresh;
 	private JTextField ffext;
 	
@@ -98,14 +94,11 @@ public class ExForestFireDataPanel extends JPanel implements
 		barren = new JLabel();
 		densityText = new JLabel("Tree Density: ", SwingConstants.LEFT);
 		density2Text = new JLabel("Bush Density: ");
-		tempText = new JLabel("Temperature: ");
 		density = new JTextField("0.3");
 		density2 = new JTextField("0.3");
 		fftresh = new JTextField("0.3");
 		ffext = new JTextField("0.3");
-		temp = new JTextField("18");
 		typeText = new JLabel("Grid Type: ");
-		firefighters = new JLabel("Firefighters:");
 		randwater = new JLabel("Generate random water:");
 		
 		triggerModel = new DefaultListModel<Trigger>();
@@ -127,10 +120,8 @@ public class ExForestFireDataPanel extends JPanel implements
 		
 		gridtype = new JComboBox<String>(GridStr);
 		waterCheck = new JComboBox<String>(YesNoStr);
-		ffCheck = new JComboBox<String>(YesNoStr);
 		
 		// Standard no firefighters, set to false
-		ffCheck.setSelectedIndex(1);
 		fftresh.setEnabled(false);
 		ffext.setEnabled(false);
 		gridtype.addActionListener(new ActionListener() {
@@ -145,12 +136,7 @@ public class ExForestFireDataPanel extends JPanel implements
 				updateWater();
 			}
 		});
-		ffCheck.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				updateFirefighter();
-			}
-		});
+		
 		c.weightx = 1;
 		
 		c.gridx = 0;
@@ -192,16 +178,9 @@ public class ExForestFireDataPanel extends JPanel implements
 		add(density2Text, c);
 		
 		c.gridx = 1;
-		c.gridy = 2;
-		add(tempText, c);
-		
-		c.gridx = 1;
 		c.gridy = 3;
 		add(randwater, c);
-		
-		c.gridx = 1;
-		c.gridy = 4;
-		add(firefighters, c);
+
 		
 		c.gridx = 1;
 		c.gridy = 5;
@@ -216,17 +195,10 @@ public class ExForestFireDataPanel extends JPanel implements
 		c.gridy = 1;
 		add(density2, c);
 		
-		c.gridx = 2;
-		c.gridy = 2;
-		add(temp, c);
 		
 		c.gridx = 2;
 		c.gridy = 3;
 		add(waterCheck, c);
-		
-		c.gridx = 2;
-		c.gridy = 4;
-		add(ffCheck, c);
 		
 		c.gridx = 2;
 		c.gridy = 5;
@@ -363,21 +335,6 @@ public class ExForestFireDataPanel extends JPanel implements
 		}
 	}
 	
-	public void updateFirefighter() {
-		int i = ffCheck.getSelectedIndex();
-		switch(i) {
-			case 0:
-				fftresh.setEnabled(true);
-				ffext.setEnabled(true);
-				break;
-			case 1:
-				fftresh.setEnabled(false);
-				ffext.setEnabled(false);
-				break;
-		
-		}
-	}
-	
 	public void updateType() {
 		int i = gridtype.getSelectedIndex();
 		switch(i) {
@@ -428,13 +385,11 @@ public class ExForestFireDataPanel extends JPanel implements
 	public void enableDropdowns() {
 		gridtype.setEnabled(true);
 		waterCheck.setEnabled(true);
-		ffCheck.setEnabled(true);
 	}
 	
 	public void disableDropdowns() {
 		gridtype.setEnabled(false);
 		waterCheck.setEnabled(false);
-		ffCheck.setEnabled(false);
 	}
 	
 	/*
