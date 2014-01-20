@@ -56,6 +56,24 @@ public class ExForestFireCell extends Cell {
 		}
 		return shouldSimulate();
 	}
+	
+	public boolean murderFireFighter(Grid grid){
+		type = secondaryType;
+		secondaryType = null;
+		if(type == null) {
+			grid.clearCell(this.x, this.y);
+			return false;
+		}
+		else if(type == ExForestFireCellType.TREE) {
+			type = ExForestFireCellType.BURNING_TREE;
+			return true;
+		}
+		else if(type == ExForestFireCellType.BUSH) {
+			type = ExForestFireCellType.BURNING_BUSH;
+			return true;
+		}
+		return false;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -236,12 +254,21 @@ public class ExForestFireCell extends Cell {
 						// if there are fires around me, i could die
 						if(fireCount > 0){
 							// exponentially increasing chance of death 
-							int deathProb = 2^fireCount;
-							int died = rand.nextInt(256-deathProb)+1;
-							if(died == 1){
-								// i dead, set my cell to a burning something
+							double deathProb = Math.pow(1.49,(8-fireCount));
+							int deathProbInt  = (int) Math.round(deathProb);
+							// already died, no chance of escape
+							if(deathProbInt == 1){
+								// should this return?
+								return murderFireFighter(grid);
 							}
-							
+							// else probability
+							else{
+								int died = rand.nextInt(deathProbInt);
+								if(died == 0){
+									// should this return?
+									return murderFireFighter(grid);
+								}
+							}
 						}
 						else{
 							for(int ny = 0; ny < 3; ny++) {
