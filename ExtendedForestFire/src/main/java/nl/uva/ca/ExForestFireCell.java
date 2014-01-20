@@ -13,7 +13,6 @@ import nl.tompeerdeman.ca.Grid;
 import nl.tompeerdeman.ca.Simulator;
 
 public class ExForestFireCell extends Cell {
-	private double temperature;
 	private int nBurningTicks;
 	private CellType secondaryType;
 	
@@ -24,7 +23,6 @@ public class ExForestFireCell extends Cell {
 	 */
 	public ExForestFireCell(int x, int y, ExForestFireCellType t) {
 		super(x, y, t);
-		temperature = 0.0;
 		nBurningTicks = 0;
 	}
 	
@@ -58,30 +56,7 @@ public class ExForestFireCell extends Cell {
 		}
 		return shouldSimulate();
 	}
-	
-	/**
-	 * @return the temperature of this cell
-	 */
-	public double getTemperature() {
-		return temperature;
-	}
-	
-	/**
-	 * @param temperature
-	 *            the temperature to set
-	 */
-	public void setTemperature(double temperature) {
-		this.temperature = temperature;
-	}
-	
-	/**
-	 * @param temperature
-	 *            the temperature to add
-	 */
-	public void addTemperature(double temperature) {
-		this.temperature += temperature;
-	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -617,49 +592,66 @@ public class ExForestFireCell extends Cell {
 						return walkFireFighter(grid, newX, newY, sim);
 					}
 					else if(distToFire[0] == 1){
-						int x=-1, y=-1;
-						double randomDouble;
-						boolean area;
-						for(int ny = 0; ny < 3; ny++) {
-							for(int nx = 0; nx < 3; nx++) {
-								area = false;
-								if((ny == 1 && this.x % 2 == 1 && this.y % 2 == 0)
-										|| (ny == 1 && this.x % 2 == 0 && this.y % 2 == 1)
-										|| (ny == 0 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 0)
-										|| (ny == 0 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 1)) {
-									x = this.x + nx - 1;
-									// Grid y increases north so cell above is y + 1
-									y = this.y - ny + 1;
-									area = true;
-								}
-								else if((ny == 1 && this.x % 2 == 0 && this.y % 2 == 0)
-										|| (ny == 1 && this.x % 2 == 1 && this.y % 2 == 1)
-										|| (ny == 2 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 0)
-										|| (ny == 2 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 1)) {
-									x = this.x + nx - 1;
-									// Grid y increases north so cell above is y + 1
-									y = this.y - ny + 1;
-									area = true;
-								}
-								if(area){
-									if(x >= 0 && x < 100 && y >= 0 && y < 100){
-										c = (ExForestFireCell) grid.getCell(x, y);
-										// If a tree is burning, try to extinguish
-										if(c != null && c.getType() == ExForestFireCellType.BURNING_TREE) {
-											randomDouble = Math.random();
-											if (randomDouble <= ffdata.extinguishProb){
-												c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
-												ffdata.burning--;
-												ffdata.trees++;
+						if((this.x%2 == distToFire[1]%2 && this.y%2 == 0 && distToFire[2]%2 == 1)
+						   ||(this.x%2 == distToFire[1]%2 && this.y%2 == 1 && distToFire[2]%2 == 0)){
+							if(this.x == 0)
+								newX++;
+							else if(this.x == 99)
+								newX--;
+							else{
+								Random leftRight = new Random();
+								if(leftRight.nextInt(1) == 0)
+									newX--;
+								else
+									newX++;
+							}
+							return walkFireFighter(grid, newX, newY, sim);
+						}
+						else{
+							int x=-1, y=-1;
+							double randomDouble;
+							boolean area;
+							for(int ny = 0; ny < 3; ny++) {
+								for(int nx = 0; nx < 3; nx++) {
+									area = false;
+									if((ny == 1 && this.x % 2 == 1 && this.y % 2 == 0)
+											|| (ny == 1 && this.x % 2 == 0 && this.y % 2 == 1)
+											|| (ny == 0 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 0)
+											|| (ny == 0 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 1)) {
+										x = this.x + nx - 1;
+										// Grid y increases north so cell above is y + 1
+										y = this.y - ny + 1;
+										area = true;
+									}
+									else if((ny == 1 && this.x % 2 == 0 && this.y % 2 == 0)
+											|| (ny == 1 && this.x % 2 == 1 && this.y % 2 == 1)
+											|| (ny == 2 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 0)
+											|| (ny == 2 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 1)) {
+										x = this.x + nx - 1;
+										// Grid y increases north so cell above is y + 1
+										y = this.y - ny + 1;
+										area = true;
+									}
+									if(area){
+										if(x >= 0 && x < 100 && y >= 0 && y < 100){
+											c = (ExForestFireCell) grid.getCell(x, y);
+											// If a tree is burning, try to extinguish
+											if(c != null && c.getType() == ExForestFireCellType.BURNING_TREE) {
+												randomDouble = Math.random();
+												if (randomDouble <= ffdata.extinguishProb){
+													c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
+													ffdata.burning--;
+													ffdata.trees++;
+												}
 											}
-										}
-										// If a bush is burning, try to extinguish
-										else if(c != null && c.getType() == ExForestFireCellType.BURNING_BUSH) {
-											randomDouble = Math.random();
-											if (randomDouble <= ffdata.extinguishProb){
-												c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
-												ffdata.burning--;
-												ffdata.bushes++;
+											// If a bush is burning, try to extinguish
+											else if(c != null && c.getType() == ExForestFireCellType.BURNING_BUSH) {
+												randomDouble = Math.random();
+												if (randomDouble <= ffdata.extinguishProb){
+													c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
+													ffdata.burning--;
+													ffdata.bushes++;
+												}
 											}
 										}
 									}
