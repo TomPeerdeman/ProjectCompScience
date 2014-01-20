@@ -17,6 +17,7 @@ import nl.uva.ca.visual.trigger.TestActionGenerator;
 import nl.uva.ca.visual.trigger.TriggerActionGeneratorPanel;
 import nl.uva.ca.visual.trigger.TriggerGeneratorPanel;
 import nl.uva.ca.visual.trigger.forestfire.BushBurnTicksGenerator;
+import nl.uva.ca.visual.trigger.forestfire.ExtinguishProbGenerator;
 import nl.uva.ca.visual.trigger.forestfire.NBActionGenerator;
 import nl.uva.ca.visual.trigger.forestfire.PercBurnedGenerator;
 import nl.uva.ca.visual.trigger.forestfire.ProbDividerGenerator;
@@ -48,6 +49,7 @@ public class TriggerManager implements SimulateChangeListener {
 			ACTIONS.put("Stop firefighting", StopFireFightersGenerator.class);
 			ACTIONS.put("Set prob divider", ProbDividerGenerator.class);
 			ACTIONS.put("Start fire", StartFireGenerator.class);
+			ACTIONS.put("Set ext prob", ExtinguishProbGenerator.class);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
