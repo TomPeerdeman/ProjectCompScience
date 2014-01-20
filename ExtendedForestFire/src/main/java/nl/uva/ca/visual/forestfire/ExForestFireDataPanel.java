@@ -5,6 +5,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Formatter;
 import java.util.Locale;
 
@@ -70,6 +71,8 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JButton triggerAddButton = new JButton("Add");
 	private JButton triggerEditButton = new JButton("Edit");
 	private JButton triggerDelButton = new JButton("Del");
+	private JButton saveTriggersButton = new JButton("Save");
+	private JButton loadTriggersButton = new JButton("Load");
 	
 	private DefaultListModel<Trigger> triggerModel;
 	private JList<Trigger> triggerList;
@@ -178,14 +181,16 @@ public class ExForestFireDataPanel extends JPanel implements
 		add(density2Text, c);
 		
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 2;
 		add(randwater, c);
-
 		
 		c.gridx = 1;
-		c.gridy = 5;
+		c.gridy = 3;
 		
 		add(typeText, c);
+		
+		c.gridy = 5;
+		add(new JLabel("Trigger list actions:"), c);
 		
 		c.gridx = 2;
 		c.gridy = 0;
@@ -195,14 +200,21 @@ public class ExForestFireDataPanel extends JPanel implements
 		c.gridy = 1;
 		add(density2, c);
 		
-		
 		c.gridx = 2;
-		c.gridy = 3;
+		c.gridy = 2;
 		add(waterCheck, c);
 		
 		c.gridx = 2;
-		c.gridy = 5;
+		c.gridy = 3;
 		add(gridtype, c);
+		
+		c.gridy = 5;
+		saveTriggersButton.addActionListener(this);
+		add(saveTriggersButton, c);
+		
+		c.gridy = 6;
+		loadTriggersButton.addActionListener(this);
+		add(loadTriggersButton, c);
 		
 		c.gridx = 3;
 		c.gridy = 0;
@@ -400,43 +412,61 @@ public class ExForestFireDataPanel extends JPanel implements
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		int idx = triggerList.getSelectedIndex();
-		if(e.getSource() != triggerAddButton
-				&& (idx < 0 || idx >= triggerManager.triggers.size())) {
-			return;
+		if(e.getSource() == saveTriggersButton) {
+			try {
+				triggerManager.save(this);
+			} catch(IOException e1) {
+				e1.printStackTrace();
+			}
+		} else if(e.getSource() == loadTriggersButton) {
+			try {
+				triggerManager.load(this, triggerModel);
+			} catch(Exception e1) {
+				e1.printStackTrace();
+			}
+		} else {
+			int idx = triggerList.getSelectedIndex();
+			if(e.getSource() != triggerAddButton
+					&& (idx < 0 || idx >= triggerManager.triggers.size())) {
+				return;
+			}
+			
+			if(e.getSource() == triggerAddButton) {
+				if(triggerFrame != null) {
+					triggerFrame.dispose();
+				}
+				triggerFrame = new TriggerFrame("Add new trigger", this);
+			} else if(e.getSource() == triggerEditButton) {
+				if(triggerFrame != null) {
+					triggerFrame.dispose();
+				}
+				triggerFrame =
+					new TriggerFrame(idx, triggerModel.get(idx), this);
+			} else if(e.getSource() == triggerDelButton) {
+				if(triggerFrame != null) {
+					triggerFrame.dispose();
+				}
+				triggerModel.remove(idx);
+				triggerManager.triggers.remove(idx);
+				if(idx == triggerManager.triggers.size()) {
+					triggerList.setSelectedIndex(idx - 1);
+				}
+				setTriggerButtonsState();
+			}
 		}
-		
-		if(e.getSource() == triggerAddButton) {
-			if(triggerFrame != null) {
-				triggerFrame.dispose();
-			}
-			triggerFrame = new TriggerFrame("Add new trigger", this);
-		} else if(e.getSource() == triggerEditButton) {
-			if(triggerFrame != null) {
-				triggerFrame.dispose();
-			}
-			triggerFrame = new TriggerFrame(idx, triggerModel.get(idx), this);
-		} else if(e.getSource() == triggerDelButton) {
-			if(triggerFrame != null) {
-				triggerFrame.dispose();
-			}
-			triggerModel.remove(idx);
-			triggerManager.triggers.remove(idx);
-			if(triggerManager.triggers.size() == 0) {
-				triggerEditButton.setEnabled(false);
-				triggerDelButton.setEnabled(false);
-			} else if(idx == triggerManager.triggers.size()) {
-				triggerList.setSelectedIndex(idx - 1);
-			}
-		}
+	}
+	
+	public void setTriggerButtonsState() {
+		boolean active = triggerModel.size() > 0;
+		triggerEditButton.setEnabled(active);
+		triggerDelButton.setEnabled(active);
 	}
 	
 	public void onNewTrigger(Trigger newTrigger) {
 		int idx = triggerModel.size();
 		triggerModel.add(idx, newTrigger);
 		triggerManager.triggers.add(idx, newTrigger);
-		triggerEditButton.setEnabled(true);
-		triggerDelButton.setEnabled(true);
+		setTriggerButtonsState();
 		triggerList.setSelectedIndex(idx);
 		fire.getSimulator().afterSimulateTick();
 	}

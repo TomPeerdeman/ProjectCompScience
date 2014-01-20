@@ -4,12 +4,16 @@
  */
 package nl.uva.ca;
 
+import java.io.Serializable;
+
 import nl.tompeerdeman.ca.SimulatableSystem;
 
 /**
  *
  */
-public abstract class Trigger {
+public abstract class Trigger implements Serializable {
+	private static final long serialVersionUID = 706111937933284072L;
+	
 	protected final TriggerAction action;
 	protected boolean activated;
 	

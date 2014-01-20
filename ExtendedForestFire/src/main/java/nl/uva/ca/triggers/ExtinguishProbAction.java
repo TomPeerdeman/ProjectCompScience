@@ -13,6 +13,8 @@ import nl.uva.ca.TriggerAction;
  *
  */
 public class ExtinguishProbAction implements TriggerAction {
+	private static final long serialVersionUID = 1L;
+	
 	private final double extProb;
 	
 	/**

@@ -12,6 +12,7 @@ import nl.uva.ca.TriggerAction;
  *
  */
 public class TestAction implements TriggerAction {
+	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * 

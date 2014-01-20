@@ -19,6 +19,8 @@ import nl.uva.ca.TriggerAction;
  *
  */
 public class StartFireAction implements TriggerAction {
+	private static final long serialVersionUID = 1L;
+	
 	private final Point lowerPoint;
 	private final Point upperPoint;
 	private final int nPoints;

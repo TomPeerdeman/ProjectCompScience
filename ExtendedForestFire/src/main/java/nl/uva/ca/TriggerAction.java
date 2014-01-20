@@ -4,12 +4,14 @@
  */
 package nl.uva.ca;
 
+import java.io.Serializable;
+
 import nl.tompeerdeman.ca.SimulatableSystem;
 
 /**
  *
  */
-public interface TriggerAction {
+public interface TriggerAction extends Serializable {
 	/**
 	 * Execute this action
 	 * 

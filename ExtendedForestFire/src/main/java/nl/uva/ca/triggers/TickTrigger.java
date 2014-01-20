@@ -14,6 +14,8 @@ import nl.uva.ca.TriggerAction;
  *
  */
 public class TickTrigger extends Trigger {
+	private static final long serialVersionUID = 1L;
+	
 	private final int tick;
 	
 	/**

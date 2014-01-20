@@ -12,6 +12,7 @@ import nl.uva.ca.ExForestFireData;
  *
  */
 public class BushBurnTicksAction extends TreeBurnTicksAction {
+	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * @param burnTicks
