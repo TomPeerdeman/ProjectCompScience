@@ -736,7 +736,7 @@ public class ExForestFireCell extends Cell {
 							// if there are fires around me, i could die
 							if(fireCount > 0){
 								// exponentially increasing chance of death 
-								double deathProb = Math.pow(3,(6-fireCount));
+								double deathProb = Math.pow(3,(3-fireCount));
 								int deathProbInt  = (int) Math.round(deathProb);
 								// already died, no chance of escape
 								if(deathProbInt == 1){
