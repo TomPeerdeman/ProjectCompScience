@@ -66,13 +66,11 @@ public class ExForestFireCell extends Cell {
 		}
 		else if(type == ExForestFireCellType.TREE) {
 			type = ExForestFireCellType.BURNING_TREE;
-			return true;
 		}
 		else if(type == ExForestFireCellType.BUSH) {
 			type = ExForestFireCellType.BURNING_BUSH;
-			return true;
 		}
-		return false;
+		return shouldSimulate();
 	}
 
 	/*
