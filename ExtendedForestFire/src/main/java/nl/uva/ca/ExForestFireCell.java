@@ -217,28 +217,56 @@ public class ExForestFireCell extends Cell {
 					else if(distToFire[0] == 1){
 						int x, y;
 						double randomDouble;
+						int fireCount = 0;
+						Random rand = new Random();
+						// count surrounding fires
 						for(int ny = 0; ny < 3; ny++) {
 							for(int nx = 0; nx < 3; nx++) {
 								x = this.x + nx - 1;
 								y = this.y - ny + 1;
 								if(x >= 0 && x < 100 && y >= 0 && y < 100){
 									c = (ExForestFireCell) grid.getCell(x, y);
-									// If a tree is burning, try to extinguish
-									if(c != null && c.getType() == ExForestFireCellType.BURNING_TREE) {
-										randomDouble = Math.random();
-										if (randomDouble <= ffdata.extinguishProb){
-											c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
-											ffdata.burning--;
-											ffdata.trees++;
-										}
+									if(c != null && (c.getType() == ExForestFireCellType.BURNING_TREE
+											|| c.getType() == ExForestFireCellType.BURNING_BUSH)) {
+										fireCount++;
 									}
-									// If a bush is burning, try to extinguish
-									else if(c != null && c.getType() == ExForestFireCellType.BURNING_BUSH) {
-										randomDouble = Math.random();
-										if (randomDouble <= ffdata.extinguishProb){
-											c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
-											ffdata.burning--;
-											ffdata.bushes++;
+								}
+							}
+						}
+						// if there are fires around me, i could die
+						if(fireCount > 0){
+							// exponentially increasing chance of death 
+							int deathProb = 2^fireCount;
+							int died = rand.nextInt(256-deathProb)+1;
+							if(died == 1){
+								// i dead, set my cell to a burning something
+							}
+							
+						}
+						else{
+							for(int ny = 0; ny < 3; ny++) {
+								for(int nx = 0; nx < 3; nx++) {
+									x = this.x + nx - 1;
+									y = this.y - ny + 1;
+									if(x >= 0 && x < 100 && y >= 0 && y < 100){
+										c = (ExForestFireCell) grid.getCell(x, y);
+										// If a tree is burning, try to extinguish
+										if(c != null && c.getType() == ExForestFireCellType.BURNING_TREE) {
+											randomDouble = Math.random();
+											if (randomDouble <= ffdata.extinguishProb){
+												c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
+												ffdata.burning--;
+												ffdata.trees++;
+											}
+										}
+										// If a bush is burning, try to extinguish
+										else if(c != null && c.getType() == ExForestFireCellType.BURNING_BUSH) {
+											randomDouble = Math.random();
+											if (randomDouble <= ffdata.extinguishProb){
+												c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
+												ffdata.burning--;
+												ffdata.bushes++;
+											}
 										}
 									}
 								}
