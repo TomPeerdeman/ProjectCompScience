@@ -252,7 +252,7 @@ public class ExForestFireCell extends Cell {
 						// if there are fires around me, i could die
 						if(fireCount > 0){
 							// exponentially increasing chance of death 
-							double deathProb = Math.pow(1.49,(8-fireCount));
+							double deathProb = Math.pow(1.45,(8-fireCount));
 							int deathProbInt  = (int) Math.round(deathProb);
 							// already died, no chance of escape
 							if(deathProbInt == 1){
@@ -464,6 +464,45 @@ public class ExForestFireCell extends Cell {
 					else if(distToFire[0] == 1){
 						int x, y;
 						double randomDouble;
+						int fireCount = 0;
+						Random rand = new Random();
+						// count surrounding fires
+						for(int ny = 0; ny < 3; ny++) {
+							for(int nx = 0; nx < 3; nx++) {
+								if(this.y % 2 == 1 || ny == 1)
+									x = this.x + nx - 1;
+								else
+									x = this.x + nx - 2;
+								// Grid y increases north so cell above is y + 1
+								y = this.y - ny + 1;
+								if(x >= 0 && x < 100 && y >= 0 && y < 100){
+									c = (ExForestFireCell) grid.getCell(x, y);
+									if(c != null && (c.getType() == ExForestFireCellType.BURNING_TREE
+											|| c.getType() == ExForestFireCellType.BURNING_BUSH)) {
+										fireCount++;
+									}
+								}
+							}
+						}
+						// if there are fires around me, i could die
+						if(fireCount > 0){
+							// exponentially increasing chance of death 
+							double deathProb = Math.pow(1.6,(6-fireCount));
+							int deathProbInt  = (int) Math.round(deathProb);
+							// already died, no chance of escape
+							if(deathProbInt == 1){
+								// should this return?
+								return murderFireFighter(grid);
+							}
+							// else probability
+							else{
+								int died = rand.nextInt(deathProbInt);
+								if(died == 0){
+									// should this return?
+									return murderFireFighter(grid);
+								}
+							}
+						}
 						for(int ny = 0; ny < 3; ny++) {
 							for(int nx = 0; nx < 3; nx++) {
 								if((ny == 0 && (nx == 1 || nx == 2))
@@ -664,6 +703,55 @@ public class ExForestFireCell extends Cell {
 							int x=-1, y=-1;
 							double randomDouble;
 							boolean area;
+							int fireCount = 0;
+							Random rand = new Random();
+							// count surrounding fires
+							for(int ny = 0; ny < 3; ny++) {
+								for(int nx = 0; nx < 3; nx++) {
+									if((ny == 1 && this.x % 2 == 1 && this.y % 2 == 0)
+											|| (ny == 1 && this.x % 2 == 0 && this.y % 2 == 1)
+											|| (ny == 0 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 0)
+											|| (ny == 0 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 1)) {
+										x = this.x + nx - 1;
+										// Grid y increases north so cell above is y + 1
+										y = this.y - ny + 1;
+									}
+									else if((ny == 1 && this.x % 2 == 0 && this.y % 2 == 0)
+											|| (ny == 1 && this.x % 2 == 1 && this.y % 2 == 1)
+											|| (ny == 2 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 0)
+											|| (ny == 2 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 1)) {
+										x = this.x + nx - 1;
+										// Grid y increases north so cell above is y + 1
+										y = this.y - ny + 1;
+									}
+									if(x >= 0 && x < 100 && y >= 0 && y < 100){
+										c = (ExForestFireCell) grid.getCell(x, y);
+										if(c != null && (c.getType() == ExForestFireCellType.BURNING_TREE
+												|| c.getType() == ExForestFireCellType.BURNING_BUSH)) {
+											fireCount++;
+										}
+									}
+								}
+							}
+							// if there are fires around me, i could die
+							if(fireCount > 0){
+								// exponentially increasing chance of death 
+								double deathProb = Math.pow(3,(6-fireCount));
+								int deathProbInt  = (int) Math.round(deathProb);
+								// already died, no chance of escape
+								if(deathProbInt == 1){
+									// should this return?
+									return murderFireFighter(grid);
+								}
+								// else probability
+								else{
+									int died = rand.nextInt(deathProbInt);
+									if(died == 0){
+										// should this return?
+										return murderFireFighter(grid);
+									}
+								}
+							}
 							for(int ny = 0; ny < 3; ny++) {
 								for(int nx = 0; nx < 3; nx++) {
 									area = false;
