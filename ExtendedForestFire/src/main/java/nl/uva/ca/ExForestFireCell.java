@@ -94,6 +94,10 @@ public class ExForestFireCell extends Cell {
 		ExForestFireCell c = null;
 		int probvar = ffdata.probDivider;
 		
+		// I'm extinguished, don't simulate me
+		if(type == ExForestFireCellType.EXTINGUISHED_TREE || type == ExForestFireCellType.EXTINGUISHED_BUSH)
+			return false;
+		
 		if(ffdata.type == 0) {
 			if(type == ExForestFireCellType.BURNING_TREE
 					|| type == ExForestFireCellType.BURNING_BUSH) {
@@ -234,6 +238,44 @@ public class ExForestFireCell extends Cell {
 							newY++;
 						
 						return walkFireFighter(grid, newX, newY, sim);
+					}
+					// distToFire[0] is what if fire in neighbor cell?
+					else if(distToFire[0] == 1){
+						System.out.println("Im trying to extinguish");
+						int x, y;
+						double randomDouble;
+						for(int ny = 0; ny < 3; ny++) {
+							for(int nx = 0; nx < 3; nx++) {
+								x = this.x + nx - 1;
+								y = this.y - ny + 1;
+								if(x >= 0 && x < 100 && y >= 0 && y < 100){
+									System.out.println("Inside Grid");
+									c = (ExForestFireCell) grid.getCell(x, y);
+									// If a tree is burning, try to extinguish
+									if(c != null && c.getType() == ExForestFireCellType.BURNING_TREE) {
+										randomDouble = Math.random();
+										System.out.println("Im a burning tree, random: " + randomDouble + " <= " + ffdata.extinguishProb);
+										if (randomDouble <= ffdata.extinguishProb){
+											System.out.println("Im an extinguished tree");
+											c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
+											ffdata.burning--;
+											ffdata.trees++;
+										}
+									}
+									// If a bush is burning, try to extinguish
+									else if(c != null && c.getType() == ExForestFireCellType.BURNING_BUSH) {
+										randomDouble = Math.random();
+										System.out.println("Im a burning bush, random: " + randomDouble + " <= " + ffdata.extinguishProb);
+										if (randomDouble <= ffdata.extinguishProb){
+											System.out.println("Im an extinguished bush");
+											c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
+											ffdata.burning--;
+											ffdata.bushes++;
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}
