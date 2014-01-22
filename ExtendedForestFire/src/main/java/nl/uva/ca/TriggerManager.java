@@ -159,6 +159,11 @@ public class TriggerManager implements SimulateChangeListener {
 		Object obj = in.readObject();
 		if(obj instanceof ArrayList<?>) {
 			triggers = (ArrayList<Trigger>) obj;
+			
+			// Reset all triggers to be not activated yet
+			for(Trigger t : triggers) {
+				t.setActivated(false);
+			}
 		}
 		in.close();
 	}
