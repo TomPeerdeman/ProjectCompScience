@@ -4,6 +4,10 @@
  */
 package nl.uva.ca;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Random;
 
 import nl.tompeerdeman.ca.Cell;
@@ -12,7 +16,7 @@ import nl.tompeerdeman.ca.DataSet;
 import nl.tompeerdeman.ca.Grid;
 import nl.tompeerdeman.ca.Simulator;
 
-public class ExForestFireCell extends SerializableCell {
+public class ExForestFireCell extends AbstractCell implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private int nBurningTicks;
@@ -26,6 +30,34 @@ public class ExForestFireCell extends SerializableCell {
 	public ExForestFireCell(int x, int y, ExForestFireCellType t) {
 		super(x, y, t);
 		nBurningTicks = 0;
+	}
+	
+	/**
+	 * Custom write type, x and y since Cell type is not serializable
+	 * 
+	 * @param out
+	 * @throws IOException
+	 */
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.defaultWriteObject();
+		out.writeObject(type);
+		out.writeInt(x);
+		out.writeInt(y);
+	}
+	
+	/**
+	 * Custom read type, x and y since Cell type is not serializable
+	 * 
+	 * @param in
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	private void readObject(ObjectInputStream in) throws IOException,
+			ClassNotFoundException {
+		in.defaultReadObject();
+		type = (CellType) in.readObject();
+		x = in.readInt();
+		y = in.readInt();
 	}
 	
 	@Override
@@ -1079,5 +1111,9 @@ public class ExForestFireCell extends SerializableCell {
 		
 		// Remove FFighter from this cell.
 		return removeFireFighter(grid);
+	}
+	
+	public void resetNumBurnTicks() {
+		nBurningTicks = 0;
 	}
 }

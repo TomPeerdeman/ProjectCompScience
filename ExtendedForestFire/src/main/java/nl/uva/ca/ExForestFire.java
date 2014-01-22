@@ -18,7 +18,6 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import nl.tompeerdeman.ca.Cell;
-import nl.tompeerdeman.ca.Grid;
 import nl.tompeerdeman.ca.SimulatableSystem;
 
 public class ExForestFire extends SimulatableSystem {
@@ -109,7 +108,6 @@ public class ExForestFire extends SimulatableSystem {
 			File f = fileChooser.getSelectedFile();
 			ObjectOutputStream out =
 				new ObjectOutputStream(new FileOutputStream(f));
-			out.writeObject(grid);
 			out.writeObject(data);
 			out.flush();
 			out.close();
@@ -129,22 +127,21 @@ public class ExForestFire extends SimulatableSystem {
 		ObjectInputStream in =
 			new ObjectInputStream(new FileInputStream(f));
 		Object obj = in.readObject();
-		if(obj instanceof Grid) {
-			Grid g = (Grid) obj;
-			grid.grid = g.grid;
-		}
-		
-		obj = in.readObject();
 		if(obj instanceof ExForestFireData) {
-			data = (ExForestFireData) obj;
-			// Data grid was not saved, set to local version.
-			((ExForestFireData) data).grid = grid;
+			ExForestFireData data = (ExForestFireData) obj;
+			
+			// Load the data into the local one, so we don't have to change all
+			// the pointers.
+			((ExForestFireData) this.data).loadFrom(((ExForestFireData) data));
 			
 			// Reset grid
 			resetGrid();
 			
 			// Count cell type's
 			data.reset();
+			
+			sim.reset();
+			sim.afterSimulateTick();
 		}
 		in.close();
 	}
@@ -291,7 +288,7 @@ public class ExForestFire extends SimulatableSystem {
 		plantVegetation(totalbushes, ExForestFireCellType.BUSH);
 	}
 	
-	public void plantVegetation(int total, ExForestFireCellType cellType) {
+	private void plantVegetation(int total, ExForestFireCellType cellType) {
 		Random rand = new Random();
 		int t = 0;
 		int rx, ry;
@@ -656,6 +653,9 @@ public class ExForestFire extends SimulatableSystem {
 		return ycurr;
 	}
 	
+	/**
+	 * Ignite the grid at the bottom
+	 */
 	public void igniteGrid() {
 		// Fill the bottom line of the grid with burning vegetation.
 		for(int x = 0; x < grid.grid.length; x++) {
@@ -673,6 +673,12 @@ public class ExForestFire extends SimulatableSystem {
 		}
 	}
 	
+	/**
+	 * Reset the grid to it's initial randomized generated form.
+	 * *_BUSH -> BUSH
+	 * *_TREE -> TREE
+	 * Also remove all firefighters.
+	 */
 	public void resetGrid() {
 		for(int y = 0; y < grid.grid[0].length; y++) {
 			for(int x = 0; x < grid.grid.length; x++) {
@@ -703,6 +709,9 @@ public class ExForestFire extends SimulatableSystem {
 							// Ignore water and existing BUSH & TREE cell's.
 							break;
 					}
+					
+					// Reset number of burned ticks.
+					cell.resetNumBurnTicks();
 				}
 			}
 		}

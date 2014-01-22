@@ -13,7 +13,7 @@ import nl.tompeerdeman.ca.Grid;
 public class ExForestFireData implements DataSet, Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	public transient Grid grid;
+	public Grid grid;
 	public double[][] neighborhood;
 	
 	public transient long bushes;
@@ -22,12 +22,12 @@ public class ExForestFireData implements DataSet, Serializable {
 	public transient long burning;
 	public transient long burnt;
 	
-	public boolean fireFighters;
-	public double extinguishProb;
-	public boolean useTemperature;
-	public int nTicksTreeBurn;
-	public int nTicksBushBurn;
-	public int probDivider;
+	public transient boolean fireFighters;
+	public transient double extinguishProb;
+	public transient int nTicksTreeBurn;
+	public transient int nTicksBushBurn;
+	public transient int probDivider;
+	
 	public int type;
 	
 	/**
@@ -41,6 +41,13 @@ public class ExForestFireData implements DataSet, Serializable {
 		reset();
 	}
 	
+	public void loadFrom(ExForestFireData data) {
+		type = data.type;
+		grid.grid = data.grid.grid;
+		
+		neighborhood = data.neighborhood;
+	}
+	
 	@Override
 	public void reset() {
 		fireFighters = false;
@@ -49,6 +56,7 @@ public class ExForestFireData implements DataSet, Serializable {
 		nTicksTreeBurn = 10;
 		nTicksBushBurn = 4;
 		
+		// TODO: Depends on type?
 		neighborhood = new double[][] {
 										{0.1, 0.1, 0.1},
 										{0.1, 0.0, 0.1},

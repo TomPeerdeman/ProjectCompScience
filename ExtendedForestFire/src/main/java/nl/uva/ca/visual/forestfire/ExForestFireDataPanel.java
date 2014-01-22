@@ -62,6 +62,7 @@ public class ExForestFireDataPanel extends JPanel implements
 	
 	private JComboBox<String> gridtype;
 	private JComboBox<String> waterCheck;
+	private JComboBox<String> pathCheck;
 	
 	private JTextField density;
 	private JTextField density2;
@@ -73,6 +74,9 @@ public class ExForestFireDataPanel extends JPanel implements
 	private JButton triggerDelButton = new JButton("Del");
 	private JButton saveTriggersButton = new JButton("Save");
 	private JButton loadTriggersButton = new JButton("Load");
+	
+	private JButton saveGridButton = new JButton("Save");
+	private JButton loadGridButton = new JButton("Load");
 	
 	private DefaultListModel<Trigger> triggerModel;
 	private JList<Trigger> triggerList;
@@ -115,14 +119,12 @@ public class ExForestFireDataPanel extends JPanel implements
 		fracBurned = new JLabel("Fraction burned: 0.0");
 		oppReached = new JLabel("Opposite reached: false");
 		
-		String GridStr[] =
-		{"Standard", "Hexagonal", "Triangular"};
-		
-		String YesNoStr[] =
-		{"Yes", "No"};
+		String GridStr[] = {"Standard", "Hexagonal", "Triangular"};
+		String yesNoArray[] = {"Yes", "No"};
 		
 		gridtype = new JComboBox<String>(GridStr);
-		waterCheck = new JComboBox<String>(YesNoStr);
+		waterCheck = new JComboBox<String>(yesNoArray);
+		pathCheck = new JComboBox<String>(yesNoArray);
 		
 		// Standard no firefighters, set to false
 		fftresh.setEnabled(false);
@@ -137,6 +139,13 @@ public class ExForestFireDataPanel extends JPanel implements
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				updateWater();
+			}
+		});
+		
+		pathCheck.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				updatePath();
 			}
 		});
 		
@@ -181,16 +190,20 @@ public class ExForestFireDataPanel extends JPanel implements
 		add(density2Text, c);
 		
 		c.gridx = 1;
-		c.gridy = 2;
+		c.gridy = 3;
 		add(randwater, c);
 		
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 4;
+		add(new JLabel("Generate random path:"), c);
+		
+		c.gridx = 1;
+		c.gridy = 2;
 		
 		add(typeText, c);
 		
-		c.gridy = 5;
-		add(new JLabel("Trigger list actions:"), c);
+		c.gridy = 6;
+		add(new JLabel("Grid:"), c);
 		
 		c.gridx = 2;
 		c.gridy = 0;
@@ -202,19 +215,23 @@ public class ExForestFireDataPanel extends JPanel implements
 		
 		c.gridx = 2;
 		c.gridy = 2;
-		add(waterCheck, c);
+		add(gridtype, c);
 		
 		c.gridx = 2;
 		c.gridy = 3;
-		add(gridtype, c);
+		add(waterCheck, c);
 		
-		c.gridy = 5;
-		saveTriggersButton.addActionListener(this);
-		add(saveTriggersButton, c);
+		c.gridx = 2;
+		c.gridy = 4;
+		add(pathCheck, c);
 		
 		c.gridy = 6;
-		loadTriggersButton.addActionListener(this);
-		add(loadTriggersButton, c);
+		saveGridButton.addActionListener(this);
+		add(saveGridButton, c);
+		
+		c.gridy = 7;
+		loadGridButton.addActionListener(this);
+		add(loadGridButton, c);
 		
 		c.gridx = 3;
 		c.gridy = 0;
@@ -246,6 +263,20 @@ public class ExForestFireDataPanel extends JPanel implements
 		add(triggerPane, c);
 		
 		c.gridheight = 1;
+		c.gridwidth = 2;
+		
+		c.gridx = 3;
+		c.gridy = 7;
+		
+		saveTriggersButton.addActionListener(this);
+		add(saveTriggersButton, c);
+		
+		c.gridx = 5;
+		c.gridy = 7;
+		
+		loadTriggersButton.addActionListener(this);
+		add(loadTriggersButton, c);
+		
 		c.gridwidth = 1;
 		
 		control = new ExSimulateControlPanel(fire, this, this, 7, 0);
@@ -347,6 +378,10 @@ public class ExForestFireDataPanel extends JPanel implements
 		}
 	}
 	
+	public void updatePath() {
+		fire.randPath = (pathCheck.getSelectedIndex() == 0);
+	}
+	
 	public void updateType() {
 		int i = gridtype.getSelectedIndex();
 		switch(i) {
@@ -397,11 +432,15 @@ public class ExForestFireDataPanel extends JPanel implements
 	public void enableDropdowns() {
 		gridtype.setEnabled(true);
 		waterCheck.setEnabled(true);
+		saveGridButton.setEnabled(true);
+		loadGridButton.setEnabled(true);
 	}
 	
 	public void disableDropdowns() {
 		gridtype.setEnabled(false);
 		waterCheck.setEnabled(false);
+		saveGridButton.setEnabled(false);
+		loadGridButton.setEnabled(false);
 	}
 	
 	/*
@@ -421,6 +460,20 @@ public class ExForestFireDataPanel extends JPanel implements
 		} else if(e.getSource() == loadTriggersButton) {
 			try {
 				triggerManager.load(this, triggerModel);
+				sim.afterSimulateTick();
+			} catch(Exception e1) {
+				e1.printStackTrace();
+			}
+		} else if(e.getSource() == saveGridButton) {
+			try {
+				fire.saveGrid(this);
+			} catch(IOException e1) {
+				e1.printStackTrace();
+			}
+		} else if(e.getSource() == loadGridButton) {
+			try {
+				fire.loadGrid(this);
+				control.reset();
 			} catch(Exception e1) {
 				e1.printStackTrace();
 			}
