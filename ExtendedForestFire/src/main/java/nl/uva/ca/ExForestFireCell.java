@@ -95,7 +95,7 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 		return shouldSimulate();
 	}
 	
-	public boolean murderFireFighter(Grid grid) {
+	public boolean murderFireFighter(Grid grid, ExForestFireData ffdata) {
 		type = secondaryType;
 		secondaryType = null;
 		if(type == null) {
@@ -104,9 +104,11 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 		}
 		else if(type == ExForestFireCellType.TREE) {
 			type = ExForestFireCellType.BURNING_TREE;
+			ffdata.burning++;
 		}
 		else if(type == ExForestFireCellType.BUSH) {
 			type = ExForestFireCellType.BURNING_BUSH;
+			ffdata.burning++;
 		}
 		return shouldSimulate();
 	}
@@ -297,14 +299,14 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 							// already died, no chance of escape
 							if(deathProbInt == 1) {
 								// should this return?
-								return murderFireFighter(grid);
+								return murderFireFighter(grid, ffdata);
 							}
 							// else probability
 							else {
 								int died = rand.nextInt(deathProbInt);
 								if(died == 0) {
 									// should this return?
-									return murderFireFighter(grid);
+									return murderFireFighter(grid, ffdata);
 								}
 							}
 						}
@@ -538,14 +540,14 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 							// already died, no chance of escape
 							if(deathProbInt == 1) {
 								// should this return?
-								return murderFireFighter(grid);
+								return murderFireFighter(grid, ffdata);
 							}
 							// else probability
 							else {
 								int died = rand.nextInt(deathProbInt);
 								if(died == 0) {
 									// should this return?
-									return murderFireFighter(grid);
+									return murderFireFighter(grid, ffdata);
 								}
 							}
 						}
@@ -806,14 +808,14 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 								// already died, no chance of escape
 								if(deathProbInt == 1) {
 									// should this return?
-									return murderFireFighter(grid);
+									return murderFireFighter(grid, ffdata);
 								}
 								// else probability
 								else {
 									int died = rand.nextInt(deathProbInt);
 									if(died == 0) {
 										// should this return?
-										return murderFireFighter(grid);
+										return murderFireFighter(grid, ffdata);
 									}
 								}
 							}
