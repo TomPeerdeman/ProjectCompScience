@@ -788,7 +788,7 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 											y = this.y;
 										}
 									}
-									else if (this.x%2 == this.y%2){
+									else if (this.x%2 != this.y%2){
 										if(ny == 2 && nx == 1){
 											x = this.x;
 											y = this.y+1;
