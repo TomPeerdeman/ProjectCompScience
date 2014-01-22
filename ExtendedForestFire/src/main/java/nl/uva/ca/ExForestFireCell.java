@@ -748,6 +748,16 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 								newX++;
 							else if(this.x == 99)
 								newX--;
+							else if(this.x < 99 && this.x > 0){
+								ExForestFireCell cell1;
+								cell1 =	(ExForestFireCell) grid.getCell(this.x+1, this.y);	
+								ExForestFireCell cell2;
+								cell2 =	(ExForestFireCell) grid.getCell(this.x-1, this.y);
+								if(cell1 != null && cell1.getType() == ExForestFireCellType.PATH)
+									newX++;
+								else if(cell2 != null && cell2.getType() == ExForestFireCellType.PATH)
+									newX--;
+							}
 							else {
 								Random leftRight = new Random();
 								if(leftRight.nextInt(1) == 0)
@@ -766,27 +776,27 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 							// count surrounding fires
 							for(int ny = 0; ny < 3; ny++) {
 								for(int nx = 0; nx < 3; nx++) {
-									if((ny == 1 && this.x % 2 == 1 && this.y % 2 == 0)
-											|| (ny == 1 && this.x % 2 == 0 && this.y % 2 == 1)
-											|| (ny == 0 && nx == 1
-													&& this.x % 2 == 1 && this.y % 2 == 0)
-											|| (ny == 0 && nx == 1
-													&& this.x % 2 == 0 && this.y % 2 == 1)) {
-										x = this.x + nx - 1;
-										// Grid y increases north so cell above
-										// is y + 1
-										y = this.y - ny + 1;
+									x = -1;
+									y = -1;
+									if(this.x%2 == this.y%2){
+										if(ny == 0 && nx == 1){
+											x = this.x;
+											y = this.y-1;
+										}
+										if(ny == 1 && nx != 1){
+											x = this.x +nx-1;
+											y = this.y;
+										}
 									}
-									else if((ny == 1 && this.x % 2 == 0 && this.y % 2 == 0)
-											|| (ny == 1 && this.x % 2 == 1 && this.y % 2 == 1)
-											|| (ny == 2 && nx == 1
-													&& this.x % 2 == 0 && this.y % 2 == 0)
-											|| (ny == 2 && nx == 1
-													&& this.x % 2 == 1 && this.y % 2 == 1)) {
-										x = this.x + nx - 1;
-										// Grid y increases north so cell above
-										// is y + 1
-										y = this.y - ny + 1;
+									else if (this.x%2 == this.y%2){
+										if(ny == 2 && nx == 1){
+											x = this.x;
+											y = this.y+1;
+										}
+										if(ny == 1 && nx != 1){
+											x = this.x +nx-1;
+											y = this.y;
+										}
 									}
 									if(x >= 0 && x < 100 && y >= 0 && y < 100) {
 										c =
@@ -803,8 +813,7 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 							// if there are fires around me, i could die
 							if(fireCount > 0) {
 								// exponentially increasing chance of death
-								double deathProb = Math.pow(3, (3 - fireCount));
-								int deathProbInt = (int) Math.round(deathProb);
+								int deathProbInt = (int) Math.pow(3, (3-fireCount));
 								// already died, no chance of escape
 								if(deathProbInt == 1) {
 									// should this return?
