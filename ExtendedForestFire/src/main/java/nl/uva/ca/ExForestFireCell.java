@@ -1044,7 +1044,8 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 				ExForestFireCell cell =
 						(ExForestFireCell) grid.getCell(i, j);
 				// Prefer fire over path.
-				if(cell != null && cell.getType() == ExForestFireCellType.PATH) {
+				if(cell != null && cell.getType() == ExForestFireCellType.PATH
+						&& (i != prevX || j != prevY) ) {
 					possibilities++;
 					newDistance =
 						Math.abs(i - this.x)
@@ -1101,7 +1102,7 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 							}
 						}
 					}
-					if(newDistance < distToFire[0] && (i != prevX || j != prevY) && possibilities > 1) {
+					if(newDistance < distToFire[0] && possibilities > 1 ) {
 						distToFire[0] = newDistance;
 						distToFire[1] = i;
 						distToFire[2] = j;
