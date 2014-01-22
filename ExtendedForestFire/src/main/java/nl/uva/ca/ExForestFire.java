@@ -79,6 +79,7 @@ public class ExForestFire extends SimulatableSystem {
 	 */
 	public ExForestFire(int nx, int ny, long seed, boolean randWater,
 			boolean randPath, double treeDensity, double bushDensity, int type) {
+		this.randPath = randPath;
 		this.randWater = randWater;
 		this.treeDensity = treeDensity;
 		this.bushDensity = bushDensity;
