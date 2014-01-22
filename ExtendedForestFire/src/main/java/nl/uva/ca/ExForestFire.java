@@ -291,10 +291,13 @@ public class ExForestFire extends SimulatableSystem {
 		if(randPath)
 			buildPath(rand);
 		
-		plantVegetation(totaltrees, ExForestFireCellType.TREE);
-		plantVegetation(totalbushes, ExForestFireCellType.BUSH);
+		// plantVegetation(totaltrees, ExForestFireCellType.TREE);
+		// plantVegetation(totalbushes, ExForestFireCellType.BUSH);
+		
+		plantVegetation(totaltrees, totalbushes);
 	}
 	
+	@SuppressWarnings("unused")
 	private void plantVegetation(int total, ExForestFireCellType cellType) {
 		Random rand = new Random();
 		int t = 0;
@@ -316,6 +319,127 @@ public class ExForestFire extends SimulatableSystem {
 		}
 	}
 	
+	private void plantVegetation(int nTrees, int nBushes) {
+		final int nTotal = nTrees + nBushes;
+		final int gridSurface = grid.grid.length * grid.grid[0].length;
+		
+		if(nTotal > gridSurface) {
+			throw new IllegalArgumentException("Density sum > 1.0");
+		}
+		
+		int n = 0;
+		
+		// Generate a list of trees and bushes.
+		for(int x = 0; x < grid.grid.length; x++) {
+			for(int y = 0; y < grid.grid[0].length; y++) {
+				if(grid.getCell(x, y) == null) {
+					if(n < nTrees) {
+						grid.setCell(new ExForestFireCell(x, y,
+								ExForestFireCellType.TREE));
+					} else {
+						grid.setCell(new ExForestFireCell(x, y,
+								ExForestFireCellType.BUSH));
+					}
+					
+					n++;
+					if(n > nTotal) {
+						break;
+					}
+				}
+			}
+		}
+		
+		Random rand = new Random();
+		
+		// Shuffle the list.
+		for(int i = 0; i < 100; i++) {
+			Cell cell;
+			Cell other;
+			for(int x = 0; x < grid.grid.length; x++) {
+				for(int y = 0; y < grid.grid[0].length; y++) {
+					cell = grid.getCell(x, y);
+					if(cell != null
+							&& (cell.getType() == ExForestFireCellType.TREE ||
+							cell.getType() == ExForestFireCellType.BUSH)) {
+						int rx, ry;
+						int tries = 0;
+						while(true) {
+							rx = rand.nextInt(grid.grid.length);
+							ry = rand.nextInt((grid.grid[0].length));
+							other = grid.getCell(rx, ry);
+							if(other == null && (rx != x || ry != y)) {
+								// Move to new location (rx, ry).
+								grid.move(x, y, rx, ry);
+								break;
+							} else if((rx != x || ry != y)
+									&& (other.getType() == ExForestFireCellType.TREE
+									|| other.getType() == ExForestFireCellType.BUSH)) {
+								// Swap cell's.
+								
+								// Set 'cell' x and y to rx and ry. Also clears
+								// the
+								// cell at x, y.
+								grid.move(x, y, rx, ry);
+								
+								// Set the cell at rx, ry to the original one.
+								grid.setCell(other);
+								
+								// Moves 'other' to position x, y. Also clears
+								// the
+								// cell at rx, ry.
+								grid.move(rx, ry, x, y);
+								
+								// Set 'cell' at rx, ry.
+								grid.setCell(cell);
+								
+								/*
+								 * Swap algorithm. Cell's remember their
+								 * position
+								 * even when another cell is moved into its
+								 * place.
+								 * 
+								 * Step 0:
+								 * cell(x, y)
+								 * other(rx, ry)
+								 * {cell, other}
+								 * 
+								 * Step 1:
+								 * cell(rx, ry)
+								 * other(rx, ry)
+								 * {null, cell}
+								 * 
+								 * Step 2:
+								 * cell(rx, ry)
+								 * other(rx, ry)
+								 * {null, other}
+								 * 
+								 * Step 3:
+								 * cell(rx, ry)
+								 * other(x, y)
+								 * {other, null}
+								 * 
+								 * Step 4:
+								 * cell(rx, ry)
+								 * other(x, y)
+								 * {other, cell}
+								 */
+								
+								break;
+							} else {
+								// Random cell was water or path. Retry 5 times
+								// max.
+								tries++;
+								if(tries > 10) {
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	private void buildPath(Random rand) {
 		// [2-4] edge points
 		int edgePoints = rand.nextInt(3) + 2;
@@ -332,7 +456,7 @@ public class ExForestFire extends SimulatableSystem {
 			int edge = n % 100;
 			int p = n / 100;
 			if(p == 2 || p == 3) {
-				edge = 99 - edge;
+				edge = 100 - edge;
 			}
 			
 			if(p == 1) {
@@ -358,7 +482,9 @@ public class ExForestFire extends SimulatableSystem {
 			
 		}
 		
+		// The number of connections each point has.
 		int nConnections[] = new int[nPoints];
+		// [1][2] = true -> point 1 is connected to point 2.
 		boolean[][] connected = new boolean[nPoints][nPoints];
 		
 		for(int j = 0; j < nPoints; j++) {
