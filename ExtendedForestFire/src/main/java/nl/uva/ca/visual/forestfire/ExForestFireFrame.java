@@ -24,14 +24,9 @@ public class ExForestFireFrame extends ExCaFrame {
 		Dimension d = new Dimension(getWidth(), 10);
 		
 		main.add(new Box.Filler(d, d, d));
-		double[][] standardProb =
-			{ {0.1, 0.1, 0.1}, {0.1, 0, 0.1}, {0.1, 0.1, 0.1}};
 		
 		ExForestFire fire =
-			// new ForestFire(0.6, 100, 100, 0, ForestFireData.NB_MOORE, 0);
-			new ExForestFire(100, 100, 0,
-					standardProb, true, false,
-					0.3, 0.3, 0.3, 0.2, false, 0);
+			new ExForestFire(100, 100, 0, true, true, 0.3, 0.3, 0);
 		fire.buildTimedSimulator(10);
 		
 		Simulator sim = fire.getSimulator();

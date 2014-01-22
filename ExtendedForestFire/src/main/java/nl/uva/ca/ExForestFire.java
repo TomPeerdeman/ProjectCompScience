@@ -4,7 +4,18 @@
  */
 package nl.uva.ca;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Random;
+
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import nl.tompeerdeman.ca.Cell;
 import nl.tompeerdeman.ca.Grid;
@@ -49,48 +60,95 @@ public class ExForestFire extends SimulatableSystem {
 													{0, 0, 0}};
 	
 	public boolean randWater;
+	public boolean randPath;
 	public double treeDensity;
 	public double bushDensity;
 	public int type;
+	
+	private JFileChooser fileChooser;
 	
 	/**
 	 * @param nx
 	 * @param ny
 	 * @param seed
-	 * @param nb
 	 * @param randWater
-	 * @param firefighters
+	 * @param randPath
 	 * @param treeDensity
 	 * @param bushDensity
-	 * @param fireFightTresh
-	 * @param extinguishProb
-	 * @param useTemperature
 	 * @param type
 	 */
-	public ExForestFire(int nx, int ny, long seed,
-			double[][] nb, boolean randWater, boolean firefighters,
-			double treeDensity,
-			double bushDensity, double fireFightTresh, double extinguishProb,
-			boolean useTemperature, int type) {
+	public ExForestFire(int nx, int ny, long seed, boolean randWater,
+			boolean randPath, double treeDensity, double bushDensity, int type) {
 		this.randWater = randWater;
 		this.treeDensity = treeDensity;
 		this.bushDensity = bushDensity;
 		this.type = type;
 		
 		// Create an empty grid
-		grid = new Grid(nx, ny);
+		grid = new SerializableGrid(nx, ny);
 		
 		randomizeGrid(seed);
 		igniteGrid();
 		
-		data =
-			new ExForestFireData(grid, nb,
-					((firefighters) ? fireFightTresh : -1.0),
-					extinguishProb, useTemperature, type, 10, 4);
+		data = new ExForestFireData(grid, type);
+		
+		fileChooser = new JFileChooser();
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fileChooser.setFileHidingEnabled(true);
+		FileFilter filter =
+			new FileNameExtensionFilter("CA grid files", "cag");
+		fileChooser.addChoosableFileFilter(filter);
+		fileChooser.setAcceptAllFileFilterUsed(true);
+		fileChooser.setFileFilter(filter);
+	}
+	
+	public void saveGrid(JComponent parent) throws IOException {
+		int rc = fileChooser.showSaveDialog(parent);
+		if(rc == JFileChooser.APPROVE_OPTION) {
+			File f = fileChooser.getSelectedFile();
+			ObjectOutputStream out =
+				new ObjectOutputStream(new FileOutputStream(f));
+			out.writeObject(grid);
+			out.writeObject(data);
+			out.flush();
+			out.close();
+		}
+	}
+	
+	public void loadGrid(JComponent parent)
+			throws Exception {
+		int rc = fileChooser.showOpenDialog(parent);
+		if(rc == JFileChooser.APPROVE_OPTION) {
+			File f = fileChooser.getSelectedFile();
+			loadGrid(f);
+		}
+	}
+	
+	public void loadGrid(File f) throws Exception {
+		ObjectInputStream in =
+			new ObjectInputStream(new FileInputStream(f));
+		Object obj = in.readObject();
+		if(obj instanceof Grid) {
+			Grid g = (Grid) obj;
+			grid.grid = g.grid;
+		}
+		
+		obj = in.readObject();
+		if(obj instanceof ExForestFireData) {
+			data = (ExForestFireData) obj;
+			// Data grid was not saved, set to local version.
+			((ExForestFireData) data).grid = grid;
+			
+			// Reset grid
+			resetGrid();
+			
+			// Count cell type's
+			data.reset();
+		}
+		in.close();
 	}
 	
 	public void randomizeGrid(final long seed) {
-		// TODO: mega awesome terrain generation here
 		grid.clear();
 		
 		Random rand = new Random();
@@ -225,7 +283,8 @@ public class ExForestFire extends SimulatableSystem {
 			(int) Math.ceil(bushDensity
 					* (grid.grid.length * (grid.grid[0].length - 1) - watercount));
 		
-		buildRoads(rand);
+		if(randPath)
+			buildPath(rand);
 		
 		plantVegetation(totaltrees, ExForestFireCellType.TREE);
 		plantVegetation(totalbushes, ExForestFireCellType.BUSH);
@@ -252,7 +311,7 @@ public class ExForestFire extends SimulatableSystem {
 		}
 	}
 	
-	private void buildRoads(Random rand) {
+	private void buildPath(Random rand) {
 		// [2-4] edge points
 		int edgePoints = rand.nextInt(3) + 2;
 		int nPoints = rand.nextInt(3) + edgePoints + 1;

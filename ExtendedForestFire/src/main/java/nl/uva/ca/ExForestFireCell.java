@@ -12,7 +12,9 @@ import nl.tompeerdeman.ca.DataSet;
 import nl.tompeerdeman.ca.Grid;
 import nl.tompeerdeman.ca.Simulator;
 
-public class ExForestFireCell extends Cell {
+public class ExForestFireCell extends SerializableCell {
+	private static final long serialVersionUID = 1L;
+	
 	private int nBurningTicks;
 	private CellType secondaryType;
 	
@@ -57,7 +59,7 @@ public class ExForestFireCell extends Cell {
 		return shouldSimulate();
 	}
 	
-	public boolean murderFireFighter(Grid grid){
+	public boolean murderFireFighter(Grid grid) {
 		type = secondaryType;
 		secondaryType = null;
 		if(type == null) {
@@ -72,7 +74,7 @@ public class ExForestFireCell extends Cell {
 		}
 		return shouldSimulate();
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -86,7 +88,8 @@ public class ExForestFireCell extends Cell {
 		int probvar = ffdata.probDivider;
 		
 		// I'm extinguished, don't simulate me
-		if(type == ExForestFireCellType.EXTINGUISHED_TREE || type == ExForestFireCellType.EXTINGUISHED_BUSH)
+		if(type == ExForestFireCellType.EXTINGUISHED_TREE
+				|| type == ExForestFireCellType.EXTINGUISHED_BUSH)
 			return false;
 		
 		if(ffdata.type == 0) {
@@ -230,7 +233,7 @@ public class ExForestFireCell extends Cell {
 						
 						return walkFireFighter(grid, newX, newY, sim);
 					}
-					else if(distToFire[0] == 1){
+					else if(distToFire[0] == 1) {
 						int x, y;
 						double randomDouble;
 						int fireCount = 0;
@@ -240,9 +243,10 @@ public class ExForestFireCell extends Cell {
 							for(int nx = 0; nx < 3; nx++) {
 								x = this.x + nx - 1;
 								y = this.y - ny + 1;
-								if(x >= 0 && x < 100 && y >= 0 && y < 100){
+								if(x >= 0 && x < 100 && y >= 0 && y < 100) {
 									c = (ExForestFireCell) grid.getCell(x, y);
-									if(c != null && (c.getType() == ExForestFireCellType.BURNING_TREE
+									if(c != null
+											&& (c.getType() == ExForestFireCellType.BURNING_TREE
 											|| c.getType() == ExForestFireCellType.BURNING_BUSH)) {
 										fireCount++;
 									}
@@ -250,44 +254,50 @@ public class ExForestFireCell extends Cell {
 							}
 						}
 						// if there are fires around me, i could die
-						if(fireCount > 0){
-							// exponentially increasing chance of death 
-							double deathProb = Math.pow(1.45,(8-fireCount));
-							int deathProbInt  = (int) Math.round(deathProb);
+						if(fireCount > 0) {
+							// exponentially increasing chance of death
+							double deathProb = Math.pow(1.45, (8 - fireCount));
+							int deathProbInt = (int) Math.round(deathProb);
 							// already died, no chance of escape
-							if(deathProbInt == 1){
+							if(deathProbInt == 1) {
 								// should this return?
 								return murderFireFighter(grid);
 							}
 							// else probability
-							else{
+							else {
 								int died = rand.nextInt(deathProbInt);
-								if(died == 0){
+								if(died == 0) {
 									// should this return?
 									return murderFireFighter(grid);
 								}
 							}
 						}
-						else{
+						else {
 							for(int ny = 0; ny < 3; ny++) {
 								for(int nx = 0; nx < 3; nx++) {
 									x = this.x + nx - 1;
 									y = this.y - ny + 1;
-									if(x >= 0 && x < 100 && y >= 0 && y < 100){
-										c = (ExForestFireCell) grid.getCell(x, y);
-										// If a tree is burning, try to extinguish
-										if(c != null && c.getType() == ExForestFireCellType.BURNING_TREE) {
+									if(x >= 0 && x < 100 && y >= 0 && y < 100) {
+										c =
+											(ExForestFireCell) grid.getCell(x,
+													y);
+										// If a tree is burning, try to
+										// extinguish
+										if(c != null
+												&& c.getType() == ExForestFireCellType.BURNING_TREE) {
 											randomDouble = Math.random();
-											if (randomDouble <= ffdata.extinguishProb){
+											if(randomDouble <= ffdata.extinguishProb) {
 												c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
 												ffdata.burning--;
 												ffdata.trees++;
 											}
 										}
-										// If a bush is burning, try to extinguish
-										else if(c != null && c.getType() == ExForestFireCellType.BURNING_BUSH) {
+										// If a bush is burning, try to
+										// extinguish
+										else if(c != null
+												&& c.getType() == ExForestFireCellType.BURNING_BUSH) {
 											randomDouble = Math.random();
-											if (randomDouble <= ffdata.extinguishProb){
+											if(randomDouble <= ffdata.extinguishProb) {
 												c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
 												ffdata.burning--;
 												ffdata.bushes++;
@@ -459,9 +469,9 @@ public class ExForestFireCell extends Cell {
 							newY--;
 						else if(distToFire[2] > this.y)
 							newY++;
-					return walkFireFighter(grid, newX, newY, sim);
+						return walkFireFighter(grid, newX, newY, sim);
 					}
-					else if(distToFire[0] == 1){
+					else if(distToFire[0] == 1) {
 						int x, y;
 						double randomDouble;
 						int fireCount = 0;
@@ -475,9 +485,10 @@ public class ExForestFireCell extends Cell {
 									x = this.x + nx - 2;
 								// Grid y increases north so cell above is y + 1
 								y = this.y - ny + 1;
-								if(x >= 0 && x < 100 && y >= 0 && y < 100){
+								if(x >= 0 && x < 100 && y >= 0 && y < 100) {
 									c = (ExForestFireCell) grid.getCell(x, y);
-									if(c != null && (c.getType() == ExForestFireCellType.BURNING_TREE
+									if(c != null
+											&& (c.getType() == ExForestFireCellType.BURNING_TREE
 											|| c.getType() == ExForestFireCellType.BURNING_BUSH)) {
 										fireCount++;
 									}
@@ -485,19 +496,19 @@ public class ExForestFireCell extends Cell {
 							}
 						}
 						// if there are fires around me, i could die
-						if(fireCount > 0){
-							// exponentially increasing chance of death 
-							double deathProb = Math.pow(1.6,(6-fireCount));
-							int deathProbInt  = (int) Math.round(deathProb);
+						if(fireCount > 0) {
+							// exponentially increasing chance of death
+							double deathProb = Math.pow(1.6, (6 - fireCount));
+							int deathProbInt = (int) Math.round(deathProb);
 							// already died, no chance of escape
-							if(deathProbInt == 1){
+							if(deathProbInt == 1) {
 								// should this return?
 								return murderFireFighter(grid);
 							}
 							// else probability
-							else{
+							else {
 								int died = rand.nextInt(deathProbInt);
-								if(died == 0){
+								if(died == 0) {
 									// should this return?
 									return murderFireFighter(grid);
 								}
@@ -512,23 +523,30 @@ public class ExForestFireCell extends Cell {
 										x = this.x + nx - 1;
 									else
 										x = this.x + nx - 2;
-									// Grid y increases north so cell above is y + 1
+									// Grid y increases north so cell above is y
+									// + 1
 									y = this.y - ny + 1;
-									if(x >= 0 && x < 100 && y >= 0 && y < 100){
-										c = (ExForestFireCell) grid.getCell(x, y);
-										// If a tree is burning, try to extinguish
-										if(c != null && c.getType() == ExForestFireCellType.BURNING_TREE) {
+									if(x >= 0 && x < 100 && y >= 0 && y < 100) {
+										c =
+											(ExForestFireCell) grid.getCell(x,
+													y);
+										// If a tree is burning, try to
+										// extinguish
+										if(c != null
+												&& c.getType() == ExForestFireCellType.BURNING_TREE) {
 											randomDouble = Math.random();
-											if (randomDouble <= ffdata.extinguishProb){
+											if(randomDouble <= ffdata.extinguishProb) {
 												c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
 												ffdata.burning--;
 												ffdata.trees++;
 											}
 										}
-										// If a bush is burning, try to extinguish
-										else if(c != null && c.getType() == ExForestFireCellType.BURNING_BUSH) {
+										// If a bush is burning, try to
+										// extinguish
+										else if(c != null
+												&& c.getType() == ExForestFireCellType.BURNING_BUSH) {
 											randomDouble = Math.random();
-											if (randomDouble <= ffdata.extinguishProb){
+											if(randomDouble <= ffdata.extinguishProb) {
 												c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
 												ffdata.burning--;
 												ffdata.bushes++;
@@ -662,7 +680,7 @@ public class ExForestFireCell extends Cell {
 				if(!ffdata.fireFighters) {
 					return removeFireFighter(grid);
 				}
-				else{
+				else {
 					// initialize max distance to fire
 					// can't be more than 200
 					int newX = this.x, newY = this.y;
@@ -671,10 +689,12 @@ public class ExForestFireCell extends Cell {
 					distToFire = searchFire(grid, distToFire);
 					if(distToFire[0] > 1 && distToFire[0] < 200) {
 						// move to nearest fire
-						if(distToFire[2] < this.y && ((this.y % 2 == 0 && this.x % 2 == 0) || (this.y % 2 == 1 && this.x % 2 == 1))){
+						if(distToFire[2] < this.y
+								&& ((this.y % 2 == 0 && this.x % 2 == 0) || (this.y % 2 == 1 && this.x % 2 == 1))) {
 							newY--;
 						}
-						else if(distToFire[2] > this.y && ((this.y % 2 == 1 && this.x % 2 == 0) || (this.y % 2 == 0 && this.x % 2 == 1))){
+						else if(distToFire[2] > this.y
+								&& ((this.y % 2 == 1 && this.x % 2 == 0) || (this.y % 2 == 0 && this.x % 2 == 1))) {
 							newY++;
 						}
 						else if(distToFire[1] < this.x)
@@ -683,14 +703,15 @@ public class ExForestFireCell extends Cell {
 							newX++;
 						return walkFireFighter(grid, newX, newY, sim);
 					}
-					else if(distToFire[0] == 1){
-						if((this.x%2 == distToFire[1]%2 && this.y%2 == 0 && distToFire[2]%2 == 1)
-						   ||(this.x%2 == distToFire[1]%2 && this.y%2 == 1 && distToFire[2]%2 == 0)){
+					else if(distToFire[0] == 1) {
+						if((this.x % 2 == distToFire[1] % 2 && this.y % 2 == 0 && distToFire[2] % 2 == 1)
+								|| (this.x % 2 == distToFire[1] % 2
+										&& this.y % 2 == 1 && distToFire[2] % 2 == 0)) {
 							if(this.x == 0)
 								newX++;
 							else if(this.x == 99)
 								newX--;
-							else{
+							else {
 								Random leftRight = new Random();
 								if(leftRight.nextInt(1) == 0)
 									newX--;
@@ -699,8 +720,8 @@ public class ExForestFireCell extends Cell {
 							}
 							return walkFireFighter(grid, newX, newY, sim);
 						}
-						else{
-							int x=-1, y=-1;
+						else {
+							int x = -1, y = -1;
 							double randomDouble;
 							boolean area;
 							int fireCount = 0;
@@ -710,23 +731,32 @@ public class ExForestFireCell extends Cell {
 								for(int nx = 0; nx < 3; nx++) {
 									if((ny == 1 && this.x % 2 == 1 && this.y % 2 == 0)
 											|| (ny == 1 && this.x % 2 == 0 && this.y % 2 == 1)
-											|| (ny == 0 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 0)
-											|| (ny == 0 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 1)) {
+											|| (ny == 0 && nx == 1
+													&& this.x % 2 == 1 && this.y % 2 == 0)
+											|| (ny == 0 && nx == 1
+													&& this.x % 2 == 0 && this.y % 2 == 1)) {
 										x = this.x + nx - 1;
-										// Grid y increases north so cell above is y + 1
+										// Grid y increases north so cell above
+										// is y + 1
 										y = this.y - ny + 1;
 									}
 									else if((ny == 1 && this.x % 2 == 0 && this.y % 2 == 0)
 											|| (ny == 1 && this.x % 2 == 1 && this.y % 2 == 1)
-											|| (ny == 2 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 0)
-											|| (ny == 2 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 1)) {
+											|| (ny == 2 && nx == 1
+													&& this.x % 2 == 0 && this.y % 2 == 0)
+											|| (ny == 2 && nx == 1
+													&& this.x % 2 == 1 && this.y % 2 == 1)) {
 										x = this.x + nx - 1;
-										// Grid y increases north so cell above is y + 1
+										// Grid y increases north so cell above
+										// is y + 1
 										y = this.y - ny + 1;
 									}
-									if(x >= 0 && x < 100 && y >= 0 && y < 100){
-										c = (ExForestFireCell) grid.getCell(x, y);
-										if(c != null && (c.getType() == ExForestFireCellType.BURNING_TREE
+									if(x >= 0 && x < 100 && y >= 0 && y < 100) {
+										c =
+											(ExForestFireCell) grid.getCell(x,
+													y);
+										if(c != null
+												&& (c.getType() == ExForestFireCellType.BURNING_TREE
 												|| c.getType() == ExForestFireCellType.BURNING_BUSH)) {
 											fireCount++;
 										}
@@ -734,19 +764,19 @@ public class ExForestFireCell extends Cell {
 								}
 							}
 							// if there are fires around me, i could die
-							if(fireCount > 0){
-								// exponentially increasing chance of death 
-								double deathProb = Math.pow(3,(3-fireCount));
-								int deathProbInt  = (int) Math.round(deathProb);
+							if(fireCount > 0) {
+								// exponentially increasing chance of death
+								double deathProb = Math.pow(3, (3 - fireCount));
+								int deathProbInt = (int) Math.round(deathProb);
 								// already died, no chance of escape
-								if(deathProbInt == 1){
+								if(deathProbInt == 1) {
 									// should this return?
 									return murderFireFighter(grid);
 								}
 								// else probability
-								else{
+								else {
 									int died = rand.nextInt(deathProbInt);
-									if(died == 0){
+									if(died == 0) {
 										// should this return?
 										return murderFireFighter(grid);
 									}
@@ -757,38 +787,51 @@ public class ExForestFireCell extends Cell {
 									area = false;
 									if((ny == 1 && this.x % 2 == 1 && this.y % 2 == 0)
 											|| (ny == 1 && this.x % 2 == 0 && this.y % 2 == 1)
-											|| (ny == 0 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 0)
-											|| (ny == 0 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 1)) {
+											|| (ny == 0 && nx == 1
+													&& this.x % 2 == 1 && this.y % 2 == 0)
+											|| (ny == 0 && nx == 1
+													&& this.x % 2 == 0 && this.y % 2 == 1)) {
 										x = this.x + nx - 1;
-										// Grid y increases north so cell above is y + 1
+										// Grid y increases north so cell above
+										// is y + 1
 										y = this.y - ny + 1;
 										area = true;
 									}
 									else if((ny == 1 && this.x % 2 == 0 && this.y % 2 == 0)
 											|| (ny == 1 && this.x % 2 == 1 && this.y % 2 == 1)
-											|| (ny == 2 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 0)
-											|| (ny == 2 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 1)) {
+											|| (ny == 2 && nx == 1
+													&& this.x % 2 == 0 && this.y % 2 == 0)
+											|| (ny == 2 && nx == 1
+													&& this.x % 2 == 1 && this.y % 2 == 1)) {
 										x = this.x + nx - 1;
-										// Grid y increases north so cell above is y + 1
+										// Grid y increases north so cell above
+										// is y + 1
 										y = this.y - ny + 1;
 										area = true;
 									}
-									if(area){
-										if(x >= 0 && x < 100 && y >= 0 && y < 100){
-											c = (ExForestFireCell) grid.getCell(x, y);
-											// If a tree is burning, try to extinguish
-											if(c != null && c.getType() == ExForestFireCellType.BURNING_TREE) {
+									if(area) {
+										if(x >= 0 && x < 100 && y >= 0
+												&& y < 100) {
+											c =
+												(ExForestFireCell) grid.getCell(
+														x, y);
+											// If a tree is burning, try to
+											// extinguish
+											if(c != null
+													&& c.getType() == ExForestFireCellType.BURNING_TREE) {
 												randomDouble = Math.random();
-												if (randomDouble <= ffdata.extinguishProb){
+												if(randomDouble <= ffdata.extinguishProb) {
 													c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
 													ffdata.burning--;
 													ffdata.trees++;
 												}
 											}
-											// If a bush is burning, try to extinguish
-											else if(c != null && c.getType() == ExForestFireCellType.BURNING_BUSH) {
+											// If a bush is burning, try to
+											// extinguish
+											else if(c != null
+													&& c.getType() == ExForestFireCellType.BURNING_BUSH) {
 												randomDouble = Math.random();
-												if (randomDouble <= ffdata.extinguishProb){
+												if(randomDouble <= ffdata.extinguishProb) {
 													c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
 													ffdata.burning--;
 													ffdata.bushes++;

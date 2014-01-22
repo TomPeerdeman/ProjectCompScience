@@ -4,26 +4,24 @@
  */
 package nl.uva.ca;
 
+import java.io.Serializable;
+
 import nl.tompeerdeman.ca.Cell;
 import nl.tompeerdeman.ca.DataSet;
 import nl.tompeerdeman.ca.Grid;
 
-public class ExForestFireData implements DataSet {
-	public Grid grid;
+public class ExForestFireData implements DataSet, Serializable {
+	private static final long serialVersionUID = 1L;
+	
+	public transient Grid grid;
 	public double[][] neighborhood;
 	
-	public long bushes;
-	public long trees;
-	public long barren;
-	public long burning;
-	public long burnt;
+	public transient long bushes;
+	public transient long trees;
+	public transient long barren;
+	public transient long burning;
+	public transient long burnt;
 	
-	/**
-	 * UNUSED
-	 * 
-	 * @deprecated use fireFighters
-	 */
-	public double fireFightTresh;
 	public boolean fireFighters;
 	public double extinguishProb;
 	public boolean useTemperature;
@@ -34,28 +32,11 @@ public class ExForestFireData implements DataSet {
 	
 	/**
 	 * @param grid
-	 * @param neighborhood
-	 * @param fireFightTresh
-	 * @param extinguishProb
-	 * @param useTemperature
 	 * @param type
-	 * @param treeBurnTicks
-	 * @param bushBurnTicks
 	 */
-	public ExForestFireData(Grid grid, double[][] neighborhood,
-			double fireFightTresh, double extinguishProb,
-			boolean useTemperature, int type, int treeBurnTicks,
-			int bushBurnTicks) {
+	public ExForestFireData(Grid grid, int type) {
 		this.grid = grid;
-		this.neighborhood = neighborhood;
-		this.fireFightTresh = fireFightTresh;
-		this.extinguishProb = extinguishProb;
-		this.useTemperature = useTemperature;
 		this.type = type;
-		this.probDivider = 2;
-		
-		nTicksTreeBurn = treeBurnTicks;
-		nTicksBushBurn = bushBurnTicks;
 		
 		reset();
 	}
@@ -64,6 +45,15 @@ public class ExForestFireData implements DataSet {
 	public void reset() {
 		fireFighters = false;
 		probDivider = 2;
+		extinguishProb = 0.2;
+		nTicksTreeBurn = 10;
+		nTicksBushBurn = 4;
+		
+		neighborhood = new double[][] {
+										{0.1, 0.1, 0.1},
+										{0.1, 0.0, 0.1},
+										{0.1, 0.1, 0.1}
+		};
 		
 		burning = 0;
 		burnt = 0;
@@ -72,7 +62,6 @@ public class ExForestFireData implements DataSet {
 		trees = 0;
 		
 		Cell c;
-		
 		for(int y = 0; y < grid.grid[0].length; y++) {
 			for(int x = 0; x < grid.grid.length; x++) {
 				c = grid.getCell(x, y);
