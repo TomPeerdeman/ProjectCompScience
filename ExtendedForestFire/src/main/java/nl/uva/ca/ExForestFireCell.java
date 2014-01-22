@@ -276,38 +276,36 @@ public class ExForestFireCell extends SerializableCell {
 								}
 							}
 						}
-						else {
-							for(int ny = 0; ny < 3; ny++) {
-								for(int nx = 0; nx < 3; nx++) {
-									x = this.x + nx - 1;
-									y = this.y - ny + 1;
-									if(x >= 0 && x < 100 && y >= 0 && y < 100) {
-										c =
-											(ExForestFireCell) grid.getCell(x,
-													y);
-										// If a tree is burning, try to
-										// extinguish
-										if(c != null
-												&& c.getType() == ExForestFireCellType.BURNING_TREE) {
-											randomDouble = Math.random();
-											if(randomDouble <= ffdata.extinguishProb) {
-												c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
-												ffdata.burning--;
-												ffdata.trees++;
-											}
+						for(int ny = 0; ny < 3; ny++) {
+							for(int nx = 0; nx < 3; nx++) {
+								x = this.x + nx - 1;
+								y = this.y - ny + 1;
+								if(x >= 0 && x < 100 && y >= 0 && y < 100) {
+									c =
+										(ExForestFireCell) grid.getCell(x,
+												y);
+									// If a tree is burning, try to
+									// extinguish
+									if(c != null
+											&& c.getType() == ExForestFireCellType.BURNING_TREE) {
+										randomDouble = Math.random();
+										if(randomDouble <= ffdata.extinguishProb) {
+											c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
+											ffdata.burning--;
+											ffdata.trees++;
 										}
-										// If a bush is burning, try to
-										// extinguish
-										else if(c != null
-												&& c.getType() == ExForestFireCellType.BURNING_BUSH) {
-											randomDouble = Math.random();
-											if(randomDouble <= ffdata.extinguishProb) {
-												c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
-												ffdata.burning--;
-												ffdata.bushes++;
-											}
+									}
+									// If a bush is burning, try to
+									// extinguish
+									else if(c != null
+											&& c.getType() == ExForestFireCellType.BURNING_BUSH) {
+										randomDouble = Math.random();
+										if(randomDouble <= ffdata.extinguishProb) {
+											c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
+											ffdata.burning--;
+											ffdata.bushes++;
+										}
 
-										}
 									}
 								}
 							}
@@ -978,7 +976,7 @@ public class ExForestFireCell extends SerializableCell {
 	
 	private int[] searchFire(Grid grid, int[] distToFire) {
 		int newDistance;
-		int newX = this.x, newY = this.y;
+		boolean fireFound = false;
 		// search nearest fire
 		for(int i = Math.max(0, this.x - 4); i < Math.min(
 				grid.grid[0].length, this.x + 4); i++) {
@@ -994,14 +992,17 @@ public class ExForestFireCell extends SerializableCell {
 									+ Math.abs(j - this.y);
 						// smallest distance and at a new location
 						if(newDistance < distToFire[0]) {
+							fireFound = true;
 							distToFire[0] = newDistance;
-							distToFire[1] = newX;
-							distToFire[2] = newY;
+							distToFire[1] = i;
+							distToFire[2] = j;
 						}
 					}
 				}
 			}
 		}
+		if(fireFound)
+			return distToFire;
 		int possibilities = 0;
 		// search in 3x3 area for paths
 		for(int i = Math.max(0, this.x - 2); i < Math.min(
