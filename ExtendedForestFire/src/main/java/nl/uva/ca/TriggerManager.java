@@ -44,6 +44,8 @@ import nl.uva.ca.visual.trigger.forestfire.TreeBurnTicksGenerator;
  *
  */
 public class TriggerManager implements SimulateChangeListener {
+	private final String DEFAULT_EXTENSION = "tca";
+	
 	public static final Map<String, Class<? extends TriggerGeneratorPanel<?>>> TRIGGERS =
 		new LinkedHashMap<String, Class<? extends TriggerGeneratorPanel<?>>>();
 	public static final Map<String, Class<? extends TriggerActionGeneratorPanel<?>>> ACTIONS =
@@ -85,7 +87,7 @@ public class TriggerManager implements SimulateChangeListener {
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fileChooser.setFileHidingEnabled(true);
 		FileFilter filter =
-			new FileNameExtensionFilter("Trigger list files", "tca");
+			new FileNameExtensionFilter("Trigger list files", DEFAULT_EXTENSION);
 		fileChooser.addChoosableFileFilter(filter);
 		fileChooser.setAcceptAllFileFilterUsed(true);
 		fileChooser.setFileFilter(filter);
@@ -119,6 +121,10 @@ public class TriggerManager implements SimulateChangeListener {
 		int rc = fileChooser.showSaveDialog(parent);
 		if(rc == JFileChooser.APPROVE_OPTION) {
 			File f = fileChooser.getSelectedFile();
+			if(f.getName().indexOf('.') < 0
+					&& fileChooser.getFileFilter() instanceof FileNameExtensionFilter) {
+				f = new File(f.getAbsolutePath() + "." + DEFAULT_EXTENSION);
+			}
 			ObjectOutputStream out =
 				new ObjectOutputStream(new FileOutputStream(f));
 			out.writeObject(triggers);

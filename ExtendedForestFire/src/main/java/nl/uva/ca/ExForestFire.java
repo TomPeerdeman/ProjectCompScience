@@ -21,6 +21,8 @@ import nl.tompeerdeman.ca.Cell;
 import nl.tompeerdeman.ca.SimulatableSystem;
 
 public class ExForestFire extends SimulatableSystem {
+	public final String DEFAULT_GRID_EXTENSION = "cag";
+	
 	public static final double[][] NB_NEUMANN = {
 													{0, 1, 0},
 													{1, 0, 1},
@@ -96,7 +98,7 @@ public class ExForestFire extends SimulatableSystem {
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fileChooser.setFileHidingEnabled(true);
 		FileFilter filter =
-			new FileNameExtensionFilter("CA grid files", "cag");
+			new FileNameExtensionFilter("CA grid files", DEFAULT_GRID_EXTENSION);
 		fileChooser.addChoosableFileFilter(filter);
 		fileChooser.setAcceptAllFileFilterUsed(true);
 		fileChooser.setFileFilter(filter);
@@ -106,6 +108,11 @@ public class ExForestFire extends SimulatableSystem {
 		int rc = fileChooser.showSaveDialog(parent);
 		if(rc == JFileChooser.APPROVE_OPTION) {
 			File f = fileChooser.getSelectedFile();
+			if(f.getName().indexOf('.') < 0
+					&& fileChooser.getFileFilter() instanceof FileNameExtensionFilter) {
+				f =
+					new File(f.getAbsolutePath() + "." + DEFAULT_GRID_EXTENSION);
+			}
 			ObjectOutputStream out =
 				new ObjectOutputStream(new FileOutputStream(f));
 			out.writeObject(data);
