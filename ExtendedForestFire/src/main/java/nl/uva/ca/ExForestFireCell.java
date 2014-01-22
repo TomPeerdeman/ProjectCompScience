@@ -21,6 +21,8 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 	
 	private int nBurningTicks;
 	private CellType secondaryType;
+	private int prevX;
+	private int prevY;
 	
 	/**
 	 * @param x
@@ -30,6 +32,8 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 	public ExForestFireCell(int x, int y, ExForestFireCellType t) {
 		super(x, y, t);
 		nBurningTicks = 0;
+		prevX = x;
+		prevY = y;
 	}
 	
 	/**
@@ -304,37 +308,36 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 								}
 							}
 						}
-						else {
-							for(int ny = 0; ny < 3; ny++) {
-								for(int nx = 0; nx < 3; nx++) {
-									x = this.x + nx - 1;
-									y = this.y - ny + 1;
-									if(x >= 0 && x < 100 && y >= 0 && y < 100) {
-										c =
-											(ExForestFireCell) grid.getCell(x,
-													y);
-										// If a tree is burning, try to
-										// extinguish
-										if(c != null
-												&& c.getType() == ExForestFireCellType.BURNING_TREE) {
-											randomDouble = Math.random();
-											if(randomDouble <= ffdata.extinguishProb) {
-												c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
-												ffdata.burning--;
-												ffdata.trees++;
-											}
+						for(int ny = 0; ny < 3; ny++) {
+							for(int nx = 0; nx < 3; nx++) {
+								x = this.x + nx - 1;
+								y = this.y - ny + 1;
+								if(x >= 0 && x < 100 && y >= 0 && y < 100) {
+									c =
+										(ExForestFireCell) grid.getCell(x,
+												y);
+									// If a tree is burning, try to
+									// extinguish
+									if(c != null
+											&& c.getType() == ExForestFireCellType.BURNING_TREE) {
+										randomDouble = Math.random();
+										if(randomDouble <= ffdata.extinguishProb) {
+											c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
+											ffdata.burning--;
+											ffdata.trees++;
 										}
-										// If a bush is burning, try to
-										// extinguish
-										else if(c != null
-												&& c.getType() == ExForestFireCellType.BURNING_BUSH) {
-											randomDouble = Math.random();
-											if(randomDouble <= ffdata.extinguishProb) {
-												c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
-												ffdata.burning--;
-												ffdata.bushes++;
-											}
+									}
+									// If a bush is burning, try to
+									// extinguish
+									else if(c != null
+											&& c.getType() == ExForestFireCellType.BURNING_BUSH) {
+										randomDouble = Math.random();
+										if(randomDouble <= ffdata.extinguishProb) {
+											c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
+											ffdata.burning--;
+											ffdata.bushes++;
 										}
+
 									}
 								}
 							}
@@ -1005,6 +1008,7 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 	
 	private int[] searchFire(Grid grid, int[] distToFire) {
 		int newDistance;
+		boolean fireFound = false;
 		// search nearest fire
 		for(int i = Math.max(0, this.x - 4); i < Math.min(
 				grid.grid[0].length, this.x + 4); i++) {
@@ -1014,73 +1018,99 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 					(ExForestFireCell) grid.getCell(i, j);
 				if(cell != null) {
 					if(cell.getType() == ExForestFireCellType.BURNING_TREE
-							|| cell.getType() == ExForestFireCellType.BURNING_BUSH
-							|| cell.getType() == ExForestFireCellType.PATH) {
+							|| cell.getType() == ExForestFireCellType.BURNING_BUSH) {
 						newDistance =
 							Math.abs(i - this.x)
 									+ Math.abs(j - this.y);
-						
-						// Prefer fire over path.
-						if(cell.getType() == ExForestFireCellType.PATH) {
-							newDistance += 18;
-							
-							// Discourage a path with a fire fighter in front.
-							if(i < this.x) {
-								for(int i2 =
-									Math.max(0, i - 1); i2 < Math.max(
-										0, i - 3); i2++) {
-									Cell ce = grid.getCell(i2, j);
-									if(ce != null
-											&& ce.getType() == ExForestFireCellType.FIRE_FIGHTER) {
-										newDistance += 2;
-									}
-								}
-							}
-							
-							if(i > this.x) {
-								for(int i2 =
-									Math.min(grid.grid[0].length,
-											i + 1); i2 < Math.min(
-										grid.grid[0].length, i + 3); i2++) {
-									Cell ce = grid.getCell(i2, j);
-									if(ce != null
-											&& ce.getType() == ExForestFireCellType.FIRE_FIGHTER) {
-										newDistance += 2;
-									}
-								}
-							}
-							
-							if(j < this.y) {
-								for(int j2 =
-									Math.max(0, j - 1); j2 < Math.max(
-										0, j - 3); j2++) {
-									Cell ce = grid.getCell(i, j2);
-									if(ce != null
-											&& ce.getType() == ExForestFireCellType.FIRE_FIGHTER) {
-										newDistance += 2;
-									}
-								}
-							}
-							
-							if(j > this.y) {
-								for(int j2 =
-									Math.min(grid.grid[0].length,
-											j + 1); j2 < Math.min(
-										grid.grid[0].length, j + 3); j2++) {
-									Cell ce = grid.getCell(i, j2);
-									if(ce != null
-											&& ce.getType() == ExForestFireCellType.FIRE_FIGHTER) {
-										newDistance += 2;
-									}
-								}
-							}
-						}
-						
+						// smallest distance and at a new location
 						if(newDistance < distToFire[0]) {
+							fireFound = true;
 							distToFire[0] = newDistance;
 							distToFire[1] = i;
 							distToFire[2] = j;
 						}
+					}
+				}
+			}
+		}
+		if(fireFound)
+			return distToFire;
+		int possibilities = 0;
+		// search in 3x3 area for paths
+		for(int i = Math.max(0, this.x - 2); i < Math.min(
+				grid.grid[0].length, this.x + 2); i++) {
+			for(int j = Math.max(0, this.y - 2); j < Math.min(
+					grid.grid.length, this.y + 2); j++) {				
+				ExForestFireCell cell =
+						(ExForestFireCell) grid.getCell(i, j);
+				// Prefer fire over path.
+				if(cell != null && cell.getType() == ExForestFireCellType.PATH) {
+					possibilities++;
+					newDistance =
+						Math.abs(i - this.x)
+								+ Math.abs(j - this.y)
+								   + 18;
+					
+					// Discourage a path with a fire fighter in front.
+					if(i < this.x) {
+						for(int i2 =
+							Math.max(0, i - 1); i2 < Math.max(
+								0, i - 3); i2++) {
+							Cell ce = grid.getCell(i2, j);
+							if(ce != null
+									&& ce.getType() == ExForestFireCellType.FIRE_FIGHTER) {
+								newDistance += 2;
+							}
+						}
+					}
+					
+					else if(i > this.x) {
+						for(int i2 =
+							Math.min(grid.grid[0].length,
+									i + 1); i2 < Math.min(
+								grid.grid[0].length, i + 3); i2++) {
+							Cell ce = grid.getCell(i2, j);
+							if(ce != null
+									&& ce.getType() == ExForestFireCellType.FIRE_FIGHTER) {
+								newDistance += 2;
+							}
+						}
+					}
+					
+					else if(j < this.y) {
+						for(int j2 =
+							Math.max(0, j - 1); j2 < Math.max(
+								0, j - 3); j2++) {
+							Cell ce = grid.getCell(i, j2);
+							if(ce != null
+									&& ce.getType() == ExForestFireCellType.FIRE_FIGHTER) {
+								newDistance += 2;
+							}
+						}
+					}
+					
+					else if(j > this.y) {
+						for(int j2 =
+							Math.min(grid.grid[0].length,
+									j + 1); j2 < Math.min(
+								grid.grid[0].length, j + 3); j2++) {
+							Cell ce = grid.getCell(i, j2);
+							if(ce != null
+									&& ce.getType() == ExForestFireCellType.FIRE_FIGHTER) {
+								newDistance += 2;
+							}
+						}
+					}
+					if(newDistance < distToFire[0] && (i != prevX || j != prevY) && possibilities > 1) {
+						distToFire[0] = newDistance;
+						distToFire[1] = i;
+						distToFire[2] = j;
+					}
+					// walk back if there is no other possibility
+					else if(possibilities == 1){
+						distToFire[0] = newDistance;
+						distToFire[1] = i;
+						distToFire[2] = j;
 					}
 				}
 			}
@@ -1096,6 +1126,8 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 				&& newCell.getType() != ExForestFireCellType.BURNING_TREE
 				&& newCell.getType() != ExForestFireCellType.FIRE_FIGHTER) {
 			newCell.addFireFighter();
+			newCell.prevX = this.x;
+			newCell.prevY = this.y;
 			sim.addSimulatable(newCell);
 		} else if(newCell == null) {
 			newCell =
@@ -1104,6 +1136,8 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 			grid.setCell(newCell);
 			// New cell is FFighter only.
 			newCell.addFireFighter();
+			newCell.prevX = this.x;
+			newCell.prevY = this.y;
 			sim.addSimulatable(newCell);
 		}
 		else
