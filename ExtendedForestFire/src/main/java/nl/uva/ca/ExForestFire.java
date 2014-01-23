@@ -326,7 +326,7 @@ public class ExForestFire extends SimulatableSystem {
 		
 		int n = 0;
 		
-		// Generate a list of trees.
+		// Generate a list of trees at the start of the grid.
 		for(int x = 0; x < grid.grid.length; x++) {
 			for(int y = 0; y < grid.grid[0].length; y++) {
 				if(grid.getCell(x, y) == null) {
@@ -345,7 +345,7 @@ public class ExForestFire extends SimulatableSystem {
 		}
 		
 		n = 0;
-		// Generate a list of bushes.
+		// Generate a list of bushes at the end of the grid.
 		for(int x = grid.grid.length - 1; x >= 0; x--) {
 			for(int y = grid.grid[0].length - 1; y >= 0; y--) {
 				if(grid.getCell(x, y) == null) {
@@ -364,32 +364,32 @@ public class ExForestFire extends SimulatableSystem {
 		}
 		
 		Random rand = new Random();
-		
-		// Shuffle the list.
-		for(int i = 0; i < 100; i++) {
-			for(int x = 0; x < grid.grid.length; x++) {
-				for(int y = 0; y < grid.grid[0].length; y++) {
-					randSwapCell(x, y, rand);
-				}
-			}
-			for(int x = grid.grid.length - 1; x >= 0; x--) {
-				for(int y = grid.grid[0].length - 1; y >= 0; y--) {
-					randSwapCell(x, y, rand);
-				}
-			}
+		// Swap random cell's, looks decent enough (visual).
+		for(int j = 0; j < 500000; j++) {
+			randSwapCell(rand);
 		}
 	}
 	
-	private void randSwapCell(int x, int y, Random rand) {
-		Cell cell;
-		Cell other;
-		int rx;
-		int ry;
-		int tries;
+	private void randSwapCell(Random rand) {
+		Cell cell, otherCell;
+		int x, y, rx, ry;
 		
-		cell = grid.getCell(x, y);
+		int tries = 0;
+		do {
+			x = rand.nextInt(grid.grid.length);
+			y = rand.nextInt((grid.grid[0].length));
+			cell = grid.getCell(x, y);
+			
+			// Make sure the selected cell is not PATH or WATER.
+			if(cell == null
+					|| cell.getType() == ExForestFireCellType.TREE
+					|| cell.getType() == ExForestFireCellType.BUSH) {
+				break;
+			}
+			tries++;
+		} while(tries < 10);
 		
-		// Make sure this cell is not PATH or WATER.
+		// Stop if 10 tries failed.
 		if(cell != null
 				&& cell.getType() != ExForestFireCellType.TREE
 				&& cell.getType() != ExForestFireCellType.BUSH) {
@@ -400,30 +400,30 @@ public class ExForestFire extends SimulatableSystem {
 		do {
 			rx = rand.nextInt(grid.grid.length);
 			ry = rand.nextInt((grid.grid[0].length));
-			other = grid.getCell(rx, ry);
+			otherCell = grid.getCell(rx, ry);
 			
 			// Make sure the selected cell is not PATH or WATER.
-			if(cell != other
-					&& (other == null
-							|| other.getType() == ExForestFireCellType.TREE
-							|| other.getType() == ExForestFireCellType.BUSH)) {
+			if(cell != otherCell
+					&& (otherCell == null
+							|| otherCell.getType() == ExForestFireCellType.TREE
+							|| otherCell.getType() == ExForestFireCellType.BUSH)) {
 				break;
 			}
 			tries++;
 		} while(tries < 10);
 		
 		// Stop if 10 tries failed.
-		if(cell != other && other != null
-				&& other.getType() != ExForestFireCellType.TREE
-				&& other.getType() != ExForestFireCellType.BUSH) {
+		if(cell != otherCell && otherCell != null
+				&& otherCell.getType() != ExForestFireCellType.TREE
+				&& otherCell.getType() != ExForestFireCellType.BUSH) {
 			return;
 		}
 		
-		if(cell == null && other != null) {
+		if(cell == null && otherCell != null) {
 			grid.move(rx, ry, x, y);
-		} else if(cell != null && other == null) {
+		} else if(cell != null && otherCell == null) {
 			grid.move(x, y, rx, ry);
-		} else if(cell != null && other != null) {
+		} else if(cell != null && otherCell != null) {
 			// Swap cell's.
 			
 			// System.out.printf("Move %s(%d, %d) to %s(%d, %d)\n",
@@ -436,7 +436,7 @@ public class ExForestFire extends SimulatableSystem {
 			grid.move(x, y, rx, ry);
 			
 			// Set the cell at rx, ry to the original one.
-			grid.setCell(other);
+			grid.setCell(otherCell);
 			
 			/*
 			 * Moves 'other' to position x, y.
