@@ -726,13 +726,46 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 					distToFire = searchFire(grid, distToFire);
 					if(distToFire[0] > 1 && distToFire[0] < 200) {
 						// move to nearest fire
-						if(distToFire[2] < this.y
-								&& ((this.y % 2 == 0 && this.x % 2 == 0) || (this.y % 2 == 1 && this.x % 2 == 1))) {
-							newY--;
+						if(distToFire[2] < this.y) {
+							if(this.y % 2 == this.x%2){
+								newY--;
+							}
+							else{
+								if(this.x==0)
+									newX++;
+								else if(this.x==99)
+									newX--;
+								else if(this.x < 99 && this.x > 0){
+									ExForestFireCell cell1;
+									cell1 =	(ExForestFireCell) grid.getCell(this.x+1, this.y);	
+									ExForestFireCell cell2;
+									cell2 =	(ExForestFireCell) grid.getCell(this.x-1, this.y);
+									if(cell1 != null && cell1.getType() == ExForestFireCellType.PATH)
+										newX++;
+									else if(cell2 != null && cell2.getType() == ExForestFireCellType.PATH)
+										newX--;
+								}
+							}
 						}
-						else if(distToFire[2] > this.y
-								&& ((this.y % 2 == 1 && this.x % 2 == 0) || (this.y % 2 == 0 && this.x % 2 == 1))) {
-							newY++;
+						else if(distToFire[2] > this.y){
+							if(this.y % 2 != this.x%2)
+								newY++;
+							else{
+								if(this.x==0)
+									newX++;
+								else if(this.x==99)
+									newX--;
+								else if(this.x < 99 && this.x > 0){
+									ExForestFireCell cell1;
+									cell1 =	(ExForestFireCell) grid.getCell(this.x+1, this.y);	
+									ExForestFireCell cell2;
+									cell2 =	(ExForestFireCell) grid.getCell(this.x-1, this.y);
+									if(cell1 != null && cell1.getType() == ExForestFireCellType.PATH)
+										newX++;
+									else if(cell2 != null && cell2.getType() == ExForestFireCellType.PATH)
+										newX--;
+								}								
+							}
 						}
 						else if(distToFire[1] < this.x)
 							newX--;
