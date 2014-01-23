@@ -281,12 +281,6 @@ public class ExForestFire extends SimulatableSystem {
 					watercount++;
 			}
 		}
-		final int totaltrees =
-			(int) Math.ceil(treeDensity
-					* (grid.grid.length * (grid.grid[0].length - 1) - watercount));
-		final int totalbushes =
-			(int) Math.ceil(bushDensity
-					* (grid.grid.length * (grid.grid[0].length - 1) - watercount));
 		
 		if(randPath)
 			buildPath(rand);
@@ -294,7 +288,7 @@ public class ExForestFire extends SimulatableSystem {
 		// plantVegetation(totaltrees, ExForestFireCellType.TREE);
 		// plantVegetation(totalbushes, ExForestFireCellType.BUSH);
 		
-		plantVegetation(totaltrees, totalbushes);
+		plantVegetation(watercount);
 	}
 	
 	@SuppressWarnings("unused")
@@ -319,11 +313,14 @@ public class ExForestFire extends SimulatableSystem {
 		}
 	}
 	
-	private void plantVegetation(int nTrees, int nBushes) {
-		final int nTotal = nTrees + nBushes;
+	private void plantVegetation(int waterCount) {
 		final int gridSurface = grid.grid.length * grid.grid[0].length;
+		final int nTrees =
+			(int) Math.ceil((treeDensity * gridSurface) - waterCount);
+		final int nBushes =
+			(int) Math.ceil((bushDensity * gridSurface) - waterCount);
 		
-		if(nTotal > gridSurface) {
+		if(nTrees + nBushes > gridSurface) {
 			throw new IllegalArgumentException("Density sum > 1.0");
 		}
 		
@@ -333,19 +330,36 @@ public class ExForestFire extends SimulatableSystem {
 		for(int x = 0; x < grid.grid.length; x++) {
 			for(int y = 0; y < grid.grid[0].length; y++) {
 				if(grid.getCell(x, y) == null) {
-					if(n < nTrees) {
-						grid.setCell(new ExForestFireCell(x, y,
-								ExForestFireCellType.TREE));
-					} else {
-						grid.setCell(new ExForestFireCell(x, y,
-								ExForestFireCellType.BUSH));
-					}
+					grid.setCell(new ExForestFireCell(x, y,
+							ExForestFireCellType.TREE));
 					
 					n++;
-					if(n > nTotal) {
+					if(n >= nTrees) {
 						break;
 					}
 				}
+			}
+			if(n >= nTrees) {
+				break;
+			}
+		}
+		
+		n = 0;
+		// Generate a list of trees and bushes.
+		for(int x = grid.grid.length - 1; x >= 0; x--) {
+			for(int y = grid.grid[0].length - 1; y >= 0; y--) {
+				if(grid.getCell(x, y) == null) {
+					grid.setCell(new ExForestFireCell(x, y,
+							ExForestFireCellType.BUSH));
+					
+					n++;
+					if(n >= nBushes) {
+						break;
+					}
+				}
+			}
+			if(n >= nBushes) {
+				break;
 			}
 		}
 		
@@ -456,7 +470,7 @@ public class ExForestFire extends SimulatableSystem {
 			int edge = n % 100;
 			int p = n / 100;
 			if(p == 2 || p == 3) {
-				edge = 100 - edge;
+				edge = 99 - edge;
 			}
 			
 			if(p == 1) {
@@ -790,20 +804,20 @@ public class ExForestFire extends SimulatableSystem {
 	 * Ignite the grid at the bottom
 	 */
 	public void igniteGrid() {
-		// Fill the bottom line of the grid with burning vegetation.
-		for(int x = 0; x < grid.grid.length; x++) {
-			ExForestFireCell cell = (ExForestFireCell) grid.getCell(x, 0);
-			if(cell != null) {
-				// Set cell's of type BUSH to BURNING_BUSH and TREE to
-				// BURNING_TREE.
-				if(cell.getType() == ExForestFireCellType.BUSH) {
-					cell.setType(ExForestFireCellType.BURNING_BUSH);
-					
-				} else if(cell.getType() == ExForestFireCellType.TREE) {
-					cell.setType(ExForestFireCellType.BURNING_TREE);
-				}
-			}
-		}
+		// // Fill the bottom line of the grid with burning vegetation.
+		// for(int x = 0; x < grid.grid.length; x++) {
+		// ExForestFireCell cell = (ExForestFireCell) grid.getCell(x, 0);
+		// if(cell != null) {
+		// // Set cell's of type BUSH to BURNING_BUSH and TREE to
+		// // BURNING_TREE.
+		// if(cell.getType() == ExForestFireCellType.BUSH) {
+		// cell.setType(ExForestFireCellType.BURNING_BUSH);
+		//
+		// } else if(cell.getType() == ExForestFireCellType.TREE) {
+		// cell.setType(ExForestFireCellType.BURNING_TREE);
+		// }
+		// }
+		// }
 	}
 	
 	/**
