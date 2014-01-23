@@ -21,8 +21,8 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 	
 	private int nBurningTicks;
 	private CellType secondaryType;
-	private int prevX;
-	private int prevY;
+	public int[] prevX = {200,200,200,200};
+	public int[] prevY = {200,200,200,200};
 	
 	/**
 	 * @param x
@@ -32,8 +32,10 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 	public ExForestFireCell(int x, int y, ExForestFireCellType t) {
 		super(x, y, t);
 		nBurningTicks = 0;
-		prevX = x;
-		prevY = y;
+		prevX = new int[4];
+		prevY = new int[4];
+		prevX[0] = x;
+		prevY[0] = y;
 	}
 	
 	/**
@@ -727,7 +729,7 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 					if(distToFire[0] > 1 && distToFire[0] < 200) {
 						// move to nearest fire
 						if(distToFire[2] < this.y) {
-							if(this.y % 2 == this.x%2){
+							if(this.y % 2 == this.x % 2){
 								newY--;
 							}
 							else{
@@ -748,8 +750,9 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 							}
 						}
 						else if(distToFire[2] > this.y){
-							if(this.y % 2 != this.x%2)
+							if(this.y % 2 != this.x % 2){
 								newY++;
+							}
 							else{
 								if(this.x==0)
 									newX++;
@@ -1089,7 +1092,10 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 						(ExForestFireCell) grid.getCell(i, j);
 				// Prefer fire over path.
 				if(cell != null && cell.getType() == ExForestFireCellType.PATH
-						&& (i != prevX || j != prevY) ) {
+						&& (i != prevX[0] || j != prevY[0])
+						&& (i != prevX[1] || j != prevY[1])
+						&& (i != prevX[2] || j != prevY[2])
+						&& (i != prevX[3] || j != prevY[3])) {
 					possibilities++;
 					newDistance =
 						Math.abs(i - this.x)
@@ -1171,8 +1177,14 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 				&& newCell.getType() != ExForestFireCellType.BURNING_TREE
 				&& newCell.getType() != ExForestFireCellType.FIRE_FIGHTER) {
 			newCell.addFireFighter();
-			newCell.prevX = this.x;
-			newCell.prevY = this.y;
+			newCell.prevX[3] = prevX[2];
+			newCell.prevY[3] = prevY[2];
+			newCell.prevX[2] = prevX[1];
+			newCell.prevY[2] = prevY[1];
+			newCell.prevX[1] = prevX[0];
+			newCell.prevY[1] = prevY[0];
+			newCell.prevX[0] = this.x;
+			newCell.prevY[0] = this.y;
 			sim.addSimulatable(newCell);
 		} else if(newCell == null) {
 			newCell =
@@ -1181,8 +1193,14 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 			grid.setCell(newCell);
 			// New cell is FFighter only.
 			newCell.addFireFighter();
-			newCell.prevX = this.x;
-			newCell.prevY = this.y;
+			newCell.prevX[3] = prevX[2];
+			newCell.prevY[3] = prevY[2];
+			newCell.prevX[2] = prevX[1];
+			newCell.prevY[2] = prevY[1];
+			newCell.prevX[1] = prevX[0];
+			newCell.prevY[1] = prevY[0];
+			newCell.prevX[0] = this.x;
+			newCell.prevY[0] = this.y;
 			sim.addSimulatable(newCell);
 		}
 		else

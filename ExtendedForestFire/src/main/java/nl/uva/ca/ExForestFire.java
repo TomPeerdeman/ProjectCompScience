@@ -829,6 +829,7 @@ public class ExForestFire extends SimulatableSystem {
 	 * Ignite the grid at the bottom
 	 */
 	public void igniteGrid() {
+
 		// // Fill the bottom line of the grid with burning vegetation.
 		// for(int x = 0; x < grid.grid.length; x++) {
 		// ExForestFireCell cell = (ExForestFireCell) grid.getCell(x, 0);
