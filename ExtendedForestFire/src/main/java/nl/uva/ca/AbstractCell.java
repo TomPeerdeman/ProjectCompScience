@@ -30,4 +30,14 @@ public abstract class AbstractCell extends Cell {
 	public AbstractCell() {
 		super(-1, -1, null);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "AbstractCell [x=" + x + ", y=" + y + ", type=" + type + "]";
+	}
 }
