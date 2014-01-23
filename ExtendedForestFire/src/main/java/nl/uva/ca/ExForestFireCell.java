@@ -21,8 +21,8 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 	
 	private int nBurningTicks;
 	private CellType secondaryType;
-	public int[] prevX = {200,200,200,200};
-	public int[] prevY = {200,200,200,200};
+	public int[] prevX = {200, 200, 200, 200};
+	public int[] prevY = {200, 200, 200, 200};
 	
 	/**
 	 * @param x
@@ -147,104 +147,107 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 					}
 				}
 				boolean fire = false;
-				for(int ny = 0; ny < 5; ny++) {
-					for(int nx = 0; nx < 5; nx++) {
-						fire = false;
-						x2 = this.x + nx - 2;
-						// Grid y increases north so cell above is y + 1
-						y2 = this.y - ny + 2;
-						if(ny == 0) {
-							if(nx == 0) {
-								prob = ffdata.neighborhood[0][0] / probvar;
-								fire = true;
+				if(probvar > 0) {
+					for(int ny = 0; ny < 5; ny++) {
+						for(int nx = 0; nx < 5; nx++) {
+							fire = false;
+							x2 = this.x + nx - 2;
+							// Grid y increases north so cell above is y + 1
+							y2 = this.y - ny + 2;
+							if(ny == 0) {
+								if(nx == 0) {
+									prob = ffdata.neighborhood[0][0] / probvar;
+									fire = true;
+								}
+								else if(nx == 1) {
+									prob =
+										((ffdata.neighborhood[0][0] / probvar) + (ffdata.neighborhood[0][1] / probvar)) / 2;
+									fire = true;
+								}
+								else if(nx == 2) {
+									prob =
+										((ffdata.neighborhood[0][0] / probvar)
+												+ (ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[0][2] / probvar)) / 3;
+									fire = true;
+								}
+								else if(nx == 3) {
+									prob =
+										((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[0][2] / probvar)) / 2;
+									fire = true;
+								}
+								else if(nx == 4) {
+									prob = ffdata.neighborhood[0][2] / probvar;
+									fire = true;
+								}
 							}
-							else if(nx == 1) {
-								prob =
-									((ffdata.neighborhood[0][0] / probvar) + (ffdata.neighborhood[0][1] / probvar)) / 2;
-								fire = true;
+							else if(ny == 1) {
+								if(nx == 0) {
+									prob =
+										((ffdata.neighborhood[0][0] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2;
+									fire = true;
+								}
+								else if(nx == 4) {
+									prob =
+										((ffdata.neighborhood[0][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2;
+									fire = true;
+								}
 							}
-							else if(nx == 2) {
-								prob =
-									((ffdata.neighborhood[0][0] / probvar)
-											+ (ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[0][2] / probvar)) / 3;
-								fire = true;
+							else if(ny == 2) {
+								if(nx == 0) {
+									prob =
+										((ffdata.neighborhood[0][0] / probvar)
+												+ (ffdata.neighborhood[1][0] / probvar) + (ffdata.neighborhood[2][0] / probvar)) / 3;
+									fire = true;
+								}
+								else if(nx == 4) {
+									prob =
+										((ffdata.neighborhood[0][2] / probvar)
+												+ (ffdata.neighborhood[1][2] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 3;
+									fire = true;
+								}
 							}
-							else if(nx == 3) {
-								prob =
-									((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[0][2] / probvar)) / 2;
-								fire = true;
+							else if(ny == 3) {
+								if(nx == 0) {
+									prob =
+										((ffdata.neighborhood[2][0] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2;
+									fire = true;
+								}
+								else if(nx == 4) {
+									prob =
+										((ffdata.neighborhood[2][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2;
+									fire = true;
+								}
 							}
-							else if(nx == 4) {
-								prob = ffdata.neighborhood[0][2] / probvar;
-								fire = true;
+							else if(ny == 4) {
+								if(nx == 0) {
+									prob = ffdata.neighborhood[2][0] / probvar;
+									fire = true;
+								}
+								else if(nx == 1) {
+									prob =
+										((ffdata.neighborhood[2][0] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2;
+									fire = true;
+								}
+								else if(nx == 2) {
+									prob =
+										((ffdata.neighborhood[2][0] / probvar)
+												+ (ffdata.neighborhood[2][1] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 3;
+									fire = true;
+								}
+								else if(nx == 3) {
+									prob =
+										((ffdata.neighborhood[2][1] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 2;
+									fire = true;
+								}
+								else if(nx == 4) {
+									prob = ffdata.neighborhood[2][2] / probvar;
+									fire = true;
+								}
 							}
+							if(fire)
+								checkFireRadius2(x2, y2, grid, ffdata, c, sim,
+										prob);
 						}
-						else if(ny == 1) {
-							if(nx == 0) {
-								prob =
-									((ffdata.neighborhood[0][0] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2;
-								fire = true;
-							}
-							else if(nx == 4) {
-								prob =
-									((ffdata.neighborhood[0][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2;
-								fire = true;
-							}
-						}
-						else if(ny == 2) {
-							if(nx == 0) {
-								prob =
-									((ffdata.neighborhood[0][0] / probvar)
-											+ (ffdata.neighborhood[1][0] / probvar) + (ffdata.neighborhood[2][0] / probvar)) / 3;
-								fire = true;
-							}
-							else if(nx == 4) {
-								prob =
-									((ffdata.neighborhood[0][2] / probvar)
-											+ (ffdata.neighborhood[1][2] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 3;
-								fire = true;
-							}
-						}
-						else if(ny == 3) {
-							if(nx == 0) {
-								prob =
-									((ffdata.neighborhood[2][0] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2;
-								fire = true;
-							}
-							else if(nx == 4) {
-								prob =
-									((ffdata.neighborhood[2][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2;
-								fire = true;
-							}
-						}
-						else if(ny == 4) {
-							if(nx == 0) {
-								prob = ffdata.neighborhood[2][0] / probvar;
-								fire = true;
-							}
-							else if(nx == 1) {
-								prob =
-									((ffdata.neighborhood[2][0] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2;
-								fire = true;
-							}
-							else if(nx == 2) {
-								prob =
-									((ffdata.neighborhood[2][0] / probvar)
-											+ (ffdata.neighborhood[2][1] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 3;
-								fire = true;
-							}
-							else if(nx == 3) {
-								prob =
-									((ffdata.neighborhood[2][1] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 2;
-								fire = true;
-							}
-							else if(nx == 4) {
-								prob = ffdata.neighborhood[2][2] / probvar;
-								fire = true;
-							}
-						}
-						if(fire)
-							checkFireRadius2(x2, y2, grid, ffdata, c, sim, prob);
 					}
 				}
 			} else if(type == ExForestFireCellType.FIRE_FIGHTER) {
@@ -341,7 +344,7 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 											ffdata.burning--;
 											ffdata.bushes++;
 										}
-
+										
 									}
 								}
 							}
@@ -373,107 +376,110 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 						}
 					}
 				}
-				boolean fire = false;
-				for(int ny = 0; ny < 5; ny++) {
-					for(int nx = 0; nx < 5; nx++) {
-						fire = false;
-						x2 = this.x + nx - 2;
-						// Grid y increases north so cell above is y + 1
-						y2 = this.y - ny + 2;
-						if(ny == 0) {
-							if(nx == 1) {
-								prob = ffdata.neighborhood[0][1] / probvar;
-								fire = true;
-							}
-							else if(nx == 2) {
-								prob =
-									((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[0][1] / probvar)) / 2;
-								fire = true;
-							}
-							else if(nx == 3) {
-								prob = ffdata.neighborhood[0][2] / probvar;
-								fire = true;
-							}
-						}
-						else if(ny == 1) {
-							if(this.y % 2 == 0) {
-								if(nx == 0) {
+				if(probvar > 0) {
+					boolean fire = false;
+					for(int ny = 0; ny < 5; ny++) {
+						for(int nx = 0; nx < 5; nx++) {
+							fire = false;
+							x2 = this.x + nx - 2;
+							// Grid y increases north so cell above is y + 1
+							y2 = this.y - ny + 2;
+							if(ny == 0) {
+								if(nx == 1) {
+									prob = ffdata.neighborhood[0][1] / probvar;
+									fire = true;
+								}
+								else if(nx == 2) {
 									prob =
-										((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2;
+										((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[0][1] / probvar)) / 2;
 									fire = true;
 								}
 								else if(nx == 3) {
-									prob =
-										((ffdata.neighborhood[0][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2;
+									prob = ffdata.neighborhood[0][2] / probvar;
 									fire = true;
 								}
 							}
-							else if(this.y % 2 == 1) {
-								if(nx == 1) {
-									prob =
-										((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2;
+							else if(ny == 1) {
+								if(this.y % 2 == 0) {
+									if(nx == 0) {
+										prob =
+											((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2;
+										fire = true;
+									}
+									else if(nx == 3) {
+										prob =
+											((ffdata.neighborhood[0][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2;
+										fire = true;
+									}
+								}
+								else if(this.y % 2 == 1) {
+									if(nx == 1) {
+										prob =
+											((ffdata.neighborhood[0][1] / probvar) + (ffdata.neighborhood[1][0] / probvar)) / 2;
+										fire = true;
+									}
+									else if(nx == 4) {
+										prob =
+											((ffdata.neighborhood[0][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2;
+										fire = true;
+									}
+								}
+							}
+							else if(ny == 2) {
+								if(nx == 0) {
+									prob = ffdata.neighborhood[1][0] / probvar;
 									fire = true;
 								}
 								else if(nx == 4) {
-									prob =
-										((ffdata.neighborhood[0][2] / probvar) + (ffdata.neighborhood[1][2] / probvar)) / 2;
+									prob = ffdata.neighborhood[1][2] / probvar;
 									fire = true;
 								}
 							}
-						}
-						else if(ny == 2) {
-							if(nx == 0) {
-								prob = ffdata.neighborhood[1][0] / probvar;
-								fire = true;
+							else if(ny == 3) {
+								if(this.y % 2 == 0) {
+									if(nx == 0) {
+										prob =
+											((ffdata.neighborhood[1][0] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2;
+										fire = true;
+									}
+									else if(nx == 3) {
+										prob =
+											((ffdata.neighborhood[1][2] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 2;
+										fire = true;
+									}
+								}
+								else if(this.y % 2 == 1) {
+									if(nx == 1) {
+										prob =
+											((ffdata.neighborhood[1][0] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2;
+										fire = true;
+									}
+									else if(nx == 4) {
+										prob =
+											((ffdata.neighborhood[1][2] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 2;
+										fire = true;
+									}
+								}
 							}
-							else if(nx == 4) {
-								prob = ffdata.neighborhood[1][2] / probvar;
-								fire = true;
-							}
-						}
-						else if(ny == 3) {
-							if(this.y % 2 == 0) {
-								if(nx == 0) {
+							else if(ny == 4) {
+								if(nx == 1) {
+									prob = ffdata.neighborhood[2][1] / probvar;
+									fire = true;
+								}
+								else if(nx == 2) {
 									prob =
-										((ffdata.neighborhood[1][0] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2;
+										((ffdata.neighborhood[2][1] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2;
 									fire = true;
 								}
 								else if(nx == 3) {
-									prob =
-										((ffdata.neighborhood[1][2] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 2;
+									prob = ffdata.neighborhood[2][2] / probvar;
 									fire = true;
 								}
 							}
-							else if(this.y % 2 == 1) {
-								if(nx == 1) {
-									prob =
-										((ffdata.neighborhood[1][0] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2;
-									fire = true;
-								}
-								else if(nx == 4) {
-									prob =
-										((ffdata.neighborhood[1][2] / probvar) + (ffdata.neighborhood[2][2] / probvar)) / 2;
-									fire = true;
-								}
-							}
+							if(fire)
+								checkFireRadius2(x2, y2, grid, ffdata, c, sim,
+										prob);
 						}
-						else if(ny == 4) {
-							if(nx == 1) {
-								prob = ffdata.neighborhood[2][1] / probvar;
-								fire = true;
-							}
-							else if(nx == 2) {
-								prob =
-									((ffdata.neighborhood[2][1] / probvar) + (ffdata.neighborhood[2][1] / probvar)) / 2;
-								fire = true;
-							}
-							else if(nx == 3) {
-								prob = ffdata.neighborhood[2][2] / probvar;
-								fire = true;
-							}
-						}
-						if(fire)
-							checkFireRadius2(x2, y2, grid, ffdata, c, sim, prob);
 					}
 				}
 			}
@@ -633,85 +639,88 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 						}
 					}
 				}
-				boolean fire = false;
-				for(int ny = 0; ny < 5; ny++) {
-					for(int nx = 0; nx < 5; nx++) {
-						fire = false;
-						x2 = this.x + nx - 2;
-						// Grid y increases north so cell above is y + 1
-						y2 = this.y - ny + 2;
-						// triangle type 1
-						if((this.x % 2 == 0 && this.y % 2 == 0)
-								|| (this.x % 2 == 1 && this.y % 2 == 1)) {
-							if(ny == 1) {
-								if(nx == 1) {
-									prob =
-										(ffdata.neighborhood[0][0] / probvar);
-									fire = true;
+				if(probvar > 0) {
+					boolean fire = false;
+					for(int ny = 0; ny < 5; ny++) {
+						for(int nx = 0; nx < 5; nx++) {
+							fire = false;
+							x2 = this.x + nx - 2;
+							// Grid y increases north so cell above is y + 1
+							y2 = this.y - ny + 2;
+							// triangle type 1
+							if((this.x % 2 == 0 && this.y % 2 == 0)
+									|| (this.x % 2 == 1 && this.y % 2 == 1)) {
+								if(ny == 1) {
+									if(nx == 1) {
+										prob =
+											(ffdata.neighborhood[0][0] / probvar);
+										fire = true;
+									}
+									else if(nx == 3) {
+										prob =
+											(ffdata.neighborhood[0][2] / probvar);
+										fire = true;
+									}
 								}
-								else if(nx == 3) {
-									prob =
-										(ffdata.neighborhood[0][2] / probvar);
-									fire = true;
+								else if(ny == 2) {
+									if(nx == 0) {
+										prob =
+											(ffdata.neighborhood[0][0] / probvar);
+										fire = true;
+									}
+									else if(nx == 4) {
+										prob =
+											(ffdata.neighborhood[0][2] / probvar);
+										fire = true;
+									}
+								}
+								if(ny == 3) {
+									if(nx == 1 || nx == 3) {
+										prob =
+											(ffdata.neighborhood[1][1] / probvar);
+										fire = true;
+									}
 								}
 							}
-							else if(ny == 2) {
-								if(nx == 0) {
-									prob =
-										(ffdata.neighborhood[0][0] / probvar);
-									fire = true;
+							// triangle type 2
+							else if((this.x % 2 == 1 && this.y % 2 == 0)
+									|| (this.x % 2 == 0 && this.y % 2 == 1)) {
+								if(ny == 1) {
+									if(nx == 1 || nx == 3) {
+										prob =
+											(ffdata.neighborhood[0][1] / probvar);
+										fire = true;
+									}
 								}
-								else if(nx == 4) {
-									prob =
-										(ffdata.neighborhood[0][2] / probvar);
-									fire = true;
+								else if(ny == 2) {
+									if(nx == 0) {
+										prob =
+											(ffdata.neighborhood[1][0] / probvar);
+										fire = true;
+									}
+									else if(nx == 4) {
+										prob =
+											(ffdata.neighborhood[1][2] / probvar);
+										fire = true;
+									}
+								}
+								else if(ny == 3) {
+									if(nx == 1) {
+										prob =
+											(ffdata.neighborhood[1][0] / probvar);
+										fire = true;
+									}
+									else if(nx == 3) {
+										prob =
+											(ffdata.neighborhood[1][2] / probvar);
+										fire = true;
+									}
 								}
 							}
-							if(ny == 3) {
-								if(nx == 1 || nx == 3) {
-									prob =
-										(ffdata.neighborhood[1][1] / probvar);
-									fire = true;
-								}
-							}
+							if(fire)
+								checkFireRadius2(x2, y2, grid, ffdata, c, sim,
+										prob);
 						}
-						// triangle type 2
-						else if((this.x % 2 == 1 && this.y % 2 == 0)
-								|| (this.x % 2 == 0 && this.y % 2 == 1)) {
-							if(ny == 1) {
-								if(nx == 1 || nx == 3) {
-									prob =
-										(ffdata.neighborhood[0][1] / probvar);
-									fire = true;
-								}
-							}
-							else if(ny == 2) {
-								if(nx == 0) {
-									prob =
-										(ffdata.neighborhood[1][0] / probvar);
-									fire = true;
-								}
-								else if(nx == 4) {
-									prob =
-										(ffdata.neighborhood[1][2] / probvar);
-									fire = true;
-								}
-							}
-							else if(ny == 3) {
-								if(nx == 1) {
-									prob =
-										(ffdata.neighborhood[1][0] / probvar);
-									fire = true;
-								}
-								else if(nx == 3) {
-									prob =
-										(ffdata.neighborhood[1][2] / probvar);
-									fire = true;
-								}
-							}
-						}
-						if(fire)
-							checkFireRadius2(x2, y2, grid, ffdata, c, sim, prob);
 					}
 				}
 			}
@@ -729,45 +738,57 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 					if(distToFire[0] > 1 && distToFire[0] < 200) {
 						// move to nearest fire
 						if(distToFire[2] < this.y) {
-							if(this.y % 2 == this.x % 2){
+							if(this.y % 2 == this.x % 2) {
 								newY--;
 							}
-							else{
-								if(this.x==0)
+							else {
+								if(this.x == 0)
 									newX++;
-								else if(this.x==99)
+								else if(this.x == 99)
 									newX--;
-								else if(this.x < 99 && this.x > 0){
+								else if(this.x < 99 && this.x > 0) {
 									ExForestFireCell cell1;
-									cell1 =	(ExForestFireCell) grid.getCell(this.x+1, this.y);	
+									cell1 =
+										(ExForestFireCell) grid.getCell(
+												this.x + 1, this.y);
 									ExForestFireCell cell2;
-									cell2 =	(ExForestFireCell) grid.getCell(this.x-1, this.y);
-									if(cell1 != null && cell1.getType() == ExForestFireCellType.PATH)
+									cell2 =
+										(ExForestFireCell) grid.getCell(
+												this.x - 1, this.y);
+									if(cell1 != null
+											&& cell1.getType() == ExForestFireCellType.PATH)
 										newX++;
-									else if(cell2 != null && cell2.getType() == ExForestFireCellType.PATH)
+									else if(cell2 != null
+											&& cell2.getType() == ExForestFireCellType.PATH)
 										newX--;
 								}
 							}
 						}
-						else if(distToFire[2] > this.y){
-							if(this.y % 2 != this.x % 2){
+						else if(distToFire[2] > this.y) {
+							if(this.y % 2 != this.x % 2) {
 								newY++;
 							}
-							else{
-								if(this.x==0)
+							else {
+								if(this.x == 0)
 									newX++;
-								else if(this.x==99)
+								else if(this.x == 99)
 									newX--;
-								else if(this.x < 99 && this.x > 0){
+								else if(this.x < 99 && this.x > 0) {
 									ExForestFireCell cell1;
-									cell1 =	(ExForestFireCell) grid.getCell(this.x+1, this.y);	
+									cell1 =
+										(ExForestFireCell) grid.getCell(
+												this.x + 1, this.y);
 									ExForestFireCell cell2;
-									cell2 =	(ExForestFireCell) grid.getCell(this.x-1, this.y);
-									if(cell1 != null && cell1.getType() == ExForestFireCellType.PATH)
+									cell2 =
+										(ExForestFireCell) grid.getCell(
+												this.x - 1, this.y);
+									if(cell1 != null
+											&& cell1.getType() == ExForestFireCellType.PATH)
 										newX++;
-									else if(cell2 != null && cell2.getType() == ExForestFireCellType.PATH)
+									else if(cell2 != null
+											&& cell2.getType() == ExForestFireCellType.PATH)
 										newX--;
-								}								
+								}
 							}
 						}
 						else if(distToFire[1] < this.x)
@@ -784,14 +805,20 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 								newX++;
 							else if(this.x == 99)
 								newX--;
-							else if(this.x < 99 && this.x > 0){
+							else if(this.x < 99 && this.x > 0) {
 								ExForestFireCell cell1;
-								cell1 =	(ExForestFireCell) grid.getCell(this.x+1, this.y);	
+								cell1 =
+									(ExForestFireCell) grid.getCell(this.x + 1,
+											this.y);
 								ExForestFireCell cell2;
-								cell2 =	(ExForestFireCell) grid.getCell(this.x-1, this.y);
-								if(cell1 != null && cell1.getType() == ExForestFireCellType.PATH)
+								cell2 =
+									(ExForestFireCell) grid.getCell(this.x - 1,
+											this.y);
+								if(cell1 != null
+										&& cell1.getType() == ExForestFireCellType.PATH)
 									newX++;
-								else if(cell2 != null && cell2.getType() == ExForestFireCellType.PATH)
+								else if(cell2 != null
+										&& cell2.getType() == ExForestFireCellType.PATH)
 									newX--;
 							}
 							else {
@@ -814,23 +841,23 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 								for(int nx = 0; nx < 3; nx++) {
 									x = -1;
 									y = -1;
-									if(this.x%2 == this.y%2){
-										if(ny == 0 && nx == 1){
+									if(this.x % 2 == this.y % 2) {
+										if(ny == 0 && nx == 1) {
 											x = this.x;
-											y = this.y-1;
+											y = this.y - 1;
 										}
-										if(ny == 1 && nx != 1){
-											x = this.x +nx-1;
+										if(ny == 1 && nx != 1) {
+											x = this.x + nx - 1;
 											y = this.y;
 										}
 									}
-									else if (this.x%2 != this.y%2){
-										if(ny == 2 && nx == 1){
+									else if(this.x % 2 != this.y % 2) {
+										if(ny == 2 && nx == 1) {
 											x = this.x;
-											y = this.y+1;
+											y = this.y + 1;
 										}
-										if(ny == 1 && nx != 1){
-											x = this.x +nx-1;
+										if(ny == 1 && nx != 1) {
+											x = this.x + nx - 1;
 											y = this.y;
 										}
 									}
@@ -849,7 +876,8 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 							// if there are fires around me, i could die
 							if(fireCount > 0) {
 								// exponentially increasing chance of death
-								int deathProbInt = (int) Math.pow(3, (3-fireCount));
+								int deathProbInt =
+									(int) Math.pow(3, (3 - fireCount));
 								// already died, no chance of escape
 								if(deathProbInt == 1) {
 									// should this return?
@@ -1046,9 +1074,8 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 			// maybe break here after x ticks fire fighter adding?
 			
 			Random r = new Random();
-			// Set to firefighter in 4% of the cases (change to variable
-			// maybe?)
-			if(r.nextInt(26) == 19)
+			if(ffdata.fireFighterSpawnProb == 1.0
+					|| r.nextInt((int) (101)) < (100 * ffdata.fireFighterSpawnProb))
 				addFireFighter();
 		}
 	}
@@ -1087,9 +1114,9 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 		for(int i = Math.max(0, this.x - 2); i < Math.min(
 				grid.grid[0].length, this.x + 2); i++) {
 			for(int j = Math.max(0, this.y - 2); j < Math.min(
-					grid.grid.length, this.y + 2); j++) {				
+					grid.grid.length, this.y + 2); j++) {
 				ExForestFireCell cell =
-						(ExForestFireCell) grid.getCell(i, j);
+					(ExForestFireCell) grid.getCell(i, j);
 				// Prefer fire over path.
 				if(cell != null && cell.getType() == ExForestFireCellType.PATH
 						&& (i != prevX[0] || j != prevY[0])
@@ -1100,7 +1127,7 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 					newDistance =
 						Math.abs(i - this.x)
 								+ Math.abs(j - this.y)
-								   + 18;
+								+ 18;
 					
 					// Discourage a path with a fire fighter in front.
 					if(i < this.x) {
@@ -1152,13 +1179,13 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 							}
 						}
 					}
-					if(newDistance < distToFire[0] && possibilities > 1 ) {
+					if(newDistance < distToFire[0] && possibilities > 1) {
 						distToFire[0] = newDistance;
 						distToFire[1] = i;
 						distToFire[2] = j;
 					}
 					// walk back if there is no other possibility
-					else if(possibilities == 1){
+					else if(possibilities == 1) {
 						distToFire[0] = newDistance;
 						distToFire[1] = i;
 						distToFire[2] = j;

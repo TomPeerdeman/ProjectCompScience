@@ -23,6 +23,7 @@ public class ExForestFireData implements DataSet, Serializable {
 	public transient long burnt;
 	
 	public transient boolean fireFighters;
+	public transient double fireFighterSpawnProb;
 	public transient double extinguishProb;
 	public transient int nTicksTreeBurn;
 	public transient int nTicksBushBurn;
@@ -55,6 +56,7 @@ public class ExForestFireData implements DataSet, Serializable {
 		extinguishProb = 0.2;
 		nTicksTreeBurn = 10;
 		nTicksBushBurn = 4;
+		fireFighterSpawnProb = 0.4;
 		
 		// TODO: Depends on type?
 		neighborhood = new double[][] {

@@ -60,7 +60,7 @@ public class ProbDividerGenerator extends
 		
 		c.gridx = 0;
 		c.gridy = 0;
-		add(new JLabel("Prob divider [1->"), c);
+		add(new JLabel("Prob divider [0, 1->"), c);
 		
 		divField = new JTextField("2");
 		c.gridy++;
@@ -80,7 +80,7 @@ public class ProbDividerGenerator extends
 	public ProbDividerAction generate() {
 		try {
 			int n = Integer.parseInt(divField.getText());
-			if(n < 1) {
+			if(n < 0) {
 				throw new NumberFormatException();
 			}
 			return new ProbDividerAction(n);

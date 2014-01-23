@@ -16,13 +16,21 @@ public class FireFightersStatusAction implements TriggerAction {
 	private static final long serialVersionUID = 1L;
 	
 	private final boolean newStatus;
+	private final double newSpawnProb;
 	
 	/**
 	 * @param newStatus
+	 * @param spawnProb
 	 * 
 	 */
+	public FireFightersStatusAction(boolean newStatus, double spawnProb) {
+		this.newStatus = newStatus;
+		newSpawnProb = spawnProb;
+	}
+	
 	public FireFightersStatusAction(boolean newStatus) {
 		this.newStatus = newStatus;
+		newSpawnProb = 0.4;
 	}
 	
 	/**
@@ -32,6 +40,13 @@ public class FireFightersStatusAction implements TriggerAction {
 		return newStatus;
 	}
 	
+	/**
+	 * @return the newSpawnProb
+	 */
+	public double getSpawnProb() {
+		return newSpawnProb;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -39,8 +54,9 @@ public class FireFightersStatusAction implements TriggerAction {
 	 */
 	@Override
 	public void execute(SimulatableSystem sys) {
-		((ExForestFireData) sys.getSimulator().getData()).fireFighters =
-			newStatus;
+		ExForestFireData data = (ExForestFireData) sys.getSimulator().getData();
+		data.fireFighters = newStatus;
+		data.fireFighterSpawnProb = newSpawnProb;
 	}
 	
 	/*
