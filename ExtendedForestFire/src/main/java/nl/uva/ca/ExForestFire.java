@@ -326,7 +326,7 @@ public class ExForestFire extends SimulatableSystem {
 		
 		int n = 0;
 		
-		// Generate a list of trees and bushes.
+		// Generate a list of trees.
 		for(int x = 0; x < grid.grid.length; x++) {
 			for(int y = 0; y < grid.grid[0].length; y++) {
 				if(grid.getCell(x, y) == null) {
@@ -345,7 +345,7 @@ public class ExForestFire extends SimulatableSystem {
 		}
 		
 		n = 0;
-		// Generate a list of trees and bushes.
+		// Generate a list of bushes.
 		for(int x = grid.grid.length - 1; x >= 0; x--) {
 			for(int y = grid.grid[0].length - 1; y >= 0; y--) {
 				if(grid.getCell(x, y) == null) {
@@ -367,90 +367,115 @@ public class ExForestFire extends SimulatableSystem {
 		
 		// Shuffle the list.
 		for(int i = 0; i < 100; i++) {
-			Cell cell;
-			Cell other;
 			for(int x = 0; x < grid.grid.length; x++) {
 				for(int y = 0; y < grid.grid[0].length; y++) {
-					cell = grid.getCell(x, y);
-					if(cell != null
-							&& (cell.getType() == ExForestFireCellType.TREE ||
-							cell.getType() == ExForestFireCellType.BUSH)) {
-						int rx, ry;
-						int tries = 0;
-						while(true) {
-							rx = rand.nextInt(grid.grid.length);
-							ry = rand.nextInt((grid.grid[0].length));
-							other = grid.getCell(rx, ry);
-							if(other == null && (rx != x || ry != y)) {
-								// Move to new location (rx, ry).
-								grid.move(x, y, rx, ry);
-								break;
-							} else if((rx != x || ry != y)
-									&& (other.getType() == ExForestFireCellType.TREE
-									|| other.getType() == ExForestFireCellType.BUSH)) {
-								// Swap cell's.
-								
-								// Set 'cell' x and y to rx and ry. Also clears
-								// the
-								// cell at x, y.
-								grid.move(x, y, rx, ry);
-								
-								// Set the cell at rx, ry to the original one.
-								grid.setCell(other);
-								
-								// Moves 'other' to position x, y. Also clears
-								// the
-								// cell at rx, ry.
-								grid.move(rx, ry, x, y);
-								
-								// Set 'cell' at rx, ry.
-								grid.setCell(cell);
-								
-								/*
-								 * Swap algorithm. Cell's remember their
-								 * position
-								 * even when another cell is moved into its
-								 * place.
-								 * 
-								 * Step 0:
-								 * cell(x, y)
-								 * other(rx, ry)
-								 * {cell, other}
-								 * 
-								 * Step 1:
-								 * cell(rx, ry)
-								 * other(rx, ry)
-								 * {null, cell}
-								 * 
-								 * Step 2:
-								 * cell(rx, ry)
-								 * other(rx, ry)
-								 * {null, other}
-								 * 
-								 * Step 3:
-								 * cell(rx, ry)
-								 * other(x, y)
-								 * {other, null}
-								 * 
-								 * Step 4:
-								 * cell(rx, ry)
-								 * other(x, y)
-								 * {other, cell}
-								 */
-								
-								break;
-							} else {
-								// Random cell was water or path. Retry 5 times
-								// max.
-								tries++;
-								if(tries > 10) {
-									break;
-								}
-							}
-						}
-					}
+					randSwapCell(x, y, rand);
 				}
 			}
+			for(int x = grid.grid.length - 1; x >= 0; x--) {
+				for(int y = grid.grid[0].length - 1; y >= 0; y--) {
+					randSwapCell(x, y, rand);
+				}
+			}
+		}
+	}
+	
+	private void randSwapCell(int x, int y, Random rand) {
+		Cell cell;
+		Cell other;
+		int rx;
+		int ry;
+		int tries;
+		
+		cell = grid.getCell(x, y);
+		
+		// Make sure this cell is not PATH or WATER.
+		if(cell != null
+				&& cell.getType() != ExForestFireCellType.TREE
+				&& cell.getType() != ExForestFireCellType.BUSH) {
+			return;
+		}
+		
+		tries = 0;
+		do {
+			rx = rand.nextInt(grid.grid.length);
+			ry = rand.nextInt((grid.grid[0].length));
+			other = grid.getCell(rx, ry);
+			
+			// Make sure the selected cell is not PATH or WATER.
+			if(cell != other
+					&& (other == null
+							|| other.getType() == ExForestFireCellType.TREE
+							|| other.getType() == ExForestFireCellType.BUSH)) {
+				break;
+			}
+			tries++;
+		} while(tries < 10);
+		
+		// Stop if 10 tries failed.
+		if(cell != other && other != null
+				&& other.getType() != ExForestFireCellType.TREE
+				&& other.getType() != ExForestFireCellType.BUSH) {
+			return;
+		}
+		
+		if(cell == null && other != null) {
+			grid.move(rx, ry, x, y);
+		} else if(cell != null && other == null) {
+			grid.move(x, y, rx, ry);
+		} else if(cell != null && other != null) {
+			// Swap cell's.
+			
+			// System.out.printf("Move %s(%d, %d) to %s(%d, %d)\n",
+			// cell, x, y, other, rx, ry);
+			
+			/*
+			 * Set 'cell' x and y to rx and ry.
+			 * Also clears the cell at x, y.
+			 */
+			grid.move(x, y, rx, ry);
+			
+			// Set the cell at rx, ry to the original one.
+			grid.setCell(other);
+			
+			/*
+			 * Moves 'other' to position x, y.
+			 * Also clears the cell at rx, ry.
+			 */
+			grid.move(rx, ry, x, y);
+			
+			// Set 'cell' at rx, ry.
+			grid.setCell(cell);
+			
+			/*
+			 * Swap algorithm. Cell's remember their position
+			 * even when another cell is moved into its place.
+			 * 
+			 * Step 0:
+			 * cell(x, y)
+			 * other(rx, ry)
+			 * {cell, other}
+			 * 
+			 * Step 1:
+			 * cell(rx, ry)
+			 * other(rx, ry)
+			 * {null, cell}
+			 * 
+			 * Step 2:
+			 * cell(rx, ry)
+			 * other(rx, ry)
+			 * {null, other}
+			 * 
+			 * Step 3:
+			 * cell(rx, ry)
+			 * other(x, y)
+			 * {other, null}
+			 * 
+			 * Step 4:
+			 * cell(rx, ry)
+			 * other(x, y)
+			 * {other, cell}
+			 */
 		}
 	}
 	
