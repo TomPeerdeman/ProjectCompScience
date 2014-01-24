@@ -888,11 +888,9 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 								}
 								
 							}
-							if(fire){
-								System.out.println("my coord: " + this.x + " ; " + this.y +" firecoord: " + x2 + " ; " + y2);
+							if(fire)
 								checkFireRadius2(x2, y2, grid, ffdata, c, sim,
 										prob);
-							}
 						}
 					}
 				}
