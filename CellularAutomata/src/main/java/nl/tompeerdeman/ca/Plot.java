@@ -24,16 +24,16 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
 public class Plot {
-	// public final static String TERMINAL = "pdfcairo";
-	// public final static String EXT = "pdf";
+	public final static String TERMINAL = "pdfcairo";
+	public final static String EXT = "pdf";
 	
-	public final static String TERMINAL = "jpeg";
-	public final static String EXT = "jpg";
+	// public final static String TERMINAL = "jpeg";
+	// public final static String EXT = "jpg";
 	
 	// Voor runnen via bestanden in cmd map
-	public final static String PATH = "../plot/";
+	// public final static String PATH = "../plot/";
 	// Voor eclipse project
-	// public final static String PATH = "plot/";
+	public final static String PATH = "plot/";
 	
 	public PrintWriter data;
 	public PrintWriter instr;
