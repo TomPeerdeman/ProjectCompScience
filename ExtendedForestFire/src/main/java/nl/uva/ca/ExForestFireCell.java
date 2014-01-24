@@ -629,10 +629,22 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 									x = this.x - 2;
 									checkFire(x, y, 0, 0, grid, ffdata, c, sim);
 								}
+								// bottom center left
+								else if(nx == 1){
+									x = this.x - 1;
+									prob = (ffdata.neighborhood[0][0] + ffdata.neighborhood[1][1]) /2;
+									checkFire(x, y, prob, grid, ffdata, c, sim);
+								}
 								// bottom center
 								else if(nx == 2){
 									x = this.x;
 									checkFire(x, y, 1, 1, grid, ffdata, c, sim);
+								}
+								// bottom center right
+								else if(nx == 3){
+									x = this.x + 1;
+									prob = (ffdata.neighborhood[0][2] + ffdata.neighborhood[1][1]) /2;
+									checkFire(x, y, prob, grid, ffdata, c, sim);
 								}
 								// bottom right
 								else if(nx == 4){
@@ -642,8 +654,14 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 							}
 							else if(ny == 1){
 								y = this.y;
+								// 2 to the left
+								if(nx == 0){
+									x = this.x - 2;
+									prob = (ffdata.neighborhood[1][0] + ffdata.neighborhood[0][0]) /2;
+									checkFire(x, y, prob, grid, ffdata, c, sim);
+								}
 								// 1 to the left
-								if(nx == 1){
+								else if(nx == 1){
 									x = this.x - 1;
 									checkFire(x, y, 0, 1, grid, ffdata, c, sim);
 								}
@@ -652,30 +670,68 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 									x = this.x + 1;
 									checkFire(x, y, 2, 1, grid, ffdata, c, sim);
 								}
+								// 2 to the right
+								else if(nx == 4){
+									x = this.x + 2;
+									prob = (ffdata.neighborhood[1][2] + ffdata.neighborhood[0][2]) /2;
+									checkFire(x, y, prob, grid, ffdata, c, sim);
+								}
 							}
 							else if(ny == 2){
 								y = this.y+1;
+								// top left
+								if(nx == 1){
+									x = this.x-1;
+									prob = (ffdata.neighborhood[0][1] + ffdata.neighborhood[1][0]) /2;
+									checkFire(x, y, prob, grid, ffdata, c, sim);
+								}
 								// top center
-								if(nx == 2){
+								else if(nx == 2){
 									x = this.x;
 									checkFire(x, y, 1, 0, grid, ffdata, c, sim);
 								}
+								// top right
+								else if(nx == 3){
+									x = this.x+1;
+									prob = (ffdata.neighborhood[0][1] + ffdata.neighborhood[1][2]) /2;
+									checkFire(x, y, prob, grid, ffdata, c, sim);
+								}
 							}
 						}
-						if(this.x != this.y){
+						
+						//triangle type 2
+						else if(this.x != this.y){
 							// bottom row
 							if(ny == 0){
 								y = this.y-1;
+								// bottom left
+								if(nx == 1){
+									x = this.x - 1;
+									prob = (ffdata.neighborhood[1][1] + ffdata.neighborhood[0][0]) /2;
+									checkFire(x, y, prob, grid, ffdata, c, sim);
+								}
 								// bottom center
-								if(nx == 2){
+								else if(nx == 2){
 									x = this.x;
 									checkFire(x, y, 1, 1, grid, ffdata, c, sim);
+								}
+								// bottom right
+								else if(nx == 3){
+									x = this.x + 1;
+									prob = (ffdata.neighborhood[1][1] + ffdata.neighborhood[0][2]) /2;
+									checkFire(x, y, prob, grid, ffdata, c, sim);
 								}
 							}
 							else if(ny == 1){
 								y = this.y;
+								// 2 to the left
+								if(nx == 0){
+									x = this.x - 2;
+									prob = (ffdata.neighborhood[0][0] + ffdata.neighborhood[1][0]) /2;
+									checkFire(x, y, prob, grid, ffdata, c, sim);
+								}
 								// 1 to the left
-								if(nx == 1){
+								else if(nx == 1){
 									x = this.x - 1;
 									checkFire(x, y, 0, 0, grid, ffdata, c, sim);
 								}
@@ -683,6 +739,12 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 								else if(nx == 3){
 									x = this.x + 1;
 									checkFire(x, y, 2, 0, grid, ffdata, c, sim);
+								}
+								// 2 to the right
+								if(nx == 4){
+									x = this.x + 2;
+									prob = (ffdata.neighborhood[0][2] + ffdata.neighborhood[1][2]) /2;
+									checkFire(x, y, prob, grid, ffdata, c, sim);
 								}
 							}
 							else if(ny == 2){
@@ -692,10 +754,22 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 									x = this.x - 2;
 									checkFire(x, y, 0, 1, grid, ffdata, c, sim);
 								}
+								// top center left
+								else if(nx == 1){
+									x = this.x - 1;
+									prob = (ffdata.neighborhood[0][1] + ffdata.neighborhood[1][0]) /2;
+									checkFire(x, y, prob, grid, ffdata, c, sim);
+								}
 								// top center
 								else if(nx == 2){
 									x = this.x;
 									checkFire(x, y, 1, 0, grid, ffdata, c, sim);
+								}
+								// top center right
+								else if(nx == 3){
+									x = this.x + 1;
+									prob = (ffdata.neighborhood[0][1] + ffdata.neighborhood[1][2]) /2;
+									checkFire(x, y, prob, grid, ffdata, c, sim);
 								}
 								// top right
 								else if(nx == 4){
@@ -706,6 +780,7 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 						}
 					}
 				}
+				prob = 0.0;
 				if(probvar > 0) {
 					boolean fire = false;
 					for(int ny = 0; ny < 5; ny++) {
@@ -1092,6 +1167,41 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 			// If the probability is 1, put the cell on fire if it
 			// is a burnable cell
 			else if(ffdata.neighborhood[ny][nx] == 1.0) {
+				setFire(ffdata, ExForestFireCellType.BURNING_TREE,
+						c, sim);
+				setFire(ffdata, ExForestFireCellType.BURNING_BUSH,
+						c, sim);
+			}
+		}
+	}
+	
+	
+	// given a probability and coordinates, try to set on fire.
+	private void checkFire(int x, int y, double prob, Grid grid,
+			ExForestFireData ffdata,
+			ExForestFireCell c, Simulator sim) {
+		if(x >= 0 && y >= 0 && x < grid.grid.length
+				&& y < grid.grid[0].length) {
+			c = (ExForestFireCell) grid.getCell(x, y);
+			// If there is a probability given in the range 0-1,
+			// draw a random number
+			if(prob < 1.0
+					&& prob > 0.0) {
+				double randomDouble = Math.random();
+				// If the probability is reached, put the cell on
+				// fire, if it is a burnable cell
+				if(randomDouble <= prob) {
+					setFire(ffdata,
+							ExForestFireCellType.BURNING_TREE, c,
+							sim);
+					setFire(ffdata,
+							ExForestFireCellType.BURNING_BUSH, c,
+							sim);
+				}
+			}
+			// If the probability is 1, put the cell on fire if it
+			// is a burnable cell
+			else if(prob == 1.0) {
 				setFire(ffdata, ExForestFireCellType.BURNING_TREE,
 						c, sim);
 				setFire(ffdata, ExForestFireCellType.BURNING_BUSH,
