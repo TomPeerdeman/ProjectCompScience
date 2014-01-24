@@ -5,3 +5,11 @@
 *.jar
 *.war
 *.ear
+
+# unnecessary Tex Files #
+.aux
+.bbl
+.blg
+.log
+.out
+.synctex.gz
