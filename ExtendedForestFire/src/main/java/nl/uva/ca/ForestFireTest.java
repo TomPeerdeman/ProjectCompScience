@@ -7,6 +7,7 @@ package nl.uva.ca;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -74,6 +75,11 @@ public class ForestFireTest implements SimulateChangeListener {
 		oppTimeAll.setAxisLabels("Density", "Time");
 		burnedAll.setAxisLabels("Density", "Num burned");
 		
+		// Same as setAxisLabels
+		oppReached.instr.printf("\nset xlabel \"Density\"\nset ylabel \"Fraction reached\"");
+		oppTime.instr.printf("\nset xlabel \"Density\"\nset ylabel \"Time\"");
+		burned.instr.printf("\nset xlabel \"Density\"\nset ylabel \"Fraction burned\"");
+		
 		List<Future<?>> tasksAdd = new ArrayList<Future<?>>(nDensities);
 		for(int i = 0; i < nDensities; i++) {
 			tasksAdd.add(threadPool.submit(new ForestFireAddTask(i, this)));
@@ -95,6 +101,24 @@ public class ForestFireTest implements SimulateChangeListener {
 		}
 		System.out.println("All tasks done");
 		threadPool.shutdown();
+		
+		for(int i = 0; i < nDensities; i++) {
+			System.out.printf("[%f] %f reached, time %f burned %f\n",
+					xAxis[i],
+					(oppReached.savedData[i] / (double) RUNS_PER_PARAM_CHANGE),
+					(oppTime.savedData[i] / oppReached.savedData[i]),
+					(burned.savedData[i] / (double) RUNS_PER_PARAM_CHANGE));
+			
+			oppReached.addData("%f\t%f\n", xAxis[i],
+					(oppReached.savedData[i] / (double) RUNS_PER_PARAM_CHANGE));
+			
+			if(oppReached.savedData[i] > 0) {
+				oppTime.data.printf(Locale.US, "%f\t%f\n", xAxis[i],
+						(oppTime.savedData[i] / oppReached.savedData[i]));
+			}
+			burned.data.printf(Locale.US, "%f\t%f\n", xAxis[i],
+					(burned.savedData[i] / (double) RUNS_PER_PARAM_CHANGE));
+		}
 		
 		oppReached.plotPoints(1, 2);
 		oppTime.plotPoints(1, 2);
@@ -131,7 +155,7 @@ public class ForestFireTest implements SimulateChangeListener {
 				oppTimeAll.addData("%f\t%d\n", xAxis[data.testNr],
 						sim.getTick());
 			}
-			burnedAll.addData("%f\t%f\n", xAxis[data.testNr], data.burnt);
+			burnedAll.addData("%f\t%d\n", xAxis[data.testNr], data.burnt);
 		}
 	}
 	
