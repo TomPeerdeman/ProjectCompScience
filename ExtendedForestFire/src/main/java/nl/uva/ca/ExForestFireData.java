@@ -40,13 +40,12 @@ public class ExForestFireData implements DataSet, Serializable {
 	/**
 	 * @param grid
 	 * @param type
+	 * @param testNr
 	 */
-	public ExForestFireData(Grid grid, int type) {
+	public ExForestFireData(Grid grid, int type, int testNr) {
 		this.grid = grid;
 		this.type = type;
-		
-		// TODO: Add test nr
-		testNr = -1;
+		this.testNr = testNr;
 		
 		reset();
 	}

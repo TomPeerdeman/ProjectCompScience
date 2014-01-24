@@ -22,6 +22,9 @@ public class ThreadSimulator extends Simulator implements Runnable {
 	
 	public ThreadSimulator(Grid g, DataSet d) {
 		super(g, d);
+		
+		running = true;
+		paused = false;
 	}
 	
 	@Override

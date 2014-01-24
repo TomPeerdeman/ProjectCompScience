@@ -77,9 +77,11 @@ public class ExForestFire extends SimulatableSystem {
 	 * @param treeDensity
 	 * @param bushDensity
 	 * @param type
+	 * @param testNr
 	 */
 	public ExForestFire(int nx, int ny, long seed, boolean randWater,
-			boolean randPath, double treeDensity, double bushDensity, int type) {
+			boolean randPath, double treeDensity, double bushDensity, int type,
+			int testNr) {
 		this.randPath = randPath;
 		this.randWater = randWater;
 		this.treeDensity = treeDensity;
@@ -92,16 +94,19 @@ public class ExForestFire extends SimulatableSystem {
 		randomizeGrid(seed);
 		igniteGrid();
 		
-		data = new ExForestFireData(grid, type);
+		data = new ExForestFireData(grid, type, testNr);
 		
-		fileChooser = new JFileChooser();
-		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		fileChooser.setFileHidingEnabled(true);
-		FileFilter filter =
-			new FileNameExtensionFilter("CA grid files", DEFAULT_GRID_EXTENSION);
-		fileChooser.addChoosableFileFilter(filter);
-		fileChooser.setAcceptAllFileFilterUsed(true);
-		fileChooser.setFileFilter(filter);
+		if(testNr < 0) {
+			fileChooser = new JFileChooser();
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			fileChooser.setFileHidingEnabled(true);
+			FileFilter filter =
+				new FileNameExtensionFilter("CA grid files",
+						DEFAULT_GRID_EXTENSION);
+			fileChooser.addChoosableFileFilter(filter);
+			fileChooser.setAcceptAllFileFilterUsed(true);
+			fileChooser.setFileFilter(filter);
+		}
 	}
 	
 	public void saveGrid(JComponent parent) throws IOException {
