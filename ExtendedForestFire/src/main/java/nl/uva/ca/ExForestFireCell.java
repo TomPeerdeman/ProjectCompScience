@@ -616,28 +616,93 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 					|| type == ExForestFireCellType.BURNING_BUSH) {
 				int x, y, x2, y2;
 				double prob = 0.0;
+
 				for(int ny = 0; ny < 3; ny++) {
-					for(int nx = 0; nx < 3; nx++) {
-						if((ny == 1 && this.x % 2 == 1 && this.y % 2 == 0)
-								|| (ny == 1 && this.x % 2 == 0 && this.y % 2 == 1)
-								|| (ny == 0 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 0)
-								|| (ny == 0 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 1)) {
-							x = this.x + nx - 1;
-							// Grid y increases north so cell above is y + 1
-							y = this.y - ny + 1;
-							
-							checkFire(x, y, nx, ny, grid, ffdata, c, sim);
+					for(int nx = 0; nx < 5; nx++) {
+						// triangletype1
+						if(this.x == this.y){
+							// bottom row
+							if(ny == 0){
+								y = this.y-1;
+								// bottom left
+								if(nx == 0){
+									x = this.x - 2;
+									checkFire(x, y, 0, 0, grid, ffdata, c, sim);
+								}
+								// bottom center
+								else if(nx == 2){
+									x = this.x;
+									checkFire(x, y, 1, 1, grid, ffdata, c, sim);
+								}
+								// bottom right
+								else if(nx == 4){
+									x = this.x + 2;
+									checkFire(x, y, 2, 0, grid, ffdata, c, sim);
+								}
+							}
+							else if(ny == 1){
+								y = this.y;
+								// 1 to the left
+								if(nx == 1){
+									x = this.x - 1;
+									checkFire(x, y, 0, 1, grid, ffdata, c, sim);
+								}
+								// 1 to the right
+								else if(nx == 3){
+									x = this.x + 1;
+									checkFire(x, y, 2, 1, grid, ffdata, c, sim);
+								}
+							}
+							else if(ny == 2){
+								y = this.y+1;
+								// top center
+								if(nx == 2){
+									x = this.x;
+									checkFire(x, y, 1, 0, grid, ffdata, c, sim);
+								}
+							}
 						}
-						else if((ny == 1 && this.x % 2 == 0 && this.y % 2 == 0)
-								|| (ny == 1 && this.x % 2 == 1 && this.y % 2 == 1)
-								|| (ny == 2 && nx == 1 && this.x % 2 == 0 && this.y % 2 == 0)
-								|| (ny == 2 && nx == 1 && this.x % 2 == 1 && this.y % 2 == 1)) {
-							x = this.x + nx - 1;
-							// Grid y increases north so cell above is y + 1
-							y = this.y - ny + 1;
-							int tempny;
-							tempny = ny - 1;
-							checkFire(x, y, nx, tempny, grid, ffdata, c, sim);
+						if(this.x != this.y){
+							// bottom row
+							if(ny == 0){
+								y = this.y-1;
+								// bottom center
+								if(nx == 2){
+									x = this.x;
+									checkFire(x, y, 1, 1, grid, ffdata, c, sim);
+								}
+							}
+							else if(ny == 1){
+								y = this.y;
+								// 1 to the left
+								if(nx == 1){
+									x = this.x - 1;
+									checkFire(x, y, 0, 0, grid, ffdata, c, sim);
+								}
+								// 1 to the right
+								else if(nx == 3){
+									x = this.x + 1;
+									checkFire(x, y, 2, 0, grid, ffdata, c, sim);
+								}
+							}
+							else if(ny == 2){
+								y = this.y+1;
+								// top left
+								if(nx == 0){
+									x = this.x - 2;
+									checkFire(x, y, 0, 1, grid, ffdata, c, sim);
+								}
+								// top center
+								else if(nx == 2){
+									x = this.x;
+									checkFire(x, y, 1, 0, grid, ffdata, c, sim);
+								}
+								// top right
+								else if(nx == 4){
+									x = this.x + 2;
+									checkFire(x, y, 2, 1, grid, ffdata, c, sim);
+								}
+							}
 						}
 					}
 				}
