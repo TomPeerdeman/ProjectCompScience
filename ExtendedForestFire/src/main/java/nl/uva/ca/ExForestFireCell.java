@@ -101,6 +101,8 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 		type = secondaryType;
 		secondaryType = null;
 		if(type == null) {
+			ffdata.nDeadFireFighters++;
+			ffdata.nFireFighters--;
 			grid.clearCell(this.x, this.y);
 			return false;
 		}
@@ -961,6 +963,10 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 		}
 		
 		if(type == ExForestFireCellType.BURNING_BUSH) {
+			if(y == 99) {
+				ffdata.oppositeReached = true;
+			}
+			
 			nBurningTicks++;
 			if(nBurningTicks >= ffdata.nTicksBushBurn) {
 				type = ExForestFireCellType.BURNT_BUSH;
@@ -975,6 +981,10 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 				return false;
 			}
 		} else if(type == ExForestFireCellType.BURNING_TREE) {
+			if(y == 99) {
+				ffdata.oppositeReached = true;
+			}
+			
 			nBurningTicks++;
 			if(nBurningTicks >= ffdata.nTicksTreeBurn) {
 				ffdata.burning--;
@@ -1075,8 +1085,10 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 			
 			Random r = new Random();
 			if(ffdata.fireFighterSpawnProb == 1.0
-					|| r.nextInt((int) (101)) < (100 * ffdata.fireFighterSpawnProb))
+					|| r.nextInt((int) (101)) < (100 * ffdata.fireFighterSpawnProb)) {
+				ffdata.nFireFighters++;
 				addFireFighter();
+			}
 		}
 	}
 	

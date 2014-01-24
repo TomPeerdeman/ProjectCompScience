@@ -29,6 +29,12 @@ public class ExForestFireData implements DataSet, Serializable {
 	public transient int nTicksBushBurn;
 	public transient int probDivider;
 	
+	public boolean oppositeReached;
+	public int nFireFighters;
+	public int nDeadFireFighters;
+	
+	public final int testNr;
+	
 	public int type;
 	
 	/**
@@ -38,6 +44,9 @@ public class ExForestFireData implements DataSet, Serializable {
 	public ExForestFireData(Grid grid, int type) {
 		this.grid = grid;
 		this.type = type;
+		
+		// TODO: Add test nr
+		testNr = -1;
 		
 		reset();
 	}
@@ -57,6 +66,10 @@ public class ExForestFireData implements DataSet, Serializable {
 		nTicksTreeBurn = 10;
 		nTicksBushBurn = 4;
 		fireFighterSpawnProb = 0.4;
+		
+		nFireFighters = 0;
+		nDeadFireFighters = 0;
+		oppositeReached = false;
 		
 		// TODO: Depends on type?
 		neighborhood = new double[][] {

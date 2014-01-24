@@ -299,7 +299,7 @@ public class ExForestFireDataPanel extends JPanel implements
 					/ (double) (data.bushes + data.burnt + data.trees));
 		
 		fracBurned.setText("Fraction burned: " + format.toString());
-		oppReached.setText("Opposite reached: maybe");
+		oppReached.setText("Opposite reached: " + data.oppositeReached);
 		
 		format.close();
 		
