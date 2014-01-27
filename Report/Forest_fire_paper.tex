@@ -24,9 +24,11 @@
 \begin{multicols}{2}
 
 \subsection*{Introduction}
-Forest fires can spread in various ways and can be effected by a lot of environmental variables. The way a fire spreads between flammable objects for example can make a huge difference in the way a forest fire moves. Fire can also be affected by environmental variables, like water, the weather or wind. Manmade objects and people can interfere with the fire as well. Fire fighters can try to extinguish fire to keep the fire from spreading. Paths and roads, like water cannot be set on fire. It is however possible for fire to cross roads and some streams of water if the conditions are right. All these variables have to be taken into account when simulating a forest fire.
+Forest fires can spread in various ways and can be effected by a lot of environmental variables. The way a fire spreads between flammable objects for example can make a huge difference in the way a forest fire moves. Fire can also be affected by environmental variables, like water, the weather or wind. Manmade objects and people can interfere with the fire as well. Fire fighters can try to extinguish fire to keep the fire from spreading. Paths and roads, like water cannot be set on fire. It is however possible for fire to cross roads and some streams of water if the conditions are right. All these variables have to be taken into account when simulating a forest fire.\\\\
+Forest fire simulations can be created by using cellular automata. Most cellular automata models consist of certain rules to change a cell’s state. While it is possible to use rules to simulate a forest fire, probabilities are used in order to simulate the environmental effects on the forest fire.
 
-\subsubsection*{Different grids and their neighborhoods}
+\subsection*{Defining the neighborhoods}
+\subsubsection*{Different grids}
 In order to ensure that the simulation is applicable in many situations, three different types of grids were used to simulate forest fires. These grids are: the Cartesian grid, the hexagonal grid and the triangular grid. Each grid has a different spread of fire.\\\\
 For the Cartesian grid a straightforward method is used. By using a Moore neighborhood the eight squares around the current square can be directly influenced. The neighborhood is shown in figure \ref{fig:cartesianstd}\\\\
 The hexagonal grid could be positioned in two different ways. Either with flat sides of the hexagon along the y-axis, or with the flat sides along the x-axis. Both types of hexagons will do, by changing your perspective on the simulation, it is possible to simulate the other type of hexagon. For the experiments and simulations the type with sides along the x-axis is chosen. The neighborhood is shown in figure \ref{fig:hexstd}\\\\
