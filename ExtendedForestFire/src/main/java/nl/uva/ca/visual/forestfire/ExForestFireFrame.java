@@ -26,7 +26,7 @@ public class ExForestFireFrame extends ExCaFrame {
 		main.add(new Box.Filler(d, d, d));
 		
 		ExForestFire fire =
-			new ExForestFire(100, 100, 0, true, true, 0.3, 0.3, 0, -1);
+			new ExForestFire(100, 100, 0, true, true, 0.3, 0.3, 0, -1, -1);
 		fire.buildTimedSimulator(10);
 		
 		Simulator sim = fire.getSimulator();
