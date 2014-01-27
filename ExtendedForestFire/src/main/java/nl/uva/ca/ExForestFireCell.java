@@ -620,7 +620,7 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 				for(int ny = 0; ny < 3; ny++) {
 					for(int nx = 0; nx < 5; nx++) {
 						// triangletype1
-						if(this.x == this.y) {
+						if(this.x % 2 == this.y % 2) {
 							// bottom row
 							if(ny == 0) {
 								y = this.y - 1;
@@ -706,7 +706,7 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 						}
 						
 						// triangle type 2
-						else if(this.x != this.y) {
+						else if(this.x % 2 != this.y % 2) {
 							// bottom row
 							if(ny == 0) {
 								y = this.y - 1;
