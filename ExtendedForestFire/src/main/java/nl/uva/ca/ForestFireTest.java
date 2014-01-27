@@ -4,6 +4,7 @@
  */
 package nl.uva.ca;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,15 +22,15 @@ import nl.tompeerdeman.ca.ThreadSimulator;
  *
  */
 public class ForestFireTest implements SimulateChangeListener {
+	public final boolean SHOW_PROGRESS = true;
 	public final int GRID_WIDTH = 100;
 	public final int GRID_HEIGHT = 100;
-	public final int RUNS_PER_PARAM_CHANGE = 100;
+	public final int RUNS_PER_PARAM_CHANGE = 20;
+	public final File TRIGGER_FILE = new File("test_triggers.tca");
 	
 	private ExecutorService threadPool;
 	private double[] xAxis;
 	
-	private double startDensity;
-	private double densityStep;
 	private List<Future<?>> tasks;
 	
 	private ImprovedPlot oppReached;
@@ -38,8 +39,10 @@ public class ForestFireTest implements SimulateChangeListener {
 	private ImprovedPlot oppTimeAll;
 	private ImprovedPlot burnedAll;
 	
+	private ImprovedPlot[] fireFighters;
+	
 	public static void main(String[] args) throws Exception {
-		new ForestFireTest(0, 1, 0.1);
+		new ForestFireTest(0.1, 1, 0.1);
 	}
 	
 	/**
@@ -53,9 +56,6 @@ public class ForestFireTest implements SimulateChangeListener {
 	 */
 	public ForestFireTest(double startDensity, double endDensity,
 			double densityStep) throws Exception {
-		this.startDensity = startDensity;
-		this.densityStep = densityStep;
-		
 		final int nCores = Runtime.getRuntime().availableProcessors();
 		threadPool = Executors.newFixedThreadPool(nCores);
 		System.out.printf("Starting threadpool on %d cores\n", nCores);
@@ -72,6 +72,8 @@ public class ForestFireTest implements SimulateChangeListener {
 		oppTimeAll = new ImprovedPlot("opptimeall", nDensities);
 		burnedAll = new ImprovedPlot("burnedall", nDensities);
 		
+		fireFighters = new ImprovedPlot[nDensities];
+		
 		oppTimeAll.setAxisLabels("Density", "Time");
 		burnedAll.setAxisLabels("Density", "Num burned");
 		
@@ -82,6 +84,13 @@ public class ForestFireTest implements SimulateChangeListener {
 		
 		List<Future<?>> tasksAdd = new ArrayList<Future<?>>(nDensities);
 		for(int i = 0; i < nDensities; i++) {
+			xAxis[i] = i * densityStep + startDensity;
+			fireFighters[i] =
+				new ImprovedPlot(String.format(Locale.US, "firefighter[%.2f]",
+						xAxis[i]),
+						0);
+			fireFighters[i].setAxisLabels("Num firefighters", "Tick");
+			fireFighters[i].data.println("Tick\tAlive\tDead");
 			tasksAdd.add(threadPool.submit(new ForestFireAddTask(i, this)));
 		}
 		
@@ -96,14 +105,19 @@ public class ForestFireTest implements SimulateChangeListener {
 				+ " simulation tasks.");
 		
 		// All simulation tasks are added, we are save to iterate over tasks.
+		int n = 0;
 		for(Future<?> task : tasks) {
 			task.get();
+			if(SHOW_PROGRESS) {
+				n++;
+				System.out.printf("Done %d\\%d\n", n, tasks.size());
+			}
 		}
 		System.out.println("All tasks done");
 		threadPool.shutdown();
 		
 		for(int i = 0; i < nDensities; i++) {
-			System.out.printf("[%f] %f reached, time %f burned %f\n",
+			System.out.printf("[%.2f] %.2f reached, time %.2f burned %f\n",
 					xAxis[i],
 					(oppReached.savedData[i] / (double) RUNS_PER_PARAM_CHANGE),
 					(oppTime.savedData[i] / oppReached.savedData[i]),
@@ -118,6 +132,10 @@ public class ForestFireTest implements SimulateChangeListener {
 			}
 			burned.data.printf(Locale.US, "%f\t%f\n", xAxis[i],
 					(burned.savedData[i] / (double) RUNS_PER_PARAM_CHANGE));
+			
+			fireFighters[i].plotFunction(1, 2);
+			fireFighters[i].plotFunction(1, 3);
+			fireFighters[i].close();
 		}
 		
 		oppReached.plotPoints(1, 2);
@@ -143,6 +161,13 @@ public class ForestFireTest implements SimulateChangeListener {
 	@Override
 	public void simulationUpdated(Simulator sim) {
 		ExForestFireData data = (ExForestFireData) sim.getData();
+		
+		if(data.simNr == 0) {
+			fireFighters[data.testNr].addData("%d\t%d\t%d\t%d\n",
+					sim.getTick(),
+					data.nFireFighters, data.nDeadFireFighters, data.burning);
+			fireFighters[data.testNr].data.flush();
+		}
 		
 		if(data.burning == 0) {
 			burned.savedData[data.testNr] +=
@@ -179,26 +204,38 @@ public class ForestFireTest implements SimulateChangeListener {
 		 */
 		@Override
 		public void run() {
-			final boolean water = false;
-			final boolean path = false;
+			final boolean water = true;
+			final boolean path = true;
+			final boolean triggers = (TRIGGER_FILE.exists() && true);
 			final int type = 0;
 			
 			double d;
 			ExForestFire fire;
 			ThreadSimulator sim;
-			xAxis[i] = i * densityStep + startDensity;
+			TriggerManager triggerManager;
 			d = xAxis[i] / 2.0;
 			for(int j = 0; j < RUNS_PER_PARAM_CHANGE; j++) {
 				fire =
 					new ExForestFire(GRID_WIDTH, GRID_HEIGHT, 0, water, path,
-							d, d, type, i);
+							d, d, type, i, j);
 				fire.buildThreadedSimulator();
 				sim = (ThreadSimulator) fire.getSimulator();
+				
+				// Load triggers.
+				if(triggers) {
+					try {
+						triggerManager = new TriggerManager(fire);
+						triggerManager.load(TRIGGER_FILE);
+						sim.addChangeListener(triggerManager);
+					} catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
+				// Add test callback.
 				sim.addChangeListener(superTest);
 				
-				// TODO: Add triggers
-				
-				// Insert into task list & thread pool
+				// Insert into task list & thread pool.
 				tasks.add(threadPool.submit(sim));
 			}
 		}

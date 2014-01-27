@@ -78,10 +78,11 @@ public class ExForestFire extends SimulatableSystem {
 	 * @param bushDensity
 	 * @param type
 	 * @param testNr
+	 * @param simNr
 	 */
 	public ExForestFire(int nx, int ny, long seed, boolean randWater,
 			boolean randPath, double treeDensity, double bushDensity, int type,
-			int testNr) {
+			int testNr, int simNr) {
 		this.randPath = randPath;
 		this.randWater = randWater;
 		this.treeDensity = treeDensity;
@@ -94,7 +95,7 @@ public class ExForestFire extends SimulatableSystem {
 		randomizeGrid(seed);
 		igniteGrid();
 		
-		data = new ExForestFireData(grid, type, testNr);
+		data = new ExForestFireData(grid, type, testNr, simNr);
 		
 		if(testNr < 0) {
 			fileChooser = new JFileChooser();

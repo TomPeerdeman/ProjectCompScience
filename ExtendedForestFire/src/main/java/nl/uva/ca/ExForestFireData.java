@@ -34,6 +34,7 @@ public class ExForestFireData implements DataSet, Serializable {
 	public int nDeadFireFighters;
 	
 	public final int testNr;
+	public final int simNr;
 	
 	public int type;
 	
@@ -41,11 +42,13 @@ public class ExForestFireData implements DataSet, Serializable {
 	 * @param grid
 	 * @param type
 	 * @param testNr
+	 * @param simNr
 	 */
-	public ExForestFireData(Grid grid, int type, int testNr) {
+	public ExForestFireData(Grid grid, int type, int testNr, int simNr) {
 		this.grid = grid;
 		this.type = type;
 		this.testNr = testNr;
+		this.simNr = simNr;
 		
 		reset();
 	}
