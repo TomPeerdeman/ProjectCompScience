@@ -78,13 +78,13 @@ Besides the increased environmental factor, the extended neighborhood also has a
 \begin{Figure}
  \centering
  \includegraphics[width=0.79\textwidth]{imgs/extendedtriangle1.png}
- \captionof{figure}{Extended Triangle1 grid neighborhood}
+ \captionof{figure}{Extended Triangle 1 grid neighborhood}
 \label{fig:exttriangle1std}
 \end{Figure}
 \begin{Figure}
  \centering
  \includegraphics[width=0.79\textwidth]{imgs/extendedtriangle2.png}
- \captionof{figure}{Extended Triangle2 grid neighborhood}
+ \captionof{figure}{Extended Triangle 2 grid neighborhood}
 \label{fig:exttriangle2std}
 \end{Figure}
 
@@ -92,13 +92,13 @@ Besides the increased environmental factor, the extended neighborhood also has a
 In addition to the experiments already made for the Cartesian grid, the same experiments have to be done for the other grids. Besides reproducing the same experiments for the other grids, new experiments can be done. The new variables create a huge variety in possible experiments. To expand the made experiments, the most logical addition is to gradually add variables and to look at the impact of these variables on the known results.\\\\
 
 \subsubsection*{Basic experiments}
-To start off, results are needed for a simulation on a simple forest, without any roads or streams of water running through it. Even though the results for the Cartesian grid are already known the experiments are made for all the grids, to ensure consistency in the experiments. Each simulation is run 50 times. This is done to overcome coincidental spreads and to show a more generalized view for each result.\\\\
+To start off, results are needed for a simulation on a simple forest, without any roads or streams of water running through the forest. Even though the results for the Cartesian grid are already known the experiments are made for all the grids, to ensure consistency in the experiments. Each simulation is run 50 times. This is done to overcome coincidental spreads and to show a more generalized view for each result.\\\\
 By increasing the density gradually after each run of simulations a variety of information van be analyzed. It is possible to look at the percentage of the forest that is burned, how long the fire burned and how long it took for the fire to reach the other side of the grid.
 
 \subsubsection*{Additional Experiments}
-After the basic experiments are done, variables can be added to the simulations. The first variable to be added is the enlarged distance for fire to spread to. This variable will increase the speed of the fire. Again the density is increased after every set of simulation runs.\\\\
-The second variables to be added are roads and streams of water. These variables are tested with and without the additional distance for fire to spread. Without the additional distance the addition of roads and water will most likely bring on problems for the simulation. Fire cannot spread across water or roads if it isn't allowed to move an extra square to each side. This will change when the additional distance is enabled again.\\\\
-After these experiments are done, there is a final variable, the fire fighters, that could change the spread of fire. Again two experiments have to be made, one with and one without the additional distance. With this final variable a conclusion can be made about the impact of each variable on the spread of fire.
+After the basic experiments are done, variables can be added to the simulations. The first variable to be added is the enlarged distance for fire to spread to more neighbors. This variable will increase the speed of the fire. Again the density is increased after every set of simulation runs.\\\\
+The second variables to be added are roads and streams of water. These variables are tested with and without the additional distance for fire to spread. Without the additional distance, the addition of roads and water will most likely bring on problems for the simulation. Fire cannot spread across water or roads if it isn't allowed to move an extra square to each side. This will change when the additional distance is enabled again.\\\\
+After these experiments are done, there is a final variable, the fire fighters, that could change the spread of fire. Again two experiments have to be made, one with and one without the additional distance. With these final experiments a conclusion can be made about the impact of each variable on the spread of fire.
 
 \subsubsection*{Expected results}
 It is expected that the fire will spread the fastest for the grid with the most neighbors. The amount of neighbors depends on the additional distance that is used for some experiments. As shown, the Cartesian grid has 9 neighbors directly surrounding the cell. If the distance is increased, the number of neighbors increases to 27 neighbors that can catch fire. For the hexagonal grid this is 6 neighbors directly surrounding the cell and a total of 18 when the distance is increased. Finally the neighborhood of the triangular grid starts with 12 neighbors directly surrounding the cell and 21 neighbors with an increased distance.\\\\
