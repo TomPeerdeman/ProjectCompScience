@@ -22,6 +22,7 @@ import nl.tompeerdeman.ca.ThreadSimulator;
  *
  */
 public class ForestFireTest implements SimulateChangeListener {
+	// Show Done x/y.
 	public final boolean SHOW_PROGRESS = true;
 	
 	public final int GRID_WIDTH = 100;
@@ -31,8 +32,12 @@ public class ForestFireTest implements SimulateChangeListener {
 	
 	public final boolean PATH = true;
 	public final boolean WATER = true;
-	public final boolean TRIGGERS = (TRIGGER_FILE.exists() & PATH & true);
-	public final int TYPE = 1;
+	// Load the triggers from TRIGGER_FILE.
+	public final boolean TRIGGERS = (TRIGGER_FILE.exists() & true);
+	// Create the fire fighter plots.
+	public final boolean FIREFIGHTERS = (PATH & TRIGGERS & true);
+	// Grid type.
+	public final int TYPE = 2;
 	
 	private ExecutorService threadPool;
 	private double[] xAxis;
@@ -81,7 +86,7 @@ public class ForestFireTest implements SimulateChangeListener {
 		oppTimeAll = new ImprovedPlot("opptimeall" + TYPE, nDensities);
 		burnedAll = new ImprovedPlot("burnedall" + TYPE, nDensities);
 		
-		if(TRIGGERS) {
+		if(FIREFIGHTERS) {
 			fireFighters = new ImprovedPlot[nDensities];
 		}
 		
@@ -97,13 +102,13 @@ public class ForestFireTest implements SimulateChangeListener {
 		for(int i = 0; i < nDensities; i++) {
 			xAxis[i] = i * densityStep + startDensity;
 			
-			if(TRIGGERS) {
+			if(FIREFIGHTERS) {
 				fireFighters[i] =
 					new ImprovedPlot(String.format(Locale.US,
-							"firefighter[%.2f]"
-									+ TYPE, xAxis[i]), 0);
-				fireFighters[i].setAxisLabels("Num firefighters", "Tick");
+							"firefighter[%.2f]" + TYPE, xAxis[i]), 6001);
+				fireFighters[i].setAxisLabels("Tick", "Num firefighters");
 				fireFighters[i].data.println("Tick\tAlive\tDead");
+				fireFighters[i].savedData[6000] = Double.MAX_VALUE;
 			}
 			
 			tasksAdd.add(threadPool.submit(new ForestFireAddTask(i, this)));
@@ -148,7 +153,15 @@ public class ForestFireTest implements SimulateChangeListener {
 			burned.data.printf(Locale.US, "%f\t%f\n", xAxis[i],
 					(burned.savedData[i] / (double) RUNS_PER_PARAM_CHANGE));
 			
-			if(TRIGGERS) {
+			if(FIREFIGHTERS) {
+				fireFighters[i].addData("%d\t%f\t%f\n", 0, 0.0, 0.0);
+				for(int j = 1; j < fireFighters[i].savedData[6000]; j++) {
+					fireFighters[i].addData(
+							"%d\t%f\t%f\n",
+							j,
+							(fireFighters[i].savedData[j] / fireFighters[i].savedData[j + 4000]),
+							(fireFighters[i].savedData[j + 2000] / fireFighters[i].savedData[j + 4000]));
+				}
 				fireFighters[i].plotFunction(1, 2);
 				fireFighters[i].plotFunction(1, 3);
 				fireFighters[i].close();
@@ -176,14 +189,26 @@ public class ForestFireTest implements SimulateChangeListener {
 	 * .ca.Simulator)
 	 */
 	@Override
-	public void simulationUpdated(Simulator sim) {
+	public synchronized void simulationUpdated(Simulator sim) {
 		ExForestFireData data = (ExForestFireData) sim.getData();
 		
-		if(data.simNr == 0 && TRIGGERS) {
-			fireFighters[data.testNr].addData("%d\t%d\t%d\t%d\n",
-					sim.getTick(),
-					data.nFireFighters, data.nDeadFireFighters, data.burning);
-			fireFighters[data.testNr].data.flush();
+		if(FIREFIGHTERS && sim.getTick() < 2000) {
+			// fireFighters[data.testNr].addData("%d\t%d\t%d\t%d\n",
+			// sim.getTick(),
+			// data.nFireFighters, data.nDeadFireFighters, data.burning);
+			fireFighters[data.testNr].savedData[(int) sim.getTick()] +=
+				data.nFireFighters;
+			fireFighters[data.testNr].savedData[(int) sim.getTick() + 2000] +=
+				data.nDeadFireFighters;
+			
+			// Save the amount of simulations reached this tick
+			fireFighters[data.testNr].savedData[(int) sim.getTick() + 4000]++;
+			
+			// Save the last tick simulated
+			if(data.burning == 0
+					&& sim.getTick() < fireFighters[data.testNr].savedData[6000])
+				fireFighters[data.testNr].savedData[6000] = sim.getTick();
+			
 		}
 		
 		if(data.burning == 0) {
