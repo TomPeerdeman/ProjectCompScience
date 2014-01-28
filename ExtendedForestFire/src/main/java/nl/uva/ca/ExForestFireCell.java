@@ -1050,29 +1050,52 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 							int fireCount = 0;
 							Random rand = new Random();
 							// count surrounding fires
-							final byte[][] nb = new byte[][] {
-																{0, 1},
-																{1, 1},
-																{1, 0},
-																{2, 0},
-																{2, -1},
-																{1, -1},
-																{0, -1},
-																{-1, -1},
-																{-2, -1},
-																{-1, 0},
-																{-1, 1}
-							};
+							byte[][] nb = null;
+							if(this.x % 2 == this.y % 2) {
+								nb = new byte[][] {
+													{0, 1},
+													{1, 1},
+													{1, 0},
+													{2, 0},
+													{2, -1},
+													{1, -1},
+													{0, -1},
+													{-1, -1},
+													{-2, -1},
+													{-2, 0},
+													{-1, 0},
+													{-1, 1}
+								};
+							} else if(this.x % 2 != this.y % 2) {
+								nb = new byte[][] {
+													{0, -1},
+													{-1, -1},
+													{-1, 0},
+													{-2, 0},
+													{-2, 1},
+													{-1, 1},
+													{0, 1},
+													{1, 1},
+													{2, 1},
+													{2, 0},
+													{1, 0},
+													{1, -1}
+								};
+							}
 							
-							for(int i = 0; i < nb.length; i++) {
-								x = this.x + nb[i][0];
-								y = this.y + nb[i][1];
-								if(x >= 0 && x < 100 && y >= 0 && y < 100) {
-									c = (ExForestFireCell) grid.getCell(x, y);
-									if(c != null
-											&& (c.getType() == ExForestFireCellType.BURNING_TREE
-											|| c.getType() == ExForestFireCellType.BURNING_BUSH)) {
-										fireCount++;
+							if(nb != null) {
+								for(int i = 0; i < nb.length; i++) {
+									x = this.x + nb[i][0];
+									y = this.y + nb[i][1];
+									if(x >= 0 && x < 100 && y >= 0 && y < 100) {
+										c =
+											(ExForestFireCell) grid.getCell(x,
+													y);
+										if(c != null
+												&& (c.getType() == ExForestFireCellType.BURNING_TREE
+												|| c.getType() == ExForestFireCellType.BURNING_BUSH)) {
+											fireCount++;
+										}
 									}
 								}
 							}
