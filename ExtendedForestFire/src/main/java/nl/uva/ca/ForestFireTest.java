@@ -27,12 +27,12 @@ public class ForestFireTest implements SimulateChangeListener {
 	public final int GRID_WIDTH = 100;
 	public final int GRID_HEIGHT = 100;
 	public final int RUNS_PER_PARAM_CHANGE = 50;
-	public final File TRIGGER_FILE = new File("nodist2_trigger.tca");
+	public final File TRIGGER_FILE = new File("firefighters_trigger.tca");
 	
-	public final boolean PATH = false;
-	public final boolean WATER = false;
-	public final boolean TRIGGERS = (TRIGGER_FILE.exists() & PATH & false);
-	public final int TYPE = 0;
+	public final boolean PATH = true;
+	public final boolean WATER = true;
+	public final boolean TRIGGERS = (TRIGGER_FILE.exists() & PATH & true);
+	public final int TYPE = 1;
 	
 	private ExecutorService threadPool;
 	private double[] xAxis;
