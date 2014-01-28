@@ -1,4 +1,4 @@
-WATER: true
-PATH: true
+WATER: false
+PATH: false
 FIREFIGHTERS: false
-DIST2: false
+DIST2: true
