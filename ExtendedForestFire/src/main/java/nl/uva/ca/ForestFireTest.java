@@ -27,12 +27,12 @@ public class ForestFireTest implements SimulateChangeListener {
 	public final int GRID_WIDTH = 100;
 	public final int GRID_HEIGHT = 100;
 	public final int RUNS_PER_PARAM_CHANGE = 50;
-	public final File TRIGGER_FILE = new File("test_triggers.tca");
+	public final File TRIGGER_FILE = new File("nodist2_trigger.tca");
 	
 	public final boolean PATH = false;
 	public final boolean WATER = false;
 	public final boolean TRIGGERS = (TRIGGER_FILE.exists() & PATH & false);
-	public final int TYPE = 2;
+	public final int TYPE = 0;
 	
 	private ExecutorService threadPool;
 	private double[] xAxis;
@@ -65,6 +65,9 @@ public class ForestFireTest implements SimulateChangeListener {
 		final int nCores = Runtime.getRuntime().availableProcessors();
 		threadPool = Executors.newFixedThreadPool(nCores);
 		System.out.printf("Starting threadpool on %d cores\n", nCores);
+		
+		System.out.printf("Trigger file exists %s, load it %s\n",
+				TRIGGER_FILE.exists(), TRIGGERS);
 		
 		tasks = new LinkedList<Future<?>>();
 		
