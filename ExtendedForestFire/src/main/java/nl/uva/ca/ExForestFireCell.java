@@ -1066,7 +1066,7 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 													{-1, 0},
 													{-1, 1}
 								};
-							} else if(this.x % 2 != this.y % 2) {
+							} else {
 								nb = new byte[][] {
 													{0, -1},
 													{-1, -1},
@@ -1083,19 +1083,17 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 								};
 							}
 							
-							if(nb != null) {
-								for(int i = 0; i < nb.length; i++) {
-									x = this.x + nb[i][0];
-									y = this.y + nb[i][1];
-									if(x >= 0 && x < 100 && y >= 0 && y < 100) {
-										c =
-											(ExForestFireCell) grid.getCell(x,
-													y);
-										if(c != null
-												&& (c.getType() == ExForestFireCellType.BURNING_TREE
-												|| c.getType() == ExForestFireCellType.BURNING_BUSH)) {
-											fireCount++;
-										}
+							for(int i = 0; i < nb.length; i++) {
+								x = this.x + nb[i][0];
+								y = this.y + nb[i][1];
+								if(x >= 0 && x < 100 && y >= 0 && y < 100) {
+									c =
+										(ExForestFireCell) grid.getCell(x,
+												y);
+									if(c != null
+											&& (c.getType() == ExForestFireCellType.BURNING_TREE
+											|| c.getType() == ExForestFireCellType.BURNING_BUSH)) {
+										fireCount++;
 									}
 								}
 							}
@@ -1103,7 +1101,7 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 							if(fireCount > 0) {
 								// exponentially increasing chance of death
 								int deathProbInt =
-									(int) Math.pow(3, (nb.length - fireCount));
+									(int) Math.pow(1.3, (nb.length - fireCount));
 								// already died, no chance of escape
 								if(deathProbInt == 1) {
 									// should this return?
