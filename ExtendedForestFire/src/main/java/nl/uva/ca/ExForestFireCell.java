@@ -548,7 +548,7 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 							double deathProb = Math.pow(1.6, (6 - fireCount));
 							int deathProbInt = (int) Math.round(deathProb);
 							// already died, no chance of escape
-							if(deathProbInt == 1) {
+							if(deathProbInt <= 1) {
 								// should this return?
 								return murderFireFighter(grid, ffdata);
 							}
@@ -1051,27 +1051,128 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 							Random rand = new Random();
 							// count surrounding fires
 							for(int ny = 0; ny < 3; ny++) {
-								for(int nx = 0; nx < 3; nx++) {
-									x = -1;
-									y = -1;
+								for(int nx = 0; nx < 5; nx++) {
+									// triangletype1
 									if(this.x % 2 == this.y % 2) {
-										if(ny == 0 && nx == 1) {
-											x = this.x;
+										// bottom row
+										if(ny == 0) {
 											y = this.y - 1;
+											// bottom left
+											if(nx == 0) {
+												x = this.x - 2;
+											}
+											// bottom center left
+											else if(nx == 1) {
+												x = this.x - 1;
+											}
+											// bottom center
+											else if(nx == 2) {
+												x = this.x;
+											}
+											// bottom center right
+											else if(nx == 3) {
+												x = this.x + 1;
+											}
+											// bottom right
+											else if(nx == 4) {
+												x = this.x + 2;
+											}
 										}
-										if(ny == 1 && nx != 1) {
-											x = this.x + nx - 1;
+										else if(ny == 1) {
 											y = this.y;
+											// 2 to the left
+											if(nx == 0) {
+												x = this.x - 2;
+											}
+											// 1 to the left
+											else if(nx == 1) {
+												x = this.x - 1;
+											}
+											// 1 to the right
+											else if(nx == 3) {
+												x = this.x + 1;
+											}
+											// 2 to the right
+											else if(nx == 4) {
+												x = this.x + 2;
+											}
+										}
+										else if(ny == 2) {
+											y = this.y + 1;
+											// top left
+											if(nx == 1) {
+												x = this.x - 1;
+											}
+											// top center
+											else if(nx == 2) {
+												x = this.x;
+											}
+											// top right
+											else if(nx == 3) {
+												x = this.x + 1;
+											}
 										}
 									}
+									
+									// triangle type 2
 									else if(this.x % 2 != this.y % 2) {
-										if(ny == 2 && nx == 1) {
-											x = this.x;
-											y = this.y + 1;
+										// bottom row
+										if(ny == 0) {
+											y = this.y - 1;
+											// bottom left
+											if(nx == 1) {
+												x = this.x - 1;
+											}
+											// bottom center
+											else if(nx == 2) {
+												x = this.x;
+											}
+											// bottom right
+											else if(nx == 3) {
+												x = this.x + 1;
+											}
 										}
-										if(ny == 1 && nx != 1) {
-											x = this.x + nx - 1;
+										else if(ny == 1) {
 											y = this.y;
+											// 2 to the left
+											if(nx == 0) {
+												x = this.x - 2;
+											}
+											// 1 to the left
+											else if(nx == 1) {
+												x = this.x - 1;
+											}
+											// 1 to the right
+											else if(nx == 3) {
+												x = this.x + 1;
+											}
+											// 2 to the right
+											if(nx == 4) {
+												x = this.x + 2;
+											}
+										}
+										else if(ny == 2) {
+											y = this.y + 1;
+											// top left
+											if(nx == 0) {
+												x = this.x - 2;
+											}
+											// top center left
+											else if(nx == 1) {
+												x = this.x - 1;
+											}
+											// top center
+											else if(nx == 2) {
+												x = this.x;
+											}
+											// top center right
+											else if(nx == 3) {
+												x = this.x + 1;
+											}
+											// top right
+											else if(nx == 4) {
+												x = this.x + 2;
+											}
 										}
 									}
 									if(x >= 0 && x < 100 && y >= 0 && y < 100) {
@@ -1090,7 +1191,7 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 							if(fireCount > 0) {
 								// exponentially increasing chance of death
 								int deathProbInt =
-									(int) Math.pow(3, (3 - fireCount));
+									(int) Math.pow(1.3, (9 - fireCount));
 								// already died, no chance of escape
 								if(deathProbInt == 1) {
 									// should this return?
