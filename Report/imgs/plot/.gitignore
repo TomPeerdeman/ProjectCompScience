@@ -1,1 +1,2 @@
+# Unignore pdf's in the plot directory
 !*.pdf

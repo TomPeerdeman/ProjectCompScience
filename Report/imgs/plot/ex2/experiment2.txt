@@ -1,0 +1,4 @@
+WATER: true
+PATH: true
+FIREFIGHTERS: false
+DIST2: false
