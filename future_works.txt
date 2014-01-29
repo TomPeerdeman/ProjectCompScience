@@ -1,0 +1,8 @@
+Forrest Fire:
+
+- GUI
+ * User changeable area
+
+- different terrains
+ * 3D (heights in terrain)
+
