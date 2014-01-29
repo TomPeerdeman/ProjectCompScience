@@ -1046,7 +1046,6 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 						else {
 							int x = -1, y = -1;
 							double randomDouble;
-							boolean area;
 							int fireCount = 0;
 							Random rand = new Random();
 							// count surrounding fires
@@ -1116,65 +1115,41 @@ public class ExForestFireCell extends AbstractCell implements Serializable {
 									}
 								}
 							}
-							for(int ny = 0; ny < 3; ny++) {
-								for(int nx = 0; nx < 3; nx++) {
-									area = false;
-									if((ny == 1 && this.x % 2 == 1 && this.y % 2 == 0)
-											|| (ny == 1 && this.x % 2 == 0 && this.y % 2 == 1)
-											|| (ny == 0 && nx == 1
-													&& this.x % 2 == 1 && this.y % 2 == 0)
-											|| (ny == 0 && nx == 1
-													&& this.x % 2 == 0 && this.y % 2 == 1)) {
-										x = this.x + nx - 1;
-										// Grid y increases north so cell above
-										// is y + 1
-										y = this.y - ny + 1;
-										area = true;
-									}
-									else if((ny == 1 && this.x % 2 == 0 && this.y % 2 == 0)
-											|| (ny == 1 && this.x % 2 == 1 && this.y % 2 == 1)
-											|| (ny == 2 && nx == 1
-													&& this.x % 2 == 0 && this.y % 2 == 0)
-											|| (ny == 2 && nx == 1
-													&& this.x % 2 == 1 && this.y % 2 == 1)) {
-										x = this.x + nx - 1;
-										// Grid y increases north so cell above
-										// is y + 1
-										y = this.y - ny + 1;
-										area = true;
-									}
-									if(area) {
-										if(x >= 0 && x < 100 && y >= 0
-												&& y < 100) {
-											c =
-												(ExForestFireCell) grid.getCell(
-														x, y);
-											// If a tree is burning, try to
-											// extinguish
-											if(c != null
-													&& c.getType() == ExForestFireCellType.BURNING_TREE) {
-												randomDouble = Math.random();
-												if(randomDouble <= ffdata.extinguishProb) {
-													c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
-													ffdata.burning--;
-													ffdata.trees++;
-												}
+							
+							for(int i = 0; i < nb.length; i++) {
+								x = this.x + nb[i][0];
+								y = this.y + nb[i][1];
+								if(x >= 0 && x < 100 && y >= 0 && y < 100) {
+									c =
+										(ExForestFireCell) grid.getCell(x,
+												y);
+									if(c != null
+											&& (c.getType() == ExForestFireCellType.BURNING_TREE
+											|| c.getType() == ExForestFireCellType.BURNING_BUSH)) {
+										if(c != null
+												&& c.getType() == ExForestFireCellType.BURNING_TREE) {
+											randomDouble = Math.random();
+											if(randomDouble <= ffdata.extinguishProb) {
+												c.setType(ExForestFireCellType.EXTINGUISHED_TREE);
+												ffdata.burning--;
+												ffdata.trees++;
 											}
-											// If a bush is burning, try to
-											// extinguish
-											else if(c != null
-													&& c.getType() == ExForestFireCellType.BURNING_BUSH) {
-												randomDouble = Math.random();
-												if(randomDouble <= ffdata.extinguishProb) {
-													c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
-													ffdata.burning--;
-													ffdata.bushes++;
-												}
+										}
+										// If a bush is burning, try to
+										// extinguish
+										else if(c != null
+												&& c.getType() == ExForestFireCellType.BURNING_BUSH) {
+											randomDouble = Math.random();
+											if(randomDouble <= ffdata.extinguishProb) {
+												c.setType(ExForestFireCellType.EXTINGUISHED_BUSH);
+												ffdata.burning--;
+												ffdata.bushes++;
 											}
 										}
 									}
 								}
 							}
+
 						}
 					}
 				}
