@@ -112,17 +112,65 @@ When the firefighters are added and the additional distance is used, the fire wi
 
 \subsection*{Results}
 \subsubsection*{Experiment 1}
-As expected, the triangular grid has a more rapid spread of fire compared to the other grids for the first experiment. Every grid type shows a similar kind of graph. A small fraction of forest burned with low densities, followed by a rapid increase in the burned fraction at some density. This increase differs per grid type. The triangular grid type has a rapid increase around a density of 0.45 to 0.5 percent forest density. Whereas the Cartesian grid has an increase around 0.6 to 0.65 and the hexagonal grid at 0.75 to 0.8 percent forest density. It is also notable that at the same time the fraction of forest that is burned rapidly increases, the opposite side of the forest is reached.
+As expected, the triangular grid has a more rapid spread of fire compared to the other grids for the first experiment. Every grid type shows a similar kind of graph. A small fraction of forest burned with low densities, followed by a rapid increase in the burned fraction at some density. This increase differs per grid type. The triangular grid type has a rapid increase around a density of 0.45 to 0.5 percent forest density. Whereas the Cartesian grid has an increase around 0.6 to 0.65 and the hexagonal grid at 0.75 to 0.8 percent forest density. This is shown in figure \ref{fig:ex1frac}. It is also notable that at the same time the fraction of forest that is burned rapidly increases, the opposite side of the forest is reached \cite{allresults}.
+
+\begin{Figure}
+ \centering
+ \includegraphics[width=\textwidth]{imgs/plot/ex1/fracburned.pdf}
+ \captionof{figure}{Average fraction of the trees burned for experiment 1}
+\label{fig:ex1frac}
+\end{Figure}
 \subsubsection*{Experiment 2}
-While the first experiment only had a small neighborhood for the spread of fire, the second experiment has an increased neighborhood. The rapidly increasing fraction of burned forest has now moved to a lower forest density. The standard grid now starts the increase before the triangular grid, followed by the hexagonal grid, as was expected. It is however notable that after a small rapid increase in the fraction of forest that is burned, the increase in fraction burned becomes linear. This linear increase seems to be equal for all grid types. It is also notable that after the rapid increase occurred, the opposite side of the forest is being reached in almost all cases.
+While the first experiment only had a small neighborhood for the spread of fire, the second experiment has an increased neighborhood. The rapidly increasing fraction of burned forest has now moved to a lower forest density. This is shown in figure \ref{fig:ex2frac}. The standard grid now starts the increase before the triangular grid, followed by the hexagonal grid, as was expected. It is however notable that after a small rapid increase in the fraction of forest that is burned, the increase in fraction burned becomes linear. This linear increase seems to be equal for all grid types. It is also notable that after the rapid increase occurred, the opposite side of the forest is being reached in almost all cases \cite{allresults}.
+
+\begin{Figure}
+ \centering
+ \includegraphics[width=\textwidth]{imgs/plot/ex2/fracburned.pdf}
+ \captionof{figure}{Average fraction of the trees burned for experiment 2}
+\label{fig:ex2frac}
+\end{Figure}
 \subsubsection*{Experiment 3}
 By adding water and roads to the grids, and reducing the distance the fire can spread to the current cells, the increase in the burned fraction of forest changes a lot compared to the first experiment. The rapid increase in the fraction burned seems to be either completely gone or really weak. The increase looks more linear than exponential when it starts increasing. The increase also starts at a higher density than before, as was expected. Where the results from experiment 1 and experiment 2 showed clean graphs, the results for experiment 3 show more anomalies at higher densities. This can be explained when looking to the results of the graph showing the percentage of forest fires that reached the opposite side of the forest. It becomes clear that the opposite side is never reached in all cases, no matter what the density of the forest may be. This has to do with the fact that the forest fires cannot cross water or roads. When higher densities of vegetation occur, parts of the grid cannot be accessed because of water or roads.
+\begin{Figure}
+ \centering
+ \includegraphics[width=\textwidth]{imgs/plot/ex3/fracburned.pdf}
+ \captionof{figure}{Average fraction of the trees burned for experiment 3}
+\label{fig:ex3frac}
+\end{Figure}
+
+\begin{Figure}
+ \centering
+ \includegraphics[width=\textwidth]{imgs/plot/ex3/oppreached.pdf}
+ \captionof{figure}{Percentage of simulations where the fire reached the opposite of the grid for experiment 3}
+\label{fig:ex3opp}
+\end{Figure}
 \subsubsection*{Experiment 4}
 Because it was already expected that experiment 3 would cause problems in moving past water, experiment 4 was done with an increased distance for the spread of fire. When comparing the results with the results of experiment 2, it becomes clear that when water and roads are added, fire does move slower over the grid. The increase still starts off with a small exponential increase, followed by a linear increase. But the increase starts at a higher density compared to experiment 2. The same goes for the fraction of runs that reached the opposite side of the forest. Compared to the second experiment, the density has to be a bit higher in order for a fire to reach the opposite side when it has to cross water and roads.
+
+\begin{Figure}
+ \centering
+ \includegraphics[width=\textwidth]{imgs/plot/ex4/fracburned.pdf}
+ \captionof{figure}{Average fraction of the trees burned for experiment 4}
+\label{fig:ex4frac}
+\end{Figure}
 \subsubsection*{Experiment 5}
 By adding firefighters to the grids, and the spread of fire again lowered to the surrounding cells, a comparison can be made with experiment 3. The increase in the fraction of forest that is burned starts at the same moment as with experiment 3. Overall however a lower fraction is burned at higher densities than before. This was expected since firefighters will extinguish more fire when there is more fire.
+
+\begin{Figure}
+ \centering
+ \includegraphics[width=\textwidth]{imgs/plot/ex5/fracburned.pdf}
+ \captionof{figure}{Average fraction of the trees burned for experiment 5}
+\label{fig:ex5frac}
+\end{Figure}
 \subsubsection*{Experiment 6}
 When the distance fire can spread is increased to the larger neighborhood, the effect of firefighters decreases. The overall fraction burned for each density is a bit lower when compared to the results of experiment 4. However the difference is almost too small to notice when comparing the graphs. The impact of firefighters is therefore, as was expected, low and could even be disregarded.
+
+\begin{Figure}
+ \centering
+ \includegraphics[width=\textwidth]{imgs/plot/ex6/fracburned.pdf}
+ \captionof{figure}{Average fraction of the trees burned for experiment 6}
+\label{fig:ex6frac}
+\end{Figure}
 \subsection*{Interpretation}
 
 \subsection*{Discussion \& Conclusion}
