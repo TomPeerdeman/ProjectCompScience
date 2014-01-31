@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage{cmap}
 \usepackage{multicol}
-\usepackage[top=3cm,bottom=3cm,left=3cm,right=3cm]{geometry}
+\usepackage[top=3cm,bottom=3cm,left=2.95cm,right=2.95cm]{geometry}
 \usepackage[hidelinks]{hyperref}
 \usepackage{graphicx}
 \usepackage{caption}
@@ -25,7 +25,7 @@
 
 \subsection*{Introduction}
 Forest fires can spread in various ways and can be effected by a lot of environmental variables. Some variables are straight forward, as seen in the forest fire simulation made by Peerdeman\cite{oldcode}. Different neighborhoods and the density of a forrest are not just the only variables defining the spread of a forest fire. The way a fire spreads between flammable objects for example can make a huge difference in the way a forest fire moves. Fire can also be affected by environmental variables, like water, the weather or wind. Manmade objects and people can interfere with the fire as well. Firefighters can try to extinguish fire to keep the fire from spreading. Paths and roads, like water cannot be set on fire. It is however possible for fire to cross roads and some streams of water if the conditions are right. All these variables have to be taken into account when simulating a forest fire.\\\\
-The experiments done in this paper are an expansion of the work done by Peerdeman\cite{oldcode}. The forest fire simulations are done by using cellular automata. Instead of using rules as was the case in the previous experiments, the experiments posed for this paper require probabilities. These probabilities are needed to simulate the environmental effects on the forest fire. 
+The experiments done in this paper are an expansion of the work done by Peerdeman\cite{oldcode}. The forest fire simulations are done by using cellular automata. Instead of using rules as was the case in the previous experiments, the experiments posed for this paper require probabilities. These probabilities are needed to simulate the environmental effects on the forest fire. By running various experiments and testing a variety of variables, it is possible to answer the question: "what variables have the biggest impact on the spread of a forest fire?".
 
 \subsection*{Defining the neighborhoods}
 \subsubsection*{Different grids}
@@ -171,10 +171,12 @@ When the distance fire can spread is increased to the larger neighborhood, the e
  \captionof{figure}{Average fraction of the trees burned for experiment 6}
 \label{fig:ex6frac}
 \end{Figure}
-\subsection*{Discussion \& Conclusion}
-From the experiments we can conclude that the biggest impact on the spread of fire is the presence of roads and water. When roads and water are added to the forest fire simulation, the spread of fire either completely stops the spread to parts of the forest or is slowed down significantly when moving across the road or streams of water. It also becomes clear that the firefighters have such a small impact that their interference can even be disregarded. A change of about 5\% is significantly too small to make a difference in the results.\\\\
-However, the firefighters if the firefighters were simulated in another way, their impact might increase. The current simulation only spawns firefighters at the edges of the grid. Firefighters can move one square for every time step. The same goes for fire (if the probability to spread is reached). When the extended spread distance is enabled, it is even possible for fire to spread more than one square. Firefighters therefore have a disadvantage compared to the fire.\\\\ 
+\subsection*{Discussion}
+The main problem in the simulation lies with the impact of firefighters on the spread of fire. The difference in results is around 5\%, which is so small that it could be mathematically disregarded. However, if the firefighters were simulated in another way, their impact might increase. The current simulation only spawns firefighters at the edges of the grid. Firefighters can move one square for every time step. The same goes for fire (if the probability to spread is reached). When the extended spread distance is enabled, it is even possible for fire to spread more than one square. Firefighters therefore have a disadvantage compared to the fire. Another problem for the firefighters is the fact that when he notice\\\\ 
 Besides the disadvantage in speed for the current firefighters, other methods of firefighting could change the spread of fire. It is common to use airplanes or helicopters to extinguish large forest fires. This method of firefighting however is not available in the current simulation. By changing the speed of the firefighters and combining forces with other firefighters, the impact will most likely be higher than the current impact on the speed of the spread of fire.
+
+\subsection*{Conclusion}
+From the experiments we can conclude that the biggest impact on the spread of fire is the presence of roads and water. When roads and water are added to the forest fire simulation, the spread of fire either completely stops the spread to parts of the forest or is slowed down significantly when moving across the road or streams of water. It also becomes clear that the firefighters have such a small impact that their interference can even be disregarded. A change of about 5\% is significantly too small to make a difference in the results. Therefore further research could be made with other firefighting algorithms.\\\\
 
 \nocite{*}
 \bibliographystyle{plain}
