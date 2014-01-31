@@ -4,7 +4,7 @@
 
 	<groupId>nl.uva</groupId>
 	<artifactId>ExtendedForestFire</artifactId>
-	<version>2.0</version>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
 	<name>ExtendedForestFire</name>
@@ -12,7 +12,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -34,15 +34,13 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
+				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.4</version>
 				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>to.be.set</mainClass>
+							<addClasspath>true</addClasspath>
+							<mainClass>nl.uva.ca.visual.forestfire.ExForestFireFrame</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
