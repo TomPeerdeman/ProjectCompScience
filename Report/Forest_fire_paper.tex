@@ -145,7 +145,7 @@ By adding water and roads to the grids, and reducing the distance the fire can s
 \label{fig:ex3opp}
 \end{Figure}
 \subsubsection*{Experiment 4}
-Because it was already expected that experiment 3 would cause problems in moving past water, experiment 4 was done with an increased distance for the spread of fire. When comparing the results shown in figure \ref{fig:ex4frac} with the results of experiment 2, it becomes clear that when water and roads are added, fire does move slower over the grid. The increase still starts off with a small exponential increase, followed by a linear increase. But the increase starts at a higher density compared to experiment 2. The same goes for the fraction of runs that reached the opposite side of the forest. Compared to the second experiment, the density has to be a bit higher in order for a fire to reach the opposite side when it has to cross water and roads.
+Because it was already expected that experiment 3 would cause problems in moving past water, experiment 4 was done with an increased distance for the spread of fire. When comparing the results shown in figure \ref{fig:ex4frac} with the results of experiment 2, it becomes clear that when water and roads are added, fire does move slower over the grid. The increase still starts off with a small exponential growth, shortly after followed by a linear increase. But the increase starts at a higher density compared to experiment 2. The same goes for the fraction of runs that reached the opposite side of the forest. Compared to the second experiment, the density has to be a bit higher in order for a fire to reach the opposite side when it has to cross water and roads.
 
 \begin{Figure}
  \centering
@@ -154,7 +154,7 @@ Because it was already expected that experiment 3 would cause problems in moving
 \label{fig:ex4frac}
 \end{Figure}
 \subsubsection*{Experiment 5}
-By adding firefighters to the grids, and the spread of fire again lowered to the surrounding cells, a comparison can be made with experiment 3. The increase in the fraction of forest that is burned starts at the same moment as with experiment 3 as shown in figure \ref{fig:ex5frac}. Overall however a lower fraction is burned at higher densities than before. This was expected since firefighters will extinguish more fire when there is more fire.
+By adding firefighters to the grids, and the distance for the spread of fire again lowered to the surrounding cells, a comparison can be made with experiment 3. The increase in the fraction of forest that is burned starts at the same moment as with experiment 3 as shown in figure \ref{fig:ex5frac}. This can be explained by the fact that firefighters only spawn at the edge of the grid. Because of that the extinguishing will most likely start when the fire has already been spreading for a while. It can also be explained by the randomizing of the grids. Since the fire cannot spread across water or roads, certain parts of the map will become inaccessible for the fire. It is possible that for this experiment more maps had inaccessible locations compared to experiment 3. Overall a lower fraction is burned at higher densities than before. This was expected since firefighters will extinguish more fire when there is more fire. This can also be observed by the difference in the results of experiment 3 and experiment 4. While experiment 4 shows a clean increasing linear line for the fraction that was burnt, the increase for experiment 3 doesn't increase in a linear fashion at all.
 
 \begin{Figure}
  \centering
@@ -163,7 +163,7 @@ By adding firefighters to the grids, and the spread of fire again lowered to the
 \label{fig:ex5frac}
 \end{Figure}
 \subsubsection*{Experiment 6}
-When the distance fire can spread is increased to the larger neighborhood, the effect of firefighters decreases as shown in figure \ref{fig:ex6frac}. The overall fraction burned for each density is a bit lower when compared to the results of experiment 4. However the difference is almost too small to notice when comparing the graphs. The impact of firefighters is therefore, as was expected, low and could even be disregarded.
+When the distance fire can spread is increased to the larger neighborhood, the effect of firefighters decreases as shown in figure \ref{fig:ex6frac}. The overall fraction burned for each density is a bit lower when compared to the results of experiment 4. However the difference is almost too small to notice when comparing the graphs. The impact of firefighters is therefore, as was expected, low and could even be disregarded. The low impact of firefighters can be explained by the fact that the fire can spread over a distance of two squares, while the firefighter can only move one square. The fire will therefore move faster than the firefighter, lowering the impact of the firefighter.
 
 \begin{Figure}
  \centering
@@ -171,8 +171,6 @@ When the distance fire can spread is increased to the larger neighborhood, the e
  \captionof{figure}{Average fraction of the trees burned for experiment 6}
 \label{fig:ex6frac}
 \end{Figure}
-\subsection*{Interpretation}
-
 \subsection*{Discussion \& Conclusion}
 From the experiments we can conclude that the biggest impact on the spread of fire is the presence of roads and water. When roads and water are added to the forest fire simulation, the spread of fire either completely stops the spread to parts of the forest or is slowed down significantly when moving across the road or streams of water. It also becomes clear that the firefighters have such a small impact that their interference can even be disregarded. A change of about 5\% is significantly too small to make a difference in the results.\\\\
 However, the firefighters if the firefighters were simulated in another way, their impact might increase. The current simulation only spawns firefighters at the edges of the grid. Firefighters can move one square for every time step. The same goes for fire (if the probability to spread is reached). When the extended spread distance is enabled, it is even possible for fire to spread more than one square. Firefighters therefore have a disadvantage compared to the fire.\\\\ 
